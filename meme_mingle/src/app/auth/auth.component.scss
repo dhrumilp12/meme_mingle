@@ -1,0 +1,32 @@
+.circle-container {
+    position: relative;
+    height: 100vh;
+    overflow: hidden; /* Ensures no overflow from the circles */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #121212; /* Background similar to your example */
+  }
+  
+  .circle {
+    position: absolute;
+    border: 2px solid rgba(255, 255, 255, 0.2); /* Light border for the circles */
+    border-radius: 50%;
+    mix-blend-mode: normal; /* Ensures no unwanted blending */
+}
+  .circle-1 {
+    width: 60%;
+    height: 60%;
+  }
+  
+  .circle-2 {
+    width: 75%;
+    height: 75%;
+    opacity: 0.8;
+  }
+  
+  .circle-3 {
+    width: 90%;
+    height: 90%;
+    opacity: 0.6;
+  }

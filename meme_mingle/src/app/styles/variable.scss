@@ -1,0 +1,32 @@
+
+// Grid variables
+$grid-unit: 4px;
+$grid-1: $grid-unit * 1;       // 4px
+$grid-2: $grid-unit * 2;       // 8px
+$grid-2_5: $grid-unit * 2.5;   // 10px
+$grid-3: $grid-unit * 3;       // 12px
+$grid-4: $grid-unit * 4;       // 16px
+$grid-5: $grid-unit * 5;       // 20px
+$grid-6: $grid-unit * 6;       // 24px
+$grid-8: $grid-unit * 8;       // 32px
+$grid-10: $grid-unit * 10;     // 40px
+$grid-16: $grid-unit * 16;     // 64px
+$grid-32: $grid-unit * 32;     // 128px
+
+// Typography variables
+$font-size-title: 24px;
+$font-size-subtitle: 14px;
+$font-size-button: 16px;
+$font-size-error: 14px;
+$font-weight-bold: 700;
+$font-weight-medium: 500;
+$font-weight-regular: 400;
+
+// Color variables
+$primary-color: #2196f3;       // Blue
+$accent-color: #ff9800;        // Orange
+$background-color: #f5f5f5;    // Light grey
+$text-color: #212121;          // Dark grey
+$success-color: #4caf50;        // Green
+$error-color: #f44336;          // Red
+$divider-color: #e0e0e0;        // Light grey for divider lines

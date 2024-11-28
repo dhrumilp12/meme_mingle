@@ -1,0 +1,115 @@
+<!-- user-profile.component.html -->
+<ng-template #loading>
+  <div class="loading-container">
+    <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+    <p>Loading profile...</p>
+  </div>
+</ng-template>
+
+<div class="user-profile-container" *ngIf="!isLoading; else loading">
+    <h2>User Profile</h2>
+  
+    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+      <!-- Username -->
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Username</mat-label>
+        <input matInput formControlName="username" placeholder="Enter your username" readonly>
+      </mat-form-field>
+  
+      <!-- Email (Read-Only) -->
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" placeholder="Enter your email" readonly>
+      </mat-form-field>
+  
+      <!-- Name -->
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name" placeholder="Enter your name">
+        <mat-error *ngIf="profileForm.get('name')?.hasError('minlength')">
+          Name must be at least 2 characters long.
+        </mat-error>
+      </mat-form-field>
+  
+      <!-- Age -->
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Age</mat-label>
+        <input matInput type="number" formControlName="age" placeholder="Enter your age">
+        <mat-error *ngIf="profileForm.get('age')?.hasError('min')">
+          Minimum age is 18.
+        </mat-error>
+        <mat-error *ngIf="profileForm.get('age')?.hasError('max')">
+          Maximum age is 120.
+        </mat-error>
+      </mat-form-field>
+  
+      <!-- Gender -->
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Gender</mat-label>
+        <mat-select formControlName="gender">
+          <mat-option *ngFor="let gender of genders" [value]="gender">
+            {{ gender | titlecase }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+  
+      <!-- Place of Residence -->
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Place of Residence</mat-label>
+        <input matInput formControlName="placeOfResidence" placeholder="Enter your place of residence">
+      </mat-form-field>
+  
+      <!-- Field of Study -->
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Field of Study</mat-label>
+        <input matInput formControlName="fieldOfStudy" placeholder="Enter your field of study">
+      </mat-form-field>
+  
+      <!-- Preferred Language -->
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Preferred Language</mat-label>
+        <input matInput formControlName="preferredLanguage" placeholder="e.g., en, es, fr">
+        <mat-error *ngIf="profileForm.get('preferredLanguage')?.hasError('pattern')">
+          Please enter a valid two-letter language code.
+        </mat-error>
+      </mat-form-field>
+      
+      <!-- Profile Picture -->
+    <div class="profile-picture-section">
+        <label for="profilePicture">Profile Picture</label>
+        <input type="file" id="profilePicture" (change)="onFileSelected($event)" accept="image/*">
+        <div *ngIf="selectedImageUrl" class="image-preview">
+          <img [src]="selectedImageUrl" alt="Selected Profile Picture">
+        </div>
+        <div *ngIf="currentProfilePicture" class="current-picture">
+          <p>Current Profile Picture:</p>
+          <img [src]="currentProfilePicture" alt="Current Profile Picture">
+        </div>
+      </div>
+      
+      <!-- Submit Button -->
+      <button mat-raised-button color="primary" type="submit" [disabled]="isSubmitting">
+        {{ isSubmitting ? 'Updating...' : 'Update Profile' }}
+      </button>
+
+      <!-- Delete Account Button -->
+      <button
+      mat-raised-button
+      color="warn"
+      type="button"
+      (click)="openDeleteConfirmationDialog()"
+      [disabled]="isSubmitting"
+    >
+      Delete Profile
+    </button>
+    
+    <!-- Success and Error Messages (Ensure they are styled appropriately) -->
+    <div *ngIf="successMessage" class="success-message">
+      {{ successMessage }}
+    </div>
+    
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+  
+    

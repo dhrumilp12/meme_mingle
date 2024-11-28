@@ -1,0 +1,52 @@
+// body {
+//     font-family: Roboto, Arial, sans-serif;
+//     background: linear-gradient(to right,#2b8ce1 0%,#dfd5ea 100%);
+//     // background-image: url('/assets/img/back.jpg');
+//     // background-repeat: no-repeat;
+//     // background-attachment: fixed;
+//     // background-size: cover;
+//     // background-color: black;
+//   }
+
+body {
+  font-family: Roboto, Arial, sans-serif;
+  background: linear-gradient(90deg, #2b8ce1, #dfd5ea);
+  background-size: 200% 200%;
+  animation: gradientAnimation 8s ease infinite;
+  overflow: hidden; /* Prevent scrollbars */
+  margin: 0;
+  padding: 0;
+}
+// .circle {
+//   position: absolute;
+//   border-radius: 50%;
+//   opacity: 0.5;
+// }
+
+// .circle-1 {
+//   background: rgba(255, 99, 132, 0.7);
+//   width: 387px;
+//   height: 550px;
+//   left: 919px;
+//   top: -150px;
+// }
+
+// .circle-2 {
+//   background: rgba(32, 50, 62, 0.7);
+//   width: 300px;
+//   height: 300px;
+//   left: 100px;
+//   top: 50px;
+// }
+
+// .circle-3 {
+//   background: rgba(75, 192, 192, 0.7);
+//   width: 500px;
+//   height: 500px;
+//   left: 50%;
+//   top: 70%;
+//   transform: translate(-50%, -50%);
+// }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

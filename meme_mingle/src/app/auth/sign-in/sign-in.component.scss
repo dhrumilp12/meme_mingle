@@ -1,0 +1,29 @@
+.custom-card {
+  border-radius: 15px;
+}
+.card{
+  background: linear-gradient(135deg, #2b8ce1 0%,#dfd5ea 100%);
+}
+.header{
+  // width: 30rem;
+  // height: 23rem;
+  border-radius: 40px;
+}
+a{
+  text-decoration: none;
+  color: white;
+}
+.btn:hover {
+  background-color: #2b8ce1;
+  color: white !important;
+  border: 1px solid white !important;
+}
+.btn{
+  border: 1px solid black !important ;
+}
+
+
+.text-danger{
+  color: rgb(198 12 15) !important;
+
+}

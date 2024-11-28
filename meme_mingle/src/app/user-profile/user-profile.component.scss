@@ -1,0 +1,51 @@
+/* user-profile.component.scss */
+
+.user-profile-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+  
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+  
+    .full-width {
+      width: 100%;
+    }
+  
+    button {
+      width: 100%;
+      margin-top: 20px;
+    }
+  
+    .success-message {
+      color: green;
+      margin-top: 10px;
+      text-align: center;
+    }
+  
+    .error-message {
+      color: red;
+      margin-top: 10px;
+      text-align: center;
+    }
+  }
+  
+  .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  
+    mat-progress-spinner {
+      margin-bottom: 16px;
+    }
+  
+    p {
+      font-size: 18px;
+      font-weight: 500;
+    }
+  }
+  
