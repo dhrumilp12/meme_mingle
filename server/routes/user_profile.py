@@ -1,7 +1,7 @@
 """This module contains the routes for the user profile."""
 
 """Step 1: Import the required libraries"""
-from services.google_mongodb import MongoDBClient
+from services.azure_mongodb import MongoDBClient
 from flask import Blueprint, request, jsonify
 from bson import ObjectId
 from flask import current_app

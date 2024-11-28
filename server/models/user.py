@@ -1,7 +1,7 @@
 """This module defines the User model, which represents a user in the system."""
 """ Step 1: Import required libraries """
 from pydantic import BaseModel, EmailStr, Field, field_validator, validator
-from services.google_mongodb import MongoDBClient
+from services.azure_mongodb import MongoDBClient
 from bson import ObjectId
 from email_validator import validate_email, EmailNotValidError
 from typing import Optional

@@ -5,8 +5,7 @@ from langchain_community.tools.tavily_search import TavilySearchResults
 from services.db.user import get_user_profile_by_user_id
 from services.db.user_journey import get_user_journey_by_user_id
 from langchain.tools import Tool
-from utils.agents import get_job_listings,get_google_search_results,get_gutendex_domain_textbooks, get_public_domain_textbooks, get_youtube_search_results,  generate_document
-from services.google_sentiment_analyze import generate_suggestions
+from utils.agents import get_job_listings,get_google_search_results,get_gutendex_domain_textbooks, get_public_domain_textbooks, get_youtube_search_results, generate_suggestions, generate_document
 from langchain_google_community import GooglePlacesTool
 from .tool_schemas import (
     GenerateDocumentInput,

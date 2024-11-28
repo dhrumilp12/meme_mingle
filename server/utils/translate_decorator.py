@@ -4,7 +4,7 @@ from functools import wraps
 from flask import request, jsonify
 from services.translator import translate_text_cached
 from models.user import User
-from services.google_mongodb import MongoDBClient
+from services.azure_mongodb import MongoDBClient
 import logging
 
 """ Step 2: Define the translate_response decorator """

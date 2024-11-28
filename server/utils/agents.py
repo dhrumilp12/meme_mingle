@@ -6,13 +6,21 @@ import requests
 from langchain_google_community import GoogleSearchAPIWrapper
 from langchain_community.utilities import BingSearchAPIWrapper
 from langchain_community.tools import YouTubeSearchTool
+from azure.core.credentials import AzureKeyCredential
+from azure.ai.textanalytics import TextAnalyticsClient
 from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
 from docx import Document as DocxDocument
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, PageBreak
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import inch
 from uuid import uuid4
 import os
+
+# Initialize Azure Text Analytics Client
+text_analytics_key = os.getenv("AZURE_TEXT_ANALYTICS_KEY")
+text_analytics_endpoint = os.getenv("AZURE_TEXT_ANALYTICS_ENDPOINT")
+text_analytics_client = TextAnalyticsClient(endpoint=text_analytics_endpoint, credential=AzureKeyCredential(text_analytics_key))
 
 
 """Step 2: Define the agent functions"""
@@ -93,6 +101,31 @@ def get_bing_search_results(query: str):
         print(f"Failed to fetch Bing search results: {e}", exc_info=True)
         return None
     
+
+
+
+
+def generate_suggestions(mood: str, user_input: str):
+    """
+    Generates personalized activities or coping mechanisms based on the user's mood and sentiment using a language model.
+    
+    Args:
+        mood (str): The user's current mood.
+        user_input (str): The user's input text to analyze sentiment.
+    
+    Returns:
+        list: A list of suggested activities or coping mechanisms.
+    """
+    # Analyze sentiment
+    sentiment_response = text_analytics_client.analyze_sentiment(documents=[{"id": "1", "text": user_input}])
+    sentiment = sentiment_response[0].sentiment
+
+    # Generate suggestions based on mood and sentiment
+    prompt = f"Suggest some personalized activities or coping mechanisms for someone who is feeling {mood} and has a sentiment of {sentiment}."
+    response = text_analytics_client.analyze_sentiment(documents=[{"id": "2", "text": prompt}])
+    suggestions = response[0].sentiment.split('\n')
+    
+    return suggestions
 
 
 def get_public_domain_textbooks(query: str):

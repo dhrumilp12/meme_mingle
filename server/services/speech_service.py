@@ -1,19 +1,16 @@
-"""
-This module contains the speech recognition service that uses the Google Cloud Speech-to-Text API to convert audio to text.
-"""
+"""This module contains the speech recognition service that uses the Azure Speech SDK to convert audio to text."""
 
 """Step 1: Import necessary modules"""
-import os
-import logging
-from google.cloud import speech_v1p1beta1 as speech  # Using the beta version for enhanced features
+import azure.cognitiveservices.speech as speechsdk
 import io
 import subprocess
+import os
 from dotenv import load_dotenv
 
 load_dotenv()
 
-"""Step 2: Define the speech recognition service"""
 
+"""Step 2: Define the speech recognition service"""
 # Define a function to check if FFmpeg is installed
 def check_ffmpeg():
     try:
@@ -22,21 +19,13 @@ def check_ffmpeg():
         print(result.stdout)
     except Exception as e:
         print("Failed to run FFmpeg:", str(e))
-        raise EnvironmentError("FFmpeg is not installed or not found in PATH.")
 
 check_ffmpeg()
 
 # Define a function to convert audio to WAV format
 def convert_audio_to_wav(input_audio_path, output_audio_path):
     try:
-        command = [
-            'ffmpeg',
-            '-i', input_audio_path,
-            '-acodec', 'pcm_s16le',
-            '-ac', '1',
-            '-ar', '16000',
-            output_audio_path
-        ]
+        command = ['ffmpeg', '-i', input_audio_path, '-acodec', 'pcm_s16le', '-ac', '1', '-ar', '16000', output_audio_path]
         result = subprocess.run(command, check=True, text=True, capture_output=True)
         print(f"FFmpeg output: {result.stdout}")
     except subprocess.CalledProcessError as e:
@@ -45,69 +34,70 @@ def convert_audio_to_wav(input_audio_path, output_audio_path):
 
 # Define the speech recognition function
 def speech_to_text(audio_file):
-    """
-    Converts an audio file to text using Google Cloud Speech-to-Text API.
-
-    Args:
-        audio_file: A file-like object containing the audio data.
-
-    Returns:
-        str: The transcribed text.
-    """
-    # Define temporary file paths
+    
+        # Save original audio to a temporary file
     temp_input_path = 'temp_input.webm'
     temp_output_path = 'temp_output.wav'
 
     try:
-        # Save original audio to a temporary file
         with open(temp_input_path, 'wb') as f:
             f.write(audio_file.read())
 
-        # Convert to WAV format
+            # Convert to WAV format
         convert_audio_to_wav(temp_input_path, temp_output_path)
 
-        # Load converted audio
+         # Load converted audio and process
         with open(temp_output_path, 'rb') as f:
             audio_data = f.read()
-
         # Convert the audio file received into a stream
         audio_stream = io.BytesIO(audio_data)
-
+        
         print(f"Size of audio file: {audio_stream.getbuffer().nbytes} bytes")  # Debugging the size of the file
         audio_stream.seek(0)
-        print(f"Size of audio file after seek: {audio_stream.getbuffer().nbytes} bytes")
+        print(f"Size of audio file: {audio_stream.getbuffer().nbytes} bytes")
+        # Set up the speech config with your subscription details
+        speech_key = os.environ.get("SPEECH_AI_KEY")
+        service_region = os.environ.get("SERVICE_REGION")
+        speech_config = speechsdk.SpeechConfig(subscription=speech_key, region=service_region)
+        speech_config.set_property(speechsdk.PropertyId.SpeechServiceConnection_InitialSilenceTimeoutMs, "5000")  # Timeout in milliseconds
+        # Create a push stream that can be used with the speech recognizer
+        push_stream = speechsdk.audio.PushAudioInputStream()
+        audio_config = speechsdk.audio.AudioConfig(stream=push_stream)
+        speech_recognizer = speechsdk.SpeechRecognizer(speech_config=speech_config, audio_config=audio_config)
+           
 
-        # Set up the Speech-to-Text client with your service account
-        credentials_path = os.getenv("GOOGLE_CLOUD_SPEECH_CREDENTIALS")
-        if not credentials_path:
-            raise ValueError("GOOGLE_CLOUD_SPEECH_CREDENTIALS environment variable not set.")
+        # Read the buffer and push into the push stream
+        data = audio_stream.read(1024)
+        print(f"Writing data to stream: {len(data)} bytes")
+        while data:
+            push_stream.write(data)
+            data = audio_stream.read(1024)
+        push_stream.close()
 
-        client = speech.SpeechClient.from_service_account_file(credentials_path)
 
-        # Configure audio settings
-        audio = speech.RecognitionAudio(content=audio_data)
-        config = speech.RecognitionConfig(
-            encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
-            sample_rate_hertz=16000,
-            language_code="en-US",
-            enable_automatic_punctuation=True
-        )
+        print("Speak into your microphone.")
+        result = speech_recognizer.recognize_once()
 
-        # Perform speech recognition
-        response = client.recognize(config=config, audio=audio)
-
-        # Process the response
-        if not response.results:
+        # Check the result
+        if result.reason == speechsdk.ResultReason.RecognizedSpeech:
+            print("Recognized: {}".format(result.text))
+            return result.text
+        elif result.reason == speechsdk.ResultReason.NoMatch:
             print("No speech could be recognized")
             return "No speech could be recognized"
+        elif result.reason == speechsdk.ResultReason.Canceled:
+            cancellation_details = result.cancellation_details
+            print("Speech Recognition canceled: {}".format(cancellation_details.reason))
+            if cancellation_details.reason == speechsdk.CancellationReason.Error:
+                print("Error details: {}".format(cancellation_details.error_details))
+            return "Speech Recognition canceled"
 
-        # Concatenate the results
-        recognized_text = ""
-        for result in response.results:
-            recognized_text += result.alternatives[0].transcript + " "
+        else:
+            print("Speech Recognition canceled: {}".format(result.cancellation_details.reason))
+            if result.cancellation_details.reason == speechsdk.CancellationReason.Error:
+                print("Error details: {}".format(result.cancellation_details.error_details))
+            return "Speech Recognition canceled"
 
-        print("Recognized:", recognized_text.strip())
-        return recognized_text.strip()
 
     except Exception as e:
         print(f"Error during speech recognition: {str(e)}")

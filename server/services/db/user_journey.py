@@ -1,7 +1,7 @@
 """This module contains functions for interacting with the user_journeys collection in the MongoDB database."""
 """Step 1: Import necessary modules"""
 from models.user_journey import UserJourney
-from services.google_mongodb import MongoDBClient
+from services.azure_mongodb import MongoDBClient
 from pydantic import ValidationError
 import logging
 

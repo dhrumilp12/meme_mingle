@@ -6,11 +6,11 @@ from flask import jsonify, Blueprint, request, send_file, send_from_directory
 import json
 from services.speech_service import speech_to_text
 from agents.meme_mingle_agent import MemeMingleAIAgent
-from services.google_mongodb import MongoDBClient
+from services.azure_mongodb import MongoDBClient
 import io
 from services.text_to_speech_service import text_to_speech
 import filetype
-from services.google_form_recognizer import ALLOWED_MIME_TYPES
+from services.azure_form_recognizer import ALLOWED_MIME_TYPES
 
 """Step 2: Create a Blueprint object"""
 # Configure logging

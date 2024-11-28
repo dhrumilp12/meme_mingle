@@ -7,7 +7,11 @@ This module defines a general structure for AI agents in the app.
 import logging
 # -- 3rd Party libraries --
 ## Langchain
-from langchain.vectorstores import MongoDBAtlasVectorSearch
+from langchain_community.vectorstores.azure_cosmos_db import (
+    AzureCosmosDBVectorSearch,
+    CosmosDBSimilarityType,
+    CosmosDBVectorSearchType,
+)
 from langchain.agents import Tool
 from langchain.tools import StructuredTool
 from langchain_core.messages import SystemMessage
@@ -18,14 +22,12 @@ from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain.schema import Document
 ## MongoDB
 from pymongo.database import Database
-## Typing
-from typing import List
 
 # -- Custom Modules --
-from services.google_mongodb import MongoDBClient
-from services.google_vertex_ai import (
-    get_vertex_ai_llm,
-    get_vertex_ai_embeddings,
+from services.azure_mongodb import MongoDBClient
+from services.azure_open_ai import (
+    get_azure_openai_llm,
+    get_azure_openai_embeddings,
 )
 from utils.docs import format_docs
 from .tools import toolbox
@@ -42,8 +44,8 @@ class AIAgent:
     
     def __init__(self, system_message: str, tool_names: list[str] = []):
         self.db: Database = (MongoDBClient.get_client())[MongoDBClient.get_db_name()]
-        self.llm = get_vertex_ai_llm()
-        self.embedding_model = get_vertex_ai_embeddings()
+        self.llm = get_azure_openai_llm()
+        self.embedding_model = get_azure_openai_embeddings()
         self.system_message = SystemMessage(content=system_message)
         self.prompt = ChatPromptTemplate.from_messages(
             [
@@ -52,7 +54,7 @@ class AIAgent:
                 MessagesPlaceholder(variable_name="agent_scratchpad"),
             ]
         )
-       
+        self.tools = self._create_agent_tools(tool_names)
 
     def run(self, message: str) -> str:
         """
@@ -82,7 +84,7 @@ class AIAgent:
         # Check if the vector store exists
         if db[vector_store_name].find_one({}):
             logging.info(f"Vector store '{vector_store_name}' exists. Loading existing vector store.")
-            vector_store = MongoDBAtlasVectorSearch.from_connection_string(
+            vector_store = AzureCosmosDBVectorSearch.from_connection_string(
                 connection_string=CONNECTION_STRING,
                 namespace=f"{db_name}.{vector_store_name}",
                 embedding=embeddings_model,
@@ -127,31 +129,24 @@ class AIAgent:
                 logging.error("No documents to index after splitting. Exiting retriever creation.")
                 return None
 
-             # Split the documents
-            text_splitter = RecursiveCharacterTextSplitter(
-                chunk_size=1000,
-                chunk_overlap=20,
-                length_function=len,
-                is_separator_regex=False,
-            )
-
-            docs = text_splitter.split_documents(docs)
-            logging.info(f"Split documents into {len(docs)} chunks.")
-
-            if not docs:
-                logging.error("No documents to index after splitting. Exiting retriever creation.")
-                return None
-
             # Create the vector store
-            vector_store = MongoDBAtlasVectorSearch.from_documents(
+            vector_store = AzureCosmosDBVectorSearch.from_documents(
                 docs,
                 embeddings_model,
-                connection_string=CONNECTION_STRING,
-                db_name=db_name,
-                collection_name=vector_store_name,
-                index_name="VectorSearchIndex",
+                collection=vector_store_collection,
+                index_name="vectorSearchIndex",
             )
 
+            num_lists = 1
+            dimensions = 1536
+            similarity_algorithm = CosmosDBSimilarityType.COS
+            kind = CosmosDBVectorSearchType.VECTOR_IVF
+            m = 16
+            ef_construction = 64
+
+            vector_store.create_index(
+                num_lists, dimensions, similarity_algorithm, kind, m, ef_construction
+            )
             logging.info("Vector store index created successfully.")
 
         retriever = vector_store.as_retriever(search_kwargs={"k": top_k})
@@ -160,83 +155,67 @@ class AIAgent:
 
 
 
-    def _create_agent_tools(self, tool_names: List[str] = []) -> List[Tool]:
-            """
-            Returns a list of agent tools.
+    def _create_agent_tools(self, tool_names=[]) -> list[Tool]:
+        """
+        Returns a list of agent tools.
 
-            Args:
-                tool_names: A list of tool names to include.
+        Args:
+            schema: A list of object names that defines which custom tools the agent will use.
+        """
+        db_name = MongoDBClient.get_db_name()
 
-            Returns:
-                List of initialized Tool objects.
-            """
-            db_name = MongoDBClient.get_db_name()
+        # filter out unselected tools
+        target_tools = {
+            section_name: {
+                tool_name: tool_dict for tool_name, tool_dict in section_dict.items() 
+            if tool_name in tool_names
+            } for section_name, section_dict in toolbox.items()
+        }
 
-            # Filter out unselected tools
-            target_tools = {
-                section_name: {
-                    tool_name: tool_dict for tool_name, tool_dict in section_dict.items() 
-                    if tool_name in tool_names
-                } for section_name, section_dict in toolbox.items()
-            }
+        community_tools = []
+        for tool_name, tool_val in target_tools.get("community").items():
+            community_tools.append(tool_val)
 
-            community_tools = []
-            for tool_name, tool_val in target_tools.get("community", {}).items():
-                if tool_val:
-                    community_tools.append(tool_val)
+        custom_tools = []
+        for tool_name, tool_dict in target_tools.get("custom", {}).items():
+            description = tool_dict.get("description")
+            args_schema = tool_dict.get("args_schema")
 
-            custom_tools = []
-            for tool_name, tool_dict in target_tools.get("custom", {}).items():
-                description = tool_dict.get("description")
-                args_schema = tool_dict.get("args_schema")
+            if tool_dict.get("retriever", False):
+                # For retriever tools, define the function here with access to self
+                retriever = self._get_vector_store_retriever(tool_name)
+                retriever_chain = retriever | format_docs
 
-                if tool_dict.get("retriever", False):
-                    retriever = self._get_vector_store_retriever(tool_name)
-                    retriever_chain = retriever | format_docs
+                def retriever_func(query: str):
+                    return retriever_chain.invoke(query)
 
-                    def retriever_func(query: str):
-                        return retriever_chain.invoke(query)
-
-                    custom_tools.append(
-                        StructuredTool(
-                            name=f"vector_search_{tool_name}",
-                            func=retriever_func,
-                            description=description,
-                            args_schema=args_schema,
-                        )
+                custom_tools.append(
+                    StructuredTool(
+                        name=f"vector_search_{tool_name}",
+                        func=retriever_func,
+                        description=description,
+                        args_schema=args_schema,
                     )
-                elif tool_dict.get("structured", False):
-                    func = tool_dict.get("func")
-                    if func:
-                        custom_tools.append(
-                            StructuredTool(
-                                name=tool_name,
-                                func=func,
-                                description=description,
-                                args_schema=args_schema,
-                            )
-                        )
-                    else:
-                        logging.error(f"Tool '{tool_name}' has no 'func' defined.")
-                else:
-                    func = tool_dict.get("func")
-                    if func:
-                        custom_tools.append(
-                            Tool(
-                                name=tool_name,
-                                func=func,
-                                description=description,
-                            )
-                        )
-                    else:
-                        logging.error(f"Tool '{tool_name}' has no 'func' defined.")
+                )
+            elif tool_dict.get("structured", False):
+                func = tool_dict.get("func")
+                custom_tools.append(
+                    StructuredTool(
+                        name=tool_name,
+                        func=func,
+                        description=description,
+                        args_schema=args_schema,
+                    )
+                )
+            else:
+                func = tool_dict.get("func")
+                custom_tools.append(
+                    Tool(
+                        name=tool_name,
+                        func=func,
+                        description=description,
+                    )
+                )
 
-            result_tools = community_tools + custom_tools
-            if not result_tools:
-                logging.error("No tools were initialized. Ensure tool names are correct and functions are defined.")
-            return result_tools
-
-    def get_vertex_ai_llm(self):
-        """Initialize and return the Bindable Vertex AI language model."""
-        
-        return get_vertex_ai_llm()
+        result_tools = community_tools + custom_tools
+        return result_tools

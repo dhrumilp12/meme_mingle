@@ -8,7 +8,7 @@ import os
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from datetime import timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
-from services.google_mongodb import MongoDBClient
+from services.azure_mongodb import MongoDBClient
 from models.user import User as UserModel
 from dotenv import load_dotenv
 from pydantic import ValidationError

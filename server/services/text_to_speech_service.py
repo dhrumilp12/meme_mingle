@@ -1,70 +1,80 @@
+
 """
-This module contains the text-to-speech service that uses the Google Cloud Text-to-Speech API to convert text to audio.
+This module contains the text-to-speech service that uses the Azure Speech SDK to convert text to audio.
 """
 
 """Step 1: Import necessary modules"""
+import azure.cognitiveservices.speech as speechsdk
 import os
-import logging
-from google.cloud import texttospeech
 from dotenv import load_dotenv
 import io
 
 load_dotenv()
 
 """Step 2: Define the text-to-speech service"""
-def text_to_speech(text_input, voice_name="en-US-Standard-A", speaking_rate=1.0, pitch=0.0, audio_encoding="LINEAR16"):
+def text_to_speech(text_input, voice_name="en-US-AriaNeural", style=None):
     """
-    Converts text to speech using Google Cloud Text-to-Speech API with specified voice parameters.
+    Converts text to speech using Azure Speech SDK with specified voice and style.
 
     Args:
         text_input (str): The text to be converted to speech.
-        voice_name (str): The name of the voice to use. Default is "en-US-Standard-A".
-        speaking_rate (float): Speaking rate/speed. Default is 1.0 (normal speed).
-        pitch (float): Pitch adjustment. Default is 0.0 (default pitch).
-        audio_encoding (str): Audio encoding format. Options: "LINEAR16", "MP3", "OGG_OPUS". Default is "LINEAR16".
+        voice_name (str): The name of the voice to use.
+        style (str, optional): The speaking style (e.g., 'calm', 'cheerful').
 
     Returns:
-        bytes: The synthesized audio data in the specified format, or None if synthesis failed.
+        bytes: The synthesized audio data in WAV format, or None if synthesis failed.
     """
     try:
-        # Set up the Text-to-Speech client with your service account
-        credentials_path = os.getenv("GOOGLE_CLOUD_TTS_CREDENTIALS")
-        if not credentials_path:
-            print("Missing GOOGLE_CLOUD_TTS_CREDENTIALS in environment variables.")
+        # Set up the speech config with your subscription details
+        speech_key = os.environ.get("SPEECH_AI_KEY")
+        service_region = os.environ.get("SERVICE_REGION")
+        if not speech_key or not service_region:
+            print("Missing SPEECH_AI_KEY or SERVICE_REGION in environment variables.")
             return None
+        
+        speech_config = speechsdk.SpeechConfig(subscription=speech_key, region=service_region)
 
-        client = texttospeech.TextToSpeechClient.from_service_account_file(credentials_path)
 
-        # Set up the synthesis input
-        synthesis_input = texttospeech.SynthesisInput(text=text_input)
+        # Create a speech synthesizer using the in-memory stream
+        #audio_stream = speechsdk.audio.AudioOutputConfig(use_default_speaker=False)
+        synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=None)
 
-        # Set up the voice parameters
-        voice = texttospeech.VoiceSelectionParams(
-            language_code=voice_name.split('-')[0],  # e.g., "en-US-Standard-A" -> "en"
-            name=voice_name
-        )
-
-        # Set up the audio configuration
-        audio_config = texttospeech.AudioConfig(
-            audio_encoding=texttospeech.AudioEncoding[audio_encoding],
-            speaking_rate=speaking_rate,
-            pitch=pitch
-        )
-
-        # Perform the text-to-speech request
-        response = client.synthesize_speech(
-            input=synthesis_input,
-            voice=voice,
-            audio_config=audio_config
-        )
-
-        # Check if audio content is present
-        if response.audio_content:
-            print("Speech synthesized successfully.")
-            print(f"Audio content length: {len(response.audio_content)} bytes")
-            return response.audio_content
+       # Construct SSML if a style is specified
+        if style:
+            ssml = f"""
+            <speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" 
+                xmlns:mstts="https://www.w3.org/2001/mstts" 
+                xml:lang="{voice_name.split('-')[0]}">
+                <voice name="{voice_name}">
+                    <mstts:express-as style="{style}">
+                        {text_input}
+                    </mstts:express-as>
+                </voice>
+            </speak>
+            """
+            result = synthesizer.speak_ssml_async(ssml).get()
         else:
-            print("No audio content found in the response.")
+            # Use plain text synthesis
+            result = synthesizer.speak_text_async(text_input).get()
+
+        # Check the result
+        if result.reason == speechsdk.ResultReason.SynthesizingAudioCompleted:
+            print("Speech synthesized successfully.")
+            # Access the audio data directly
+            audio_data = result.audio_data
+            if audio_data:
+                print(f"Audio data length: {len(audio_data)} bytes")
+                return audio_data
+            else:
+                print("No audio data found in the result.")
+                return None
+        else:
+            print(f"Speech synthesis canceled: {result.reason}")
+            if result.reason == speechsdk.ResultReason.Canceled:
+                cancellation_details = result.cancellation_details
+                print(f"Cancellation details: {cancellation_details.reason}")
+                if cancellation_details.reason == speechsdk.CancellationReason.Error:
+                    print(f"Error details: {cancellation_details.error_details}")
             return None
 
     except Exception as e:

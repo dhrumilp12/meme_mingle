@@ -1,6 +1,6 @@
 """This module is responsible for loading agent facts to the database."""
 """STEP 1: Import required libraries"""
-from services.google_mongodb import MongoDBClient
+from services.azure_mongodb import MongoDBClient
 from models.agent_fact import AgentFact
 from utils.consts import AGENT_FACTS
 

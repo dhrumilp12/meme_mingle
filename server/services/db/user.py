@@ -1,6 +1,6 @@
 """This module contains functions for interacting with the user collection in the MongoDB database."""
 """Step 1: Import necessary modules"""
-from services.google_mongodb import MongoDBClient
+from services.azure_mongodb import MongoDBClient
 import logging
 import json
 from pymongo.collection import ReturnDocument
