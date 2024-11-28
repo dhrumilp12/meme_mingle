@@ -3,6 +3,8 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Ignore service account credentials
+cloud_service.json
 # C extensions
 *.so
 

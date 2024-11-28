@@ -17,7 +17,7 @@ import logging
 import json
 import asyncio
 from operator import itemgetter
-
+from .tools import toolbox
 # -- 3rd Party libraries --
 # import spacy
 
@@ -34,7 +34,7 @@ from langchain_mongodb.chat_message_histories import MongoDBChatMessageHistory
 from langchain_core.messages import trim_messages
 from langchain_core.messages.human import HumanMessage
 from langchain_core.messages.system import SystemMessage
-
+from langchain.tools import Tool
 # MongoDB
 # -- Custom modules --
 from .ai_agent import AIAgent
@@ -79,6 +79,15 @@ class MemeMingleAIAgent(AIAgent):
         # Create a SystemMessage object
         self.system_message = SystemMessage(content=formatted_system_message)
         super().__init__(formatted_system_message, tool_names)
+        # Initialize tools from the toolbox
+        self.tools = [
+            Tool(
+                name=name,
+                func=toolbox["custom"][name]["func"],
+                description=toolbox["custom"][name]["description"]
+            )
+            for name in tool_names if name in toolbox["custom"]
+        ]
 
         # Define the base prompt messages without extracted_text
         self.base_prompt_messages = [
