@@ -5,7 +5,7 @@ from langchain_community.tools.tavily_search import TavilySearchResults
 from services.db.user import get_user_profile_by_user_id
 from services.db.user_journey import get_user_journey_by_user_id
 from langchain.tools import Tool
-from utils.agents import get_job_listings,get_bing_search_results,get_gutendex_domain_textbooks, get_public_domain_textbooks, get_youtube_search_results, generate_suggestions, generate_document
+from utils.agents import fetch_meme,get_job_listings,get_bing_search_results,get_gutendex_domain_textbooks, get_public_domain_textbooks, generate_suggestions, generate_document
 from langchain_google_community import GooglePlacesTool
 from .tool_schemas import (
     GenerateDocumentInput,
@@ -15,6 +15,7 @@ from .tool_schemas import (
     WebSearchBingInput,
     AgentFactsInput,
     JobSearchInput,
+    FetchMemeInput,
 )
 
 
@@ -26,6 +27,12 @@ toolbox = {
         "location_search_gplaces": GooglePlacesTool(),
     },
     "custom": {
+        "fetch_meme": {
+            "func": fetch_meme,
+            "description": "Fetches a popular meme related to a given topic using Giphy API.",
+            "structured": True,
+            "args_schema": FetchMemeInput,
+        },
         "agent_facts": {
             "description": "Searches for specific facts about the AI's origin, creators, capabilities, and history.",
             "retriever": True,

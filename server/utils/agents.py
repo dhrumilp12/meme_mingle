@@ -16,6 +16,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import inch
 from uuid import uuid4
 import os
+from PIL import Image, ImageDraw, ImageFont
 
 # Initialize Azure Text Analytics Client
 text_analytics_key = os.getenv("AZURE_TEXT_ANALYTICS_KEY")
@@ -354,3 +355,39 @@ def get_job_listings(skills: str, location: str = None):
     except Exception as e:
         print(f"Failed to fetch job listings: {e}")
         return "Sorry, I couldn't fetch job listings at the moment."
+    
+
+def fetch_meme(topic: str) -> str:
+    """
+    Fetches a popular meme related to the given topic using Giphy API.
+
+    Args:
+        topic (str): The topic to search memes for.
+
+    Returns:
+        str: URL of the fetched meme GIF.
+    """
+    giphy_api_key = os.getenv("GIPHY_API_KEY")
+    if not giphy_api_key:
+        return "Giphy API key is not configured."
+
+    try:
+        response = requests.get(
+            "https://api.giphy.com/v1/gifs/search",
+            params={
+                "api_key": giphy_api_key,
+                "q": topic,
+                "limit": 1,
+                "rating": "pg-13",
+            }
+        )
+        data = response.json()
+        if data["data"]:
+            meme_url = data["data"][0]["images"]["downsized_medium"]["url"]
+            return meme_url
+        else:
+            return "No memes found for the given topic."
+    except Exception as e:
+        print(f"Error fetching meme: {e}")
+        return "Failed to fetch meme."
+    

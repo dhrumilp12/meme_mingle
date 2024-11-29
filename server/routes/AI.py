@@ -11,6 +11,7 @@ import io
 from services.text_to_speech_service import text_to_speech
 import filetype
 from services.azure_form_recognizer import ALLOWED_MIME_TYPES
+import os
 
 """Step 2: Create a Blueprint object"""
 # Configure logging
@@ -44,6 +45,7 @@ def get_mental_health_agent_welcome(user_id):
             "generate_document",
             "job_search",
             "web_search_bing",
+            "fetch_meme",
         ],
         desired_role=desired_role  # Pass the desired role to the agent
     )
@@ -115,6 +117,7 @@ def run_mental_health_agent(user_id, chat_id):
             "generate_document",
             "job_search",
             "web_search_bing",
+            "fetch_meme",
         ],
         desired_role=desired_role  
     )

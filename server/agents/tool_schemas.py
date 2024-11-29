@@ -42,3 +42,8 @@ class AgentFactsInput(BaseModel):
 class JobSearchInput(BaseModel):
     skills: str
     location: str = None
+
+# Define the input schema for the FetchMeme tool
+class FetchMemeInput(BaseModel):
+    topic: str  # The topic to fetch memes about
+

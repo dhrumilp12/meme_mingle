@@ -14,13 +14,10 @@ This module defines a class used to generate AI agents centered around Education
 # -- Standard libraries --
 from datetime import datetime
 import logging
-import json
 import asyncio
 from operator import itemgetter
-
+import os
 # -- 3rd Party libraries --
-# import spacy
-
 # Azure
 # Langchain
 from langchain_core.runnables.history import RunnableWithMessageHistory
@@ -42,9 +39,6 @@ from services.azure_mongodb import MongoDBClient
 from services.azure_form_recognizer import extract_text_from_file
 # Constants
 from utils.consts import SYSTEM_MESSAGE
-
-# Load spaCy model
-# nlp = spacy.load("en_core_web_sm")
 
 
 
@@ -95,6 +89,7 @@ class MemeMingleAIAgent(AIAgent):
             ("system", "You can retrieve your user profile using the 'user_profile_retrieval' tool."),
             #("system", "You can retrieve your user journey using the 'user_journey_retrieval' tool."),
             ("system", "You can generate documents using the 'generate_document' tool."),
+            ("system", "You can fetch popular memes using the 'fetch_meme' tool."),
             ("system", "user_id:{user_id}"),
             MessagesPlaceholder(variable_name="chat_turns"),
             ("human", "{input}"),
@@ -348,18 +343,80 @@ class MemeMingleAIAgent(AIAgent):
                 config={"configurable": {"session_id": session_id}}
             )
 
-            response = invocation["output"]
+            ai_text_response = invocation["output"]
 
-            if isinstance(response, dict):
-                response = json.dumps(response)
-            elif not isinstance(response, str):
-                response = str(response)
+            # Determine if it's the initial greeting
+            is_initial = (turn_id == 0)
+
+            # Fetch a relevant meme/GIF based on the AI's response or user input
+            meme_topic = self.determine_meme_topic(ai_response=ai_text_response, is_initial=is_initial)
+
+           
+            # Use helper method to get fetch_meme tool
+            fetch_meme_tool = self.get_tool_by_name("fetch_meme")
+            if fetch_meme_tool:
+                meme_url = fetch_meme_tool.func(meme_topic)
+            else:
+                logging.error("Tool 'fetch_meme' not found.")
+                meme_url = None
+
+            # Structure the response to include both text and meme/GIF
+            response = {
+                "message": ai_text_response,
+                "meme_url": meme_url
+            }
 
             return response
         except Exception as e:
-            raise
+            logging.error(f"Error during agent execution: {e}", exc_info=True)
+            raise   
+
+   
+    def determine_meme_topic(self, ai_response: str, is_initial: bool = False) -> str:
+        """
+        Determines the topic for fetching a meme/GIF based on the AI's response content.
+
+        Args:
+            ai_response (str): The AI's textual response.
+            is_initial (bool): Flag indicating if it's the initial interaction.
+
+        Returns:
+            str: The topic to search for memes/GIFs.
+        """
+
+        if is_initial:
+            prompt = (
+                "Analyze the following AI response and determine the most appropriate welcoming meme topic from the list below:\n\n"
+                "AI Response:\n"
+                f"{ai_response}\n\n"
+                "Available Meme Topics for Welcome:\n"
+                "welcome, hello, introduction, greeting\n\n"
+                "Based on the AI Response, select the most suitable meme topic:"
+                "you must provide the meme topic."
+            )
+        else:
+            # Define the prompt for the AI to determine the meme topic
+            prompt = (
+                "Analyze the following AI response and determine the most appropriate meme topic from the list below:\n\n"
+                "AI Response:\n"
+                f"{ai_response}\n\n"
+                "Based on the AI Response, select the most suitable meme topic:"
+                "you must provide the meme topic."
+            )
+
+        try:
+            # Assuming `self.llm` is your language model instance
+            response = self.llm.invoke(prompt)
+            meme_topic = response.content.strip().lower() if hasattr(response, 'content') else str(response).strip().lower()
+        except Exception as e:
+            logging.error(f"AI-based topic determination failed: {e}")
+            return "funny"  # Default topic
+
+        return meme_topic 
 
 
+        
+        
     def get_initial_greeting(self, user_id:str) -> dict:
         """
         Retrieves the initial greeting message for a user.
@@ -390,11 +447,11 @@ class MemeMingleAIAgent(AIAgent):
 
         if summaries_text:
             addendum = f"""
-    Previous Conversations Summary:
-    {summaries_text}
+        Previous Conversations Summary:
+        {summaries_text}
 
-    Please use the above information to continue assisting the user.
-    """
+        Please use the above information to continue assisting the user.
+        """
             self.system_message.content += addendum
 
 
@@ -422,9 +479,9 @@ class MemeMingleAIAgent(AIAgent):
             })
 
             introduction = """
-    This is your first session with the patient. Be polite and introduce yourself in a friendly and inviting manner.
-    In this session, do your best to understand what the user hopes to achieve through your service, and derive a therapy style fitting to their needs.
-    """
+        This is your first session with the patient. Be polite and introduce yourself in a friendly and inviting manner.
+        In this session, do your best to understand what the user hopes to achieve through your service, and derive a therapy style fitting to their needs.
+        """
 
             full_system_message = ''.join([system_message.content, introduction])
             system_message.content = full_system_message
@@ -438,6 +495,8 @@ class MemeMingleAIAgent(AIAgent):
             chat_id=chat_id,
             turn_id=0,
         )
+
+       
 
         return {
             "message": response,
@@ -499,3 +558,18 @@ class MemeMingleAIAgent(AIAgent):
 
         print(result)
         pass
+
+    def get_tool_by_name(self, tool_name: str):
+        """
+        Retrieves a tool object by its name from the tools list.
+
+        Args:
+            tool_name (str): The name of the tool to retrieve.
+
+        Returns:
+            Tool: The tool object if found, else None.
+        """
+        for tool in self.tools:
+            if tool.name == tool_name:
+                return tool
+        return None
