@@ -23,7 +23,7 @@ class GenerateSuggestionsInput(BaseModel):
     user_input: str
 
 # Define the input schema for the WebSearchGoogle tool
-class WebSearchGoogleInput(BaseModel):
+class WebSearchBingInput(BaseModel):
     query: str
 
 # Define the input schema for the TextbookSearch tool    

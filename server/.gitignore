@@ -8,6 +8,8 @@ cloud_service.json
 # C extensions
 *.so
 
+generated_documents/
+static
 # Distribution / packaging
 .Python
 build/

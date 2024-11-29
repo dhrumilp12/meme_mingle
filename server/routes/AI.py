@@ -36,13 +36,14 @@ def get_mental_health_agent_welcome(user_id):
         tool_names=[
             "gutendex_textbook_search",
             "generate_suggestions",
-            "web_search_youtube",
             "web_search_tavily",
-            "textbook_search",
             "location_search_gplaces",
-            "web_search_google",
+            "textbook_search",
             "user_profile_retrieval",
-            "agent_facts"
+            "agent_facts",
+            "generate_document",
+            "job_search",
+            "web_search_bing",
         ],
         desired_role=desired_role  # Pass the desired role to the agent
     )
@@ -106,16 +107,14 @@ def run_mental_health_agent(user_id, chat_id):
         tool_names=[
             "gutendex_textbook_search",
             "generate_suggestions",
-            "web_search_youtube",
-            "web_search_google",
             "web_search_tavily",
             "location_search_gplaces",
             "textbook_search",
             "user_profile_retrieval",
             "agent_facts",
-            "user_journey_retrieval",
             "generate_document",
-            "job_search"
+            "job_search",
+            "web_search_bing",
         ],
         desired_role=desired_role  
     )
