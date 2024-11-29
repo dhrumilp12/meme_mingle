@@ -1,6 +1,6 @@
 """ Constants used in the application. """
 """STEP 1: Update the constants in this file to match the requirements of the application."""
-APP_NAME = "GNEC"
+APP_NAME = "MemeMingle"
 
 
 PROCESSING_STEP = 1 # The chat turn upon which the app would update the database
