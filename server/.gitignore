@@ -8,6 +8,7 @@ cloud_service.json
 # C extensions
 *.so
 
+generated_audio/
 generated_documents/
 static
 # Distribution / packaging

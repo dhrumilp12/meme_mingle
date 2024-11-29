@@ -37,6 +37,7 @@ from langchain_core.messages.system import SystemMessage
 from .ai_agent import AIAgent
 from services.azure_mongodb import MongoDBClient
 from services.azure_form_recognizer import extract_text_from_file
+from services.text_to_speech_service import text_to_speech
 # Constants
 from utils.consts import SYSTEM_MESSAGE
 
@@ -360,10 +361,14 @@ class MemeMingleAIAgent(AIAgent):
                 logging.error("Tool 'fetch_meme' not found.")
                 meme_url = None
 
+            # Convert AI text response to speech
+            audio_url = self.convert_text_to_speech(ai_text_response, user_id, chat_id, turn_id)
+
             # Structure the response to include both text and meme/GIF
             response = {
                 "message": ai_text_response,
-                "meme_url": meme_url
+                "meme_url": meme_url,
+                "audio_url": audio_url
             }
 
             return response
@@ -573,3 +578,36 @@ class MemeMingleAIAgent(AIAgent):
             if tool.name == tool_name:
                 return tool
         return None
+
+    def convert_text_to_speech(self, text: str, user_id: str, chat_id: int, turn_id: int) -> str:
+        """
+        Converts the given text to speech and returns the URL of the audio file.
+        
+        Args:
+            text (str): The text to convert to speech.
+            user_id (str): The unique identifier for the user.
+            chat_id (int): The unique identifier for the chat.
+            turn_id (int): The turn number in the chat.
+        
+        Returns:
+            str: The URL to access the generated audio file.
+        """
+        try:
+            audio_data = text_to_speech(text)
+            # Define a unique filename
+            filename = f"{user_id}_{chat_id}_{turn_id}.wav"
+            file_path = os.path.join('generated_audio', filename)
+            
+            # Ensure the directory exists
+            os.makedirs('generated_audio', exist_ok=True)
+            
+            # Save the audio file
+            with open(file_path, 'wb') as f:
+                f.write(audio_data)
+            
+            # Assuming you have a static route to serve 'generated_audio'
+            audio_url = f"/ai_mentor/download_audio/{filename}"
+            return audio_url
+        except Exception as e:
+            logging.error(f"Text-to-speech conversion failed: {e}")
+            return ""
