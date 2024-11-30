@@ -9,7 +9,7 @@ import {
   ValidatorFn,
   FormControl,
 } from '@angular/forms';
-import { AuthService } from '../../app.service';
+import { AppService } from '../../app.service';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
@@ -74,7 +74,7 @@ export class SignUpComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService,
+    private authService: AppService,
     private router: Router
   ) {}
 

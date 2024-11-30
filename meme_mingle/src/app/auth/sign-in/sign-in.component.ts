@@ -7,7 +7,7 @@ import {
   AbstractControl,
   FormControl,
 } from '@angular/forms';
-import { AuthService } from '../../app.service';
+import { AppService } from '../../app.service';
 import { RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { environment } from 'src/app/shared/constant/environment';
@@ -33,7 +33,7 @@ export class SignInComponent implements OnInit {
   isSignUpActive: boolean = false;
 
   constructor(
-    private authService: AuthService,
+    private authService: AppService,
     private router: Router,
     private ngZone: NgZone
   ) {}

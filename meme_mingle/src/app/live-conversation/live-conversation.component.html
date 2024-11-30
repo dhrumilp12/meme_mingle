@@ -1,0 +1,73 @@
+<div class="conversation-container">
+  <h2>Live Conversational AI</h2>
+
+  <!-- Overlay for Initial User Interaction -->
+  <div *ngIf="showOverlay" class="overlay">
+    <button (click)="unlockAudio()" class="unlock-button">
+      Start Conversation
+    </button>
+  </div>
+
+  <!-- Status Indicators -->
+  <div class="status-indicators">
+    <div *ngIf="isListening" class="indicator listening">
+      <span class="icon">🎤</span> Listening...
+    </div>
+    <div *ngIf="isProcessing" class="indicator processing">
+      <span class="icon">⏳</span> Processing...
+    </div>
+    <div *ngIf="isPlaying" class="indicator playing">
+      <span class="icon">🔊</span> AI is speaking...
+    </div>
+  </div>
+
+  <!-- Messages -->
+  <div class="messages" aria-live="polite" aria-atomic="false">
+    <div *ngFor="let msg of conversation" class="message-wrapper">
+      <div
+        [ngClass]="{
+          'user-message': msg.sender === 'You',
+          'ai-message': msg.sender === 'AI'
+        }"
+        class="message"
+      >
+        <img
+          *ngIf="msg.sender === 'You'"
+          src="assets/user-avatar.png"
+          alt="User Avatar"
+          class="avatar"
+        />
+        <img
+          *ngIf="msg.sender === 'AI'"
+          src="assets/ai-avatar.png"
+          alt="AI Avatar"
+          class="avatar"
+        />
+        <div class="message-content">
+          <strong>{{ msg.sender }}</strong>
+          <span>{{ msg.message }}</span>
+          <div class="timestamp">{{ msg.timestamp | date: 'shortTime' }}</div>
+        </div>
+        <!-- Replay Button -->
+        <button
+          *ngIf="msg.audioUrl"
+          (click)="playAudio(msg.audioUrl)"
+          class="replay-button"
+          aria-label="Replay AI response audio"
+          matTooltip="Replay Audio"
+        >
+          🔁
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Optional: Dark Mode Toggle -->
+  <div class="theme-toggle">
+    <label class="switch">
+      <input type="checkbox" (change)="toggleTheme()" />
+      <span class="slider round"></span>
+    </label>
+    <span>{{ isDarkMode ? 'Dark Mode' : 'Light Mode' }}</span>
+  </div>
+</div>

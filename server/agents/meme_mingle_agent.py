@@ -605,8 +605,8 @@ class MemeMingleAIAgent(AIAgent):
             with open(file_path, 'wb') as f:
                 f.write(audio_data)
             
-            # Assuming you have a static route to serve 'generated_audio'
-            audio_url = f"/ai_mentor/download_audio/{filename}"
+            backend_base_url = os.getenv('BACKEND_BASE_URL', 'http://localhost:8000')  # Ensure this environment variable is set
+            audio_url = f"{backend_base_url}/ai_mentor/download_audio/{filename}"
             return audio_url
         except Exception as e:
             logging.error(f"Text-to-speech conversion failed: {e}")

@@ -2,7 +2,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
-import { AuthService } from '../app.service';
+import { AppService } from '../app.service';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -44,13 +44,13 @@ export class UserProfileComponent implements OnInit {
   baseUrl: string = environment.baseUrl;
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService,
+    private appService: AppService,
     private router: Router,
     private dialog: MatDialog 
   ) {}
 
   ngOnInit(): void {
-    if (!this.authService.isAuthenticated()) {
+    if (!this.appService.isAuthenticated()) {
       this.router.navigate(['/auth/sign-in'], { queryParams: { error: 'Please sign in to access your profile.' } });
       return;
     }
@@ -80,7 +80,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   fetchUserProfile(): void {
-    this.authService.getUserProfile().subscribe({
+    this.appService.getUserProfile().subscribe({
       next: (response) => {
         this.profileForm.patchValue({
           username: response.username || '',
@@ -146,7 +146,7 @@ export class UserProfileComponent implements OnInit {
       formData.append('profile_picture', this.selectedFile);
     }
 
-    this.authService.updateUserProfile(formData).subscribe({
+    this.appService.updateUserProfile(formData).subscribe({
       next: (response) => {
         this.successMessage = 'Profile updated successfully.';
         this.isSubmitting = false;
@@ -176,13 +176,13 @@ export class UserProfileComponent implements OnInit {
 
   deleteProfile(): void {
     this.isSubmitting = true;
-    this.authService.deleteUserProfile().subscribe(
+    this.appService.deleteUserProfile().subscribe(
       response => {
         this.isSubmitting = false;
         // Optionally, show a success message
         this.successMessage = 'Your profile has been deleted successfully.';
         // Perform any additional cleanup, then navigate away
-        this.authService.signOut();
+        this.appService.signOut();
         this.router.navigate(['/auth/sign-up']);
       },
       error => {
