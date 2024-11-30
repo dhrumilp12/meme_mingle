@@ -33,7 +33,8 @@ export class AuthCallbackComponent implements OnInit {
         localStorage.setItem('access_token', token);
         localStorage.setItem('user_id', userId);
         localStorage.setItem('preferred_language', preferredLanguage || 'en'); 
-        this.router.navigate(['/user-profile']); // Adjust the route as needed
+        this.router.navigate(['/user-profile']);
+        // Adjust the route as needed
       } else {
         // Handle missing token or userId
         this.router.navigate(['/auth/sign-in'], { queryParams: { error: 'Authentication failed. Please try again.' } });

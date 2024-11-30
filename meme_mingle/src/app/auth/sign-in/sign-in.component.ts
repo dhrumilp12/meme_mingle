@@ -99,20 +99,34 @@ export class SignInComponent implements OnInit {
     this.showPassword = !this.showPassword;
   }
 
+  // signInWithGoogle() {
+  //   const googleAuthUrl = `${environment.baseUrl}/auth/google`;
+    
+  //   // Open a new window for Google OAuth
+  //   const width = 500;
+  //   const height = 600;
+  //   const left = (window.innerWidth / 2) - (width / 2);
+  //   const top = (window.innerHeight / 2) - (height / 2);
+  //   const authWindow = window.open(
+  //     googleAuthUrl,
+  //     'GoogleAuth',
+  //     `width=${width},height=${height},top=${top},left=${left}`
+  //   );
+  
+  //   // Listen for a message from the popup
+  //   window.addEventListener('message', (event) => {
+  //     if (event.origin === environment.baseUrl && event.data === 'auth-success') {
+  //       authWindow?.close(); // Close the popup
+  //       this.router.navigate(['/user-profile']); // Redirect to the user profile page
+  //     }
+  //   });
+  // }
+
   signInWithGoogle() {
     const googleAuthUrl = `${environment.baseUrl}/auth/google`;
-
-    // Open a new window for Google OAuth
-    const width = 500;
-    const height = 600;
-    const left = (window.innerWidth / 2) - (width / 2);
-    const top = (window.innerHeight / 2) - (height / 2);
-    window.open(
-      googleAuthUrl,
-      'GoogleAuth',
-      `width=${width},height=${height},top=${top},left=${left}`
-    );
+    window.location.href = googleAuthUrl;
   }
+  
 
   private handleMessage(event: MessageEvent) {
     const trustedOrigin = window.location.origin;
