@@ -20,6 +20,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatOptionModule } from '@angular/material/core';
 import { passwordMatchValidator, passwordStrengthValidator, supportedLanguages } from 'src/app/shared/constant/data.constant';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-sign-up',
@@ -28,13 +29,6 @@ import { passwordMatchValidator, passwordStrengthValidator, supportedLanguages }
     CommonModule,
     ReactiveFormsModule,
     RouterModule,
-    MatInputModule,
-    MatButtonModule,
-    MatSelectModule,
-    MatCardModule,
-    MatIconModule,
-    MatFormFieldModule,
-    MatOptionModule,
   ],
   templateUrl: './sign-up.component.html',
   styleUrls: ['./sign-up.component.scss'],
@@ -56,7 +50,8 @@ export class SignUpComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AppService,
-    private router: Router
+    private router: Router,
+    private toaster :ToastrService
   ) {}
 
   ngOnInit() {
@@ -141,15 +136,15 @@ export class SignUpComponent implements OnInit {
           localStorage.setItem('access_token', response.access_token);
           localStorage.setItem('user_id', response.userId);
           this.router.navigate(['/dashboard']);
+          this.toaster.success('User Register Successfull','Hey there ! ')
         },
         error: (error) => {
-          console.error('Error registering user', error);
           if (error.status === 409) {
-            this.errorMessage = 'A user with this username or email already exists.';
+            this.toaster.error('A user with this username or email already exists. ')
           } else if (error.status === 400) {
-            this.errorMessage = error.error.error || 'Failed to register user.';
+            this.toaster.error(error.error.error || 'Failed to register user.')
           } else {
-            this.errorMessage = 'An unexpected error occurred. Please try again later.';
+            this.toaster.error("An unexpected error occurred. Please try again later.")
           }
           this.isSubmitting = false;
         },
@@ -158,7 +153,7 @@ export class SignUpComponent implements OnInit {
         }
       });
     } else {
-      this.errorMessage = 'Please correct the errors in the form.';
+      this.toaster.error('Please correct the errors in the form.')
       this.isSubmitting = false;
     }
   }
