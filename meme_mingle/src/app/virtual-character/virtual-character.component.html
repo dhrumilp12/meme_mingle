@@ -1,21 +1,48 @@
-<!-- virtual-character.component.html -->
-<a-scene embedded arjs>
-    <!-- Define the AR marker -->
+<!-- src/app/virtual-character/virtual-character.component.html -->
+
+<div class="ar-container">
+  <!-- Loading Indicator -->
+  <div *ngIf="isLoading" class="loading">
+    Loading AR Experience...
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="error" class="error">
+    {{ error }}
+  </div>
+
+  <!-- AR Scene -->
+  <a-scene
+    *ngIf="!isLoading && !error && modelUrl"
+    embedded
+    arjs="sourceType: webcam; debugUIEnabled: false;"
+    renderer="logarithmicDepthBuffer: true; antialias: true;"
+    style="width: 100%; height: 100vh; position: relative;"
+  >
+    <!-- Assets -->
+    <a-assets>
+      <a-asset-item id="virtual-model" src="{{ modelUrl }}"></a-asset-item>
+    </a-assets>
+
+    <!-- Lighting -->
+    <a-entity light="type: ambient; color: #ffffff"></a-entity>
+    <a-entity light="type: directional; color: #ffffff; intensity: 0.5" position="1 1 0"></a-entity>
+
+    <!-- Marker definition using preset for tracking -->
     <a-marker preset="hiro">
-      <!-- Virtual Character Entity -->
-      <a-entity 
-        id="virtualCharacter"
-        gltf-model="url(/assets/models/virtual-character/scene.gltf)"
-        scale="0.5 0.5 0.5" 
-        animation-mixer>
+      <!-- Virtual Character Model -->
+      <a-entity
+        gltf-model="#virtual-model"
+        scale="0.5 0.5 0.5"
+        animation-mixer
+        position="0 0 0"
+        rotation="0 180 0"
+        shadow
+      >
       </a-entity>
     </a-marker>
+
+    <!-- Camera -->
     <a-entity camera></a-entity>
-    
-    <!-- Button to Start Voice Input -->
-    <button id="voiceInputButton" ng-click="startVoiceInput()">Speak</button>
-    
-    <!-- Audio Element for Speech Output -->
-    <audio id="speechOutput" controls autoplay style="display:none;"></audio>
   </a-scene>
-  
+</div>

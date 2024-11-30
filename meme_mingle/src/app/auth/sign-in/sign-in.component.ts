@@ -7,7 +7,7 @@ import {
   AbstractControl,
   FormControl,
 } from '@angular/forms';
-import { AuthService } from '../../auth.service';
+import { AuthService } from '../../app.service';
 import { RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { environment } from 'src/app/shared/constant/environment';

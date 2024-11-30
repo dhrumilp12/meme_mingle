@@ -20,6 +20,13 @@ export const routes: Routes = [
           import('./user-profile/user-profile.routes').then((m) => m.routes),
       },
       {
+        path: 'virtual-character',
+        loadChildren: () =>
+          import('./virtual-character/virtual-charecter.routes').then(
+            (m) => m.routes
+        ),
+      },
+      {
         path: '**',
         redirectTo: 'error',
         pathMatch: 'full',

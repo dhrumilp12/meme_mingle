@@ -10,7 +10,7 @@ cloud_service.json
 
 generated_audio/
 generated_documents/
-static
+static/profile_pics
 # Distribution / packaging
 .Python
 build/

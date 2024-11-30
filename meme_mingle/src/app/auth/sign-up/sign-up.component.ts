@@ -9,7 +9,7 @@ import {
   ValidatorFn,
   FormControl,
 } from '@angular/forms';
-import { AuthService } from '../../auth.service';
+import { AuthService } from '../../app.service';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
