@@ -1,4 +1,8 @@
 import { Routes } from '@angular/router';
+import { UserProfileComponent } from './user-profile/user-profile.component';
+import { AboutusComponent } from './layout/aboutus/aboutus.component';
+import { ContactComponent } from './layout/contact/contact.component';
+import { FaqComponent } from './layout/faq/faq.component';
 
 export const routes: Routes = [
     {
@@ -6,34 +10,44 @@ export const routes: Routes = [
         redirectTo: 'auth',
         pathMatch: 'full',
       },
-      // {
-      //   path: '',
-      //   loadChildren: () => import('./main/main.routes').then((m) => m.routes),
-      // },
       {
         path: 'auth',
         loadChildren: () => import('./auth/auth.routes').then((m) => m.routes),
       },
       {
         path: 'user-profile',
-        loadChildren: () =>
-          import('./user-profile/user-profile.routes').then((m) => m.routes),
-      },
-      {
-        path: 'virtual-character',
-        loadChildren: () =>
-          import('./virtual-character/virtual-charecter.routes').then(
-            (m) => m.routes
-        ),
-      },
-      {
-        path: 'live-conversation',
-        loadChildren: () =>
-          import('./live-conversation/live-conversation.routes').then(
-            (m) => m.routes
-          ),
-
-      },
+        loadComponent: () =>
+          import('./user-profile/user-profile.component').then((m) => UserProfileComponent),
+  },
+  {
+    path: 'About Us',
+    loadComponent: () =>
+      import('./layout/aboutus/aboutus.component').then((m) => AboutusComponent),
+  },
+  {
+    path: 'Contact',
+    loadComponent: () =>
+      import('./layout/contact/contact.component').then((m) => ContactComponent),
+  },
+  {
+    path: 'FAQ',
+    loadComponent: () =>
+      import('./layout/faq/faq.component').then((m) => FaqComponent),
+  },
+      // {
+      //   path: 'virtual-character',
+      //   loadChildren: () =>
+      //     import('./virtual-character/virtual-charecter.routes').then(
+      //       (m) => m.routes
+      //   ),
+      // },
+      // {
+      //   path: 'live-conversation',
+      //   loadChildren: () =>
+      //     import('./live-conversation/live-conversation.routes').then(
+      //       (m) => m.routes
+      //     ),
+      // },
 
       {
         path: '**',
