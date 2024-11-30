@@ -12,11 +12,11 @@ export const routes: Routes = [
         redirectTo: 'home',
         pathMatch: 'full',
       },
-      // {
-      //   path: 'home',
-      //   loadComponent: () =>
-      //     import('./home/home.component').then((m) => m.HomeComponent),
-      // },
+      {
+        path: 'home',
+        loadComponent: () =>
+          import('../live-conversation/live-conversation.component').then((m) => m.LiveConversationComponent),
+      },
       
       
     ],

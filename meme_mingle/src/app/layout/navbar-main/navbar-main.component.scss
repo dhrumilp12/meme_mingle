@@ -1,0 +1,61 @@
+/* Navbar container */
+.mememingle-headernav {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: center; /* Center-align content horizontally */
+    align-items: center; /* Center-align content vertically */
+    padding: 0 20px;
+    background-color: rgba(255, 255, 255, 0.9);
+    position: relative;
+    z-index: 2;
+  }
+  
+  /* Logo styling */
+  .mememingle-logo {
+    width: 60px;
+    height: auto;
+    position: absolute; /* Remove it from the flow */
+    left: 20px; /* Keep it on the left side */
+  }
+  
+  /* Navigation links container */
+  .mememingle-links {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: center; /* Ensure links are center-aligned */
+  }
+  
+  /* Individual link styling */
+  .mememingle-links span {
+    color: rgba(17, 17, 17, 1);
+    font-size: 16px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  
+  .mememingle-links span:hover {
+    color: rgba(5, 95, 114, 1); /* Highlight effect */
+  }
+  
+  /* Responsive Adjustments */
+  @media screen and (max-width: 768px) {
+    .mememingle-headernav {
+      flex-direction: column;
+      height: auto;
+      padding: 10px;
+    }
+  
+    .mememingle-links {
+      gap: 10px;
+      flex-wrap: wrap; /* Allow links to wrap on smaller screens */
+    }
+  
+    .mememingle-logo {
+      width: 50px;
+    }
+  }
+  

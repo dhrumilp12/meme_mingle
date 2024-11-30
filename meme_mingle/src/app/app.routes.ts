@@ -14,7 +14,7 @@ export const routes: Routes = [
         path: 'auth',
         loadChildren: () => import('./auth/auth.routes').then((m) => m.routes),
       },
-      {
+  {
         path: 'user-profile',
         loadComponent: () =>
           import('./user-profile/user-profile.component').then((m) => UserProfileComponent),
@@ -33,6 +33,11 @@ export const routes: Routes = [
     path: 'FAQ',
     loadComponent: () =>
       import('./layout/faq/faq.component').then((m) => FaqComponent),
+  },
+  {
+    path: 'home',
+    loadComponent: () =>
+      import('./live-conversation/live-conversation.component').then((m) => m.LiveConversationComponent),
   },
       // {
       //   path: 'virtual-character',

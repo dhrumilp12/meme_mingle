@@ -14,6 +14,7 @@ import { environment } from '../shared/environments/environment';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { DeleteConfirmationDialogComponent } from './delete-confirmation-dialog.component';
 import { supportedLanguages } from '../shared/constant/data.constant';
+import { NavbarMainComponent } from '../layout/navbar-main/navbar-main.component';
 
 @Component({
   selector: 'app-user-profile',
@@ -27,6 +28,7 @@ import { supportedLanguages } from '../shared/constant/data.constant';
     MatSelectModule,
     MatProgressSpinnerModule,
     MatDialogModule,
+    NavbarMainComponent
   ],
   templateUrl: './user-profile.component.html',
   styleUrls: ['./user-profile.component.scss'],
@@ -154,7 +156,7 @@ export class UserProfileComponent implements OnInit {
         this.isSubmitting = false;
         // Optionally, redirect to dashboard
         setTimeout(() => {
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/main/home']);
         }, 2000); // Redirect after 2 seconds
       },
       error: (error) => {

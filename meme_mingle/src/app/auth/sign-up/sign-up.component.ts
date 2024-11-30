@@ -38,12 +38,14 @@ export class SignUpComponent implements OnInit {
   errorMessage: string = '';
   hidePassword = true;
   submitted = false;
+  currentProfilePicture :any='assets/img/download.png'
   hideConfirmPassword = true;
   selectedFile: File | null = null;
   fileError: string = '';
   isSubmitting: boolean = false;
   isSignUpActive: boolean = true;
   isSignInActive: boolean = false;
+  data:any=''
 
   // Define supported languages
   supportedLanguges = supportedLanguages
@@ -76,9 +78,9 @@ export class SignUpComponent implements OnInit {
         fieldOfStudy: new FormControl(''),
         preferredLanguage: new FormControl('', [
           Validators.required,
-          Validators.pattern('^[a-z]{2}$'),
+          // Validators.pattern('^[a-z]{2}$'),
         ]),
-        profile_picture:new FormControl('',Validators.required)
+        // profile_picture:new FormControl('',Validators.required)
       },
       { validators: passwordMatchValidator }
     );
@@ -89,6 +91,7 @@ export class SignUpComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length) {
       const file = input.files[0];
+      console.log('hello')
       // Validate file type
       const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif'];
       if (!allowedTypes.includes(file.type)) {
@@ -104,8 +107,12 @@ export class SignUpComponent implements OnInit {
         this.selectedFile = null;
         return;
       }
-
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.currentProfilePicture = e.target?.result;
+      };
       this.selectedFile = file;
+      this.data = this.selectedFile.name
       this.fileError = '';
     }
   }
@@ -115,6 +122,7 @@ export class SignUpComponent implements OnInit {
     this.isSubmitting = true;
     this.errorMessage = '';
 
+    console.log(this.signUpForm.controls,"value")
     if (this.signUpForm.valid) {
       const formValue = { ...this.signUpForm.value };
       delete formValue.confirmPassword;
@@ -129,13 +137,13 @@ export class SignUpComponent implements OnInit {
       if (this.selectedFile) {
         formData.append('profile_picture', this.selectedFile, this.selectedFile.name);
       }
-
+ 
       this.authService.signUp(formData).subscribe({
         next: (response) => {
           console.log('User registered successfully', response);
           localStorage.setItem('access_token', response.access_token);
           localStorage.setItem('user_id', response.userId);
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/main/home']);
           this.toaster.success('User Register Successfull','Hey there ! ')
         },
         error: (error) => {
@@ -167,6 +175,9 @@ export class SignUpComponent implements OnInit {
     this.isSignUpActive = false;
     this.isSignInActive = true;
     this.router.navigate(['/auth/sign-in']);
+  }
+  triggerFileInput(fileInput: HTMLInputElement): void {
+    fileInput.click(); // Programmatically trigger the file input
   }
 }
 
