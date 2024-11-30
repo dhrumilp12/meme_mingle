@@ -1,115 +1,173 @@
-<!-- user-profile.component.html -->
-<ng-template #loading>
-  <div class="loading-container">
-    <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
-    <p>Loading profile...</p>
+<div class="signup-container">
+  <!-- Left Section: Banner Image -->
+  <div class="signup-left">
+    <img src="../../assets/img/banner.png" alt="Banner Image" class="banner-image" />
   </div>
-</ng-template>
 
-<div class="user-profile-container" *ngIf="!isLoading; else loading">
-    <h2>User Profile</h2>
-  
-    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
-      <!-- Username -->
-      <mat-form-field appearance="fill" class="full-width">
-        <mat-label>Username</mat-label>
-        <input matInput formControlName="username" placeholder="Enter your username" readonly>
-      </mat-form-field>
-  
-      <!-- Email (Read-Only) -->
-      <mat-form-field appearance="fill" class="full-width">
-        <mat-label>Email</mat-label>
-        <input matInput formControlName="email" placeholder="Enter your email" readonly>
-      </mat-form-field>
-  
-      <!-- Name -->
-      <mat-form-field appearance="fill" class="full-width">
-        <mat-label>Name</mat-label>
-        <input matInput formControlName="name" placeholder="Enter your name">
-        <mat-error *ngIf="profileForm.get('name')?.hasError('minlength')">
-          Name must be at least 2 characters long.
-        </mat-error>
-      </mat-form-field>
-  
-      <!-- Age -->
-      <mat-form-field appearance="fill" class="full-width">
-        <mat-label>Age</mat-label>
-        <input matInput type="number" formControlName="age" placeholder="Enter your age">
-        <mat-error *ngIf="profileForm.get('age')?.hasError('min')">
-          Minimum age is 18.
-        </mat-error>
-        <mat-error *ngIf="profileForm.get('age')?.hasError('max')">
-          Maximum age is 120.
-        </mat-error>
-      </mat-form-field>
-  
-      <!-- Gender -->
-      <mat-form-field appearance="fill" class="full-width">
-        <mat-label>Gender</mat-label>
-        <mat-select formControlName="gender">
-          <mat-option *ngFor="let gender of genders" [value]="gender">
-            {{ gender | titlecase }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-  
-      <!-- Place of Residence -->
-      <mat-form-field appearance="fill" class="full-width">
-        <mat-label>Place of Residence</mat-label>
-        <input matInput formControlName="placeOfResidence" placeholder="Enter your place of residence">
-      </mat-form-field>
-  
-      <!-- Field of Study -->
-      <mat-form-field appearance="fill" class="full-width">
-        <mat-label>Field of Study</mat-label>
-        <input matInput formControlName="fieldOfStudy" placeholder="Enter your field of study">
-      </mat-form-field>
-  
-      <!-- Preferred Language -->
-      <mat-form-field appearance="fill" class="full-width">
-        <mat-label>Preferred Language</mat-label>
-        <input matInput formControlName="preferredLanguage" placeholder="e.g., en, es, fr">
-        <mat-error *ngIf="profileForm.get('preferredLanguage')?.hasError('pattern')">
-          Please enter a valid two-letter language code.
-        </mat-error>
-      </mat-form-field>
-      
-      <!-- Profile Picture -->
-    <div class="profile-picture-section">
-        <label for="profilePicture">Profile Picture</label>
-        <input type="file" id="profilePicture" (change)="onFileSelected($event)" accept="image/*">
-        <div *ngIf="selectedImageUrl" class="image-preview">
-          <img [src]="selectedImageUrl" alt="Selected Profile Picture">
-        </div>
-        <div *ngIf="currentProfilePicture" class="current-picture">
-          <p>Current Profile Picture:</p>
-          <img [src]="currentProfilePicture" alt="Current Profile Picture">
-        </div>
-      </div>
-      
-      <!-- Submit Button -->
-      <button mat-raised-button color="primary" type="submit" [disabled]="isSubmitting">
-        {{ isSubmitting ? 'Updating...' : 'Update Profile' }}
-      </button>
+  <!-- Right Section: Conditional Rendering for Sign-In / Sign-Up -->
+  <div class="signup-right">
+        <div class="card shadow-lg custom-card header">
+          <div class="card-body ms-3 me-3">
 
-      <!-- Delete Account Button -->
-      <button
-      mat-raised-button
-      color="warn"
-      type="button"
-      (click)="openDeleteConfirmationDialog()"
-      [disabled]="isSubmitting"
+            <h4 class="text-center">User Profile</h4>
+
+            <!-- Sign-Up Form -->
+              <p class="card-text fw-bold text-center">
+                Welcome, Your profile is set. Start your learning journey now!
+              </p>
+              <form class = "signup-form" [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+                <div class="row">
+
+                  <!-- Profile Picture -->
+                  <div class="profile-picture-section col-lg-4 col-md-6 col-sm-6">
+                    <label for="profilePicture" class="label fw-bold">Profile Picture
+
+                    </label>
+                    <input type="file" id="profilePicture" (change)="onFileSelected($event)" accept="image/*"
+                    style="display: none;" #fileInput
+                    >
+                    <div *ngIf="currentProfilePicture" class="current-picture" (click)="triggerFileInput(fileInput)">
+                      <img 
+                        [src]="currentProfilePicture" 
+                        class="current" 
+                        alt="Current Profile Picture" 
+                        width="100px" 
+                        height="100px"
+                        style="cursor: pointer;" 
+                      >
+                    </div>
+                  
+                  
+                  </div>
+
+                  <!-- Email -->
+                  <div class="label_input col-lg-4 col-md-6 col-sm-6">
+                    <label class="label">Email</label>
+                    <input 
+                      type="email" 
+                      class="form-control custom-input" 
+                      formControlName="email" 
+                      placeholder="Email"
+                      [ngClass]="{
+                        'is-invalid':
+                          (profileForm.get('email')!.touched && profileForm.get('email')!.invalid) ||
+                          (submitted && profileForm.get('email')!.invalid)
+                      }"
+                      >
+                      <small class="text-danger" *ngIf="(profileForm.get('email')!.touched || submitted) && profileForm.get('email')!.errors?.['required']">
+                        Email is required.
+                      </small>
+                  </div>
+
+                  <!-- Password -->
+        
+                  <!-- Username -->
+                  <div class="label_input col-lg-4 col-md-6 col-sm-6">
+                    <label class="label">Username</label>
+                    <input 
+                      type="text" 
+                      class="form-control custom-input" 
+                      formControlName="username" 
+                      placeholder="Username">
+                  </div>
+
+                  <!-- Name -->
+                  <div class="label_input col-lg-4 col-md-6 col-sm-6">
+                    <label class="label">Name</label>
+                    <input 
+                      type="text" 
+                      class="form-control custom-input" 
+                      formControlName="name" 
+                      placeholder="Name">
+                  </div>
+
+                  <!-- Gender -->
+                  <div class="label_input col-lg-4 col-md-6 col-sm-6">
+                    <label class="label">Gender</label>
+                    <select 
+                      class="form-control custom-input" 
+                      formControlName="gender">
+                      <option value="" disabled selected>Select Gender</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+
+                  <!-- Age -->
+                  <div class="label_input col-lg-4 col-md-6 col-sm-6">
+                    <label class="label">Age</label>
+                    <input 
+                      type="number" 
+                      class="form-control custom-input" 
+                      formControlName="age" 
+                      placeholder="Age">
+                  </div>
+
+                  <!-- Place of Residence -->
+                  <div class="label_input col-lg-4 col-md-6 col-sm-6">
+                    <label class="label">Place of Residence</label>
+                    <input 
+                      type="text" 
+                      class="form-control custom-input" 
+                      formControlName="placeOfResidence" 
+                      placeholder="Residence">
+                  </div>
+
+                  <!-- Field of Study -->
+                  <div class="label_input col-lg-4 col-md-6 col-sm-6">
+                    <label class="label">Field of Study</label>
+                    <input 
+                      type="text" 
+                      class="form-control custom-input" 
+                      formControlName="fieldOfStudy" 
+                      placeholder="Field of Study">
+                  </div>
+
+                  <!-- Preferred Language -->
+                  <div class="label_input col-lg-4 col-md-6 col-sm-6">
+                    <label class="label">Preferred Language</label>
+                    <select 
+                      class="form-control custom-input" 
+                      formControlName="preferredLanguage">
+                      <option value="" disabled selected>Select Language</option>
+                      <option *ngFor="let lang of supportedLanguages" [value]="lang.code">
+                        {{ lang.label }}
+                      </option>
+                    </select>
+                  </div>
+                
+                  
+                  <div class=" d-flex justify-content-center gap-2 text-center align-items-center">
+                    <button class="btn btn-outline-primary" type="submit" [disabled]="isSubmitting">
+                      {{ isSubmitting ? 'Updating...' : 'Update Profile' }}
+                    </button>
+                    <button
+                    type="button"
+                    class="btn btn-danger"
+                    (click)="openDeleteConfirmationDialog()"
+                    [disabled]="isSubmitting">
+                    Delete Profile
+                  </button>
+                  </div>
+            
+                </div>
+              </form>
+            </div>
+          </div>
+    
+  </div>
+</div>
+<!-- <div class="label_input col-lg-4 col-md-6 col-sm-6">
+  <label for="profilePicture" class="label">Profile Picture</label>
+  <input 
+    type="file" 
+    class="form-control custom-input" 
+    formControlName="profile_picture" 
+    (change)="onFileChange($event)"
+    
     >
-      Delete Profile
-    </button>
-    
-    <!-- Success and Error Messages (Ensure they are styled appropriately) -->
-    <div *ngIf="successMessage" class="success-message">
-      {{ successMessage }}
-    </div>
-    
-    <div *ngIf="errorMessage" class="error-message">
-      {{ errorMessage }}
-    </div>
-  
-    
+    <small class="text-danger" *ngIf="(profileForm.get('profile_picture')!.touched || submitted) && signUpForm.get('profile_picture')!.errors?.['required']">
+      Profile Photo is required.
+    </small>
+</div> -->

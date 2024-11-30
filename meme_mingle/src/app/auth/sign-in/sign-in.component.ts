@@ -11,6 +11,7 @@ import { AuthService } from '../../app.service';
 import { RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { environment } from 'src/app/shared/constant/environment';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-sign-in',
   standalone: true,
@@ -35,7 +36,8 @@ export class SignInComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private toaster : ToastrService
   ) {}
 
   ngOnInit() {
@@ -69,6 +71,7 @@ export class SignInComponent implements OnInit {
        
       this.authService.signIn(this.signInForm.value).subscribe({
         next: (response) => {
+          this.toaster.success("Login successfull",'User Login')
           localStorage.setItem('access_token', response.access_token);
           localStorage.setItem('user_id', response.userId);
           localStorage.setItem('preferredLanguage', response.preferredLanguage);
@@ -76,13 +79,12 @@ export class SignInComponent implements OnInit {
         },
         error: (error) => {
           console.error('Error during login:', error);
-          // Adjust error handling based on backend response structure
           if (error.status === 401) {
-            this.errorMessage = 'Invalid email/username or password.';
+            this.toaster.error("Invalid email/username or password.",'Login Failed')
           } else if (error.status === 400) {
-            this.errorMessage = error.error.msg || 'Please provide valid credentials.';
+            this.toaster.error(error.error.msg || 'Please provide valid credentials.')
           } else {
-            this.errorMessage = 'An unexpected error occurred. Please try again later.';
+            this.toaster.error('An unexpected error occurred. Please try again later.')
           }
           this.isSubmitting = false;
         },
