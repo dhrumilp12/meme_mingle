@@ -1,103 +1,134 @@
-<!-- sign-in.component.html -->
+<div class="signin-container">
+  <!-- Left 50%: Banner Image -->
+  <div class="signin-left">
+    <img src="../../assets/img/banner.png" alt="Banner Image" class="banner-image" />
+  </div>
 
-<div class="container-fluid text-align-center">
-  <div class="row">
-    <div class="col-lg-4"></div>
-    <div class="col-lg-4 col-sm-12">
-      <div class="d-flex align-items-center">
-        <div class="card shadow-lg custom-card header mt-3">
-          <div class="card-body mt-3 ms-3 me-3">
-            <h5 class="card-title title fw-bold fs-4">Log In</h5>
-            <p class="card-text">
-              Don't have an account?
-              <a routerLink="/auth/sign-up" class="link ms-2">Sign up</a>
-            </p>
-            <form class="mt-3" [formGroup]="signInForm" (ngSubmit)="onSubmit()">
-              
-              <!-- Identifier Field (Email or Username) -->
-              <div class="mb-3">
-                <label for="identifier" class="fw-bold">Email or Username</label>
-                <input
-                  type="text"
-                  class="form-control custom-input"
-                  id="identifier"
-                  formControlName="identifier"
-                  placeholder="Enter your email or username"
-                  [ngClass]="{
-                    'is-invalid':
-                      (signInForm.get('identifier')!.touched && signInForm.get('identifier')!.invalid) ||
-                      (submitted && signInForm.get('identifier')!.invalid)
-                  }"
-                >
-                <small class="text-danger" *ngIf="(signInForm.get('identifier')!.touched || submitted) && signInForm.get('identifier')!.errors?.['required']">
-                  Email or Username is required.
-                </small>
-              </div>
+  <!-- Right 50%: Sign-in Form -->
+  <div class="signin-right">
+    <div class="card shadow-lg custom-card headermt-3">
+      <div class="card-body mt-3 ms-3 me-3">
+        <!-- Toggle Buttons -->
+        <h5 class="switch_sign title fw-bold fs-3">
+          <button
+            class="toggle-btn-left"
+            [class.active]="isSignInActive"
+            (click)="showSignIn()"
+          >
+            Sign In
+          </button>
+          <button
+            class="toggle-btn-right"
+            [class.active]="!isSignInActive"
+            (click)="showSignUp()"
+          >
+            Sign Up
+          </button>
 
-              <!-- Password Field -->
-              <div class="mb-3">
-                <label for="password" class="fw-bold">Password</label>
-                <input
-                  [type]="showPassword ? 'text' : 'password'"
-                  class="form-control custom-input"
-                  id="password"
-                  formControlName="password"
-                  placeholder="Password"
-                  [ngClass]="{
-                    'is-invalid':
-                      (signInForm.get('password')!.touched && signInForm.get('password')!.invalid) ||
-                      (submitted && signInForm.get('password')!.invalid)
-                  }"
-                >
-                <small class="text-danger" *ngIf="(signInForm.get('password')!.touched || submitted) && signInForm.get('password')!.errors?.['required']">
-                  Password is required.
-                </small>
-                <div class="form-check mt-2">
-                  <input
-                    type="checkbox"
-                    class="form-check-input"
-                    id="showPassword"
-                    (change)="togglePasswordVisibility()"
-                  >
-                  <label class="form-check-label" for="showPassword">Show Password</label>
-                </div>
-              </div>
+        </h5>
 
-              <!-- Submit Button -->
-              <div class="d-flex gap-4 justify-content-center mb-3">
-                <button
-                  type="submit"
-                  class="btn btn-outline-success text-dark rounded-5"
-                  [disabled]="isSubmitting"
-                >
-                  {{ isSubmitting ? 'Logging in...' : 'Log In' }}
-                </button>
-              </div>
-            </form>
 
-            <!-- Divider -->
-            <div class="d-flex align-items-center my-3">
-              <div class="flex-grow-1 border-bottom"></div>
-              <span class="mx-2">OR</span>
-              <div class="flex-grow-1 border-bottom"></div>
-            </div>
+        <!-- Sign-In Form -->
+        <div *ngIf="isSignInActive">
 
-            <!-- Google Sign-In Button -->
-            <div class="d-flex justify-content-center">
-              <button
-                class="btn btn-danger rounded-5"
-                (click)="signInWithGoogle()"
+          <form class = "signin-form" [formGroup]="signInForm" (ngSubmit)="onSubmit()">
+            <!-- Identifier Field -->
+            <div class="mb-3">
+              <label for="identifier" class="fw-bold">Email or Username</label>
+              <input
+                type="text"
+                class="form-control custom-input"
+                id="identifier"
+                formControlName="identifier"
+                placeholder="Enter your email or username"
+                [ngClass]="{
+                  'is-invalid':
+                    (signInForm.get('identifier')!.touched && signInForm.get('identifier')!.invalid) ||
+                    (submitted && signInForm.get('identifier')!.invalid)
+                }"
               >
-                <i class="bi bi-google me-2"></i> Sign in with Google
-              </button>
+              <small class="text-danger" *ngIf="(signInForm.get('identifier')!.touched || submitted) && signInForm.get('identifier')!.errors?.['required']">
+                Email or Username is required.
+              </small>
+            </div>          
+ 
+
+            <!-- Password Field -->
+            <div class="mb-3">
+              <label for="password" class="fw-bold">Password</label>
+              <input
+                [type]="showPassword ? 'text' : 'password'"
+                class="form-control custom-input"
+                id="password"
+                formControlName="password"
+                placeholder="Password"
+                [ngClass]="{
+                  'is-invalid':
+                    (signInForm.get('password')!.touched && signInForm.get('password')!.invalid) ||
+                    (submitted && signInForm.get('password')!.invalid)
+                }"
+              >
+              <small class="text-danger" *ngIf="(signInForm.get('password')!.touched || submitted) && signInForm.get('password')!.errors?.['required']">
+                Password is required.
+              </small>
+              <div class="form-check mt-2">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="showPassword"
+                  (change)="togglePasswordVisibility()"
+                >
+                <label class="form-check-label" for="showPassword">Show Password</label>
+              </div>
             </div>
 
-            <!-- Error Message -->
-            <div *ngIf="errorMessage" class="alert alert-danger mt-3">
-              {{ errorMessage }}
+
+            <!-- Submit Button -->
+            <div class="d-flex flex-column gap-4 justify-content-center mb-3">
+              <button
+                type="submit"
+                class="btn btn-outline-success text-dark rounded-5"
+                [disabled]="isSubmitting"
+              >
+                {{ isSubmitting ? 'Logging in...' : 'Log In' }}
+              </button>
+              <p class="card-text">
+                <a routerLink="/auth/forgot-password" class="link ms-2">forgot-password</a>
+              </p>
             </div>
+ 
+          </form>
+        </div>
+
+        <!-- Sign-Up Placeholder -->
+        <div *ngIf="!isSignInActive" class="card shadow-lg custom-card headermt-3">
+          <div class="card-body text-center">
+            <h5 class="card-title title fw-bold fs-4">Sign Up</h5>
+            <!-- Add sign-up form here if needed in future -->
           </div>
-        </div>  
+        </div>
+
+        <!-- Divider -->
+        <div class="d-flex align-items-center my-3">
+          <div class="flex-grow-1 border-bottom"></div>
+          <span class="mx-2">OR</span>
+          <div class="flex-grow-1 border-bottom"></div>
+        </div>
+
+        <!-- Google Sign-In Button -->
+        <div class="d-flex justify-content-center">
+          <button
+            class="btn btn-danger rounded-5"
+            (click)="signInWithGoogle()"
+          >
+            <i class="bi bi-google me-2"></i> Sign in with Google
+          </button>
+        </div>
+
+        <!-- Error Message -->
+        <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+          {{ errorMessage }}
+        </div>
       </div>
     </div>
   </div>

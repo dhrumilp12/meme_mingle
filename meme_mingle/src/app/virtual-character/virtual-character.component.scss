@@ -1,0 +1,33 @@
+/* src/app/virtual-character/virtual-character.component.scss */
+
+:host {
+  display: block;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+.ar-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.loading,
+.error {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.5rem;
+  color: #ffffff;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  z-index: 10;
+}
+
+.error {
+  color: #ff4d4f;
+}

@@ -6,7 +6,7 @@ This module is the entry point of the application. It initializes the Flask app,
 from dotenv import load_dotenv
 from utils.extensions import oauth, mail
 import os
-from flask import Flask
+from flask import Flask, send_from_directory
 from flask_cors import CORS
 from config.config import Config
 from flask_jwt_extended import JWTManager

@@ -7,7 +7,7 @@ import {
   AbstractControl,
   FormControl,
 } from '@angular/forms';
-import { AuthService } from '../../auth.service';
+import { AuthService } from '../../app.service';
 import { RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { environment } from 'src/app/shared/constant/environment';
@@ -29,6 +29,8 @@ export class SignInComponent implements OnInit {
   submitted = false;
   showPassword: any = false;
   isSubmitting: boolean = false;
+  isSignInActive: boolean = true;
+  isSignUpActive: boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -58,6 +60,7 @@ export class SignInComponent implements OnInit {
   //   return this.signInForm.get('password')!;
   // }
 
+  
   onSubmit() {
     this.submitted = true;
     this.isSubmitting = true;
@@ -99,28 +102,18 @@ export class SignInComponent implements OnInit {
     this.showPassword = !this.showPassword;
   }
 
-  // signInWithGoogle() {
-  //   const googleAuthUrl = `${environment.baseUrl}/auth/google`;
-    
-  //   // Open a new window for Google OAuth
-  //   const width = 500;
-  //   const height = 600;
-  //   const left = (window.innerWidth / 2) - (width / 2);
-  //   const top = (window.innerHeight / 2) - (height / 2);
-  //   const authWindow = window.open(
-  //     googleAuthUrl,
-  //     'GoogleAuth',
-  //     `width=${width},height=${height},top=${top},left=${left}`
-  //   );
-  
-  //   // Listen for a message from the popup
-  //   window.addEventListener('message', (event) => {
-  //     if (event.origin === environment.baseUrl && event.data === 'auth-success') {
-  //       authWindow?.close(); // Close the popup
-  //       this.router.navigate(['/user-profile']); // Redirect to the user profile page
-  //     }
-  //   });
-  // }
+  showSignIn() {
+    this.isSignInActive = true;
+    this.isSignUpActive = false;
+
+  }
+  showSignUp() {
+    this.isSignUpActive = true;
+    this.isSignInActive = false;
+    this.router.navigate(['/auth/sign-up']);
+
+  }
+
 
   signInWithGoogle() {
     const googleAuthUrl = `${environment.baseUrl}/auth/google`;

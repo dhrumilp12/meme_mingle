@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SignInComponent } from './sign-in.component';
 import { ReactiveFormsModule } from '@angular/forms'; // Add this import
 import { Router } from '@angular/router'; // For navigation
-import { AuthService } from '../../auth.service'; // If using real service
+import { AuthService } from '../../app.service'; // If using real service
 import { HttpClientTestingModule } from '@angular/common/http/testing'; // For HttpClient
 import { of } from 'rxjs';
 

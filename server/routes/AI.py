@@ -226,3 +226,11 @@ def download_document(filename):
         return jsonify({'error': 'Invalid filename'}), 400
     # Serve the file from the 'generated_documents' directory
     return send_from_directory('generated_documents', filename, as_attachment=True)
+
+@ai_routes.get("/ai_mentor/download_audio/<filename>")
+def download_audio(filename):
+    # Security check to prevent directory traversal attacks
+    if '..' in filename or filename.startswith('/'):
+        return jsonify({'error': 'Invalid filename'}), 400
+    # Serve the file from the 'generated_audio' directory
+    return send_from_directory('generated_audio', filename, as_attachment=True, mimetype='audio/wav')

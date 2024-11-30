@@ -8,8 +8,9 @@ cloud_service.json
 # C extensions
 *.so
 
+generated_audio/
 generated_documents/
-static
+static/profile_pics
 # Distribution / packaging
 .Python
 build/
