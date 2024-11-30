@@ -29,6 +29,8 @@ export class SignInComponent implements OnInit {
   submitted = false;
   showPassword: any = false;
   isSubmitting: boolean = false;
+  isSignInActive: boolean = true;
+  isSignUpActive: boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -58,6 +60,7 @@ export class SignInComponent implements OnInit {
   //   return this.signInForm.get('password')!;
   // }
 
+  
   onSubmit() {
     this.submitted = true;
     this.isSubmitting = true;
@@ -98,6 +101,19 @@ export class SignInComponent implements OnInit {
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
   }
+
+  showSignIn() {
+    this.isSignInActive = true;
+    this.isSignUpActive = false;
+
+  }
+  showSignUp() {
+    this.isSignUpActive = true;
+    this.isSignInActive = false;
+    this.router.navigate(['/auth/sign-up']);
+
+  }
+
 
   signInWithGoogle() {
     const googleAuthUrl = `${environment.baseUrl}/auth/google`;

@@ -48,6 +48,8 @@ export class SignUpComponent implements OnInit {
   selectedFile: File | null = null;
   fileError: string = '';
   isSubmitting: boolean = false;
+  isSignUpActive: boolean = true;
+  isSignInActive: boolean = false;
 
   // Define supported languages
   supportedLanguages = [
@@ -178,4 +180,17 @@ export class SignUpComponent implements OnInit {
       this.isSubmitting = false;
     }
   }
+
+  showSignUp() {
+    this.isSignUpActive = true;
+    this.isSignInActive = false;
+  }
+  
+  showSignIn() {
+    this.isSignUpActive = false;
+    this.isSignInActive = true;
+    this.router.navigate(['/auth/sign-in']);
+  }
 }
+
+

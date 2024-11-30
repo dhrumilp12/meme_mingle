@@ -1,239 +1,164 @@
-<div class="container-fluid">
-  <div class="row ">
-    <div class="col-lg-2"></div>
-   <div class="col-lg-8 col-sm-12">
-     <div class="d-flex align-items-center justify-content-center">
+<div class="signup-container">
+  <!-- Left Section: Banner Image -->
+  <div class="signup-left">
+    <img src="../../assets/img/banner.png" alt="Banner Image" class="banner-image" />
+  </div>
+
+  <!-- Right Section: Conditional Rendering for Sign-In / Sign-Up -->
+  <div class="signup-right">
         <div class="card shadow-lg custom-card header">
           <div class="card-body mt-3 ms-3 me-3">
-            <h5 class="card-title title fw-bold fs-4 text-center">Create Your Mem-Mingle Account</h5>
-            <p class="card-text text-white text-center">Join us and start your fun learning adventure!</p>
-            <form class="" [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
-              <div class="row">
-                <div class="col-lg-4 col-md-6 col-sm-6 mb-2">
-                  <label for="profilePicture" class="label">Profile Picture</label>
-                  <input type="file" class="form-control custom-input" formControlName="profile_picture" (change)="onFileChange($event)">
+
+            <!-- Toggle Buttons -->
+            <h5 class="switch_sign title fw-bold fs-4 text-center">
+              <button 
+              class="toggle-btn-left"
+              [class.active]="isSignInActive" 
+                (click)="showSignIn()">
+                Sign In
+              </button>
+              <button 
+              class="toggle-btn-right"
+              [class.active]="isSignUpActive" 
+                (click)="showSignUp()">
+                Sign Up
+              </button>
+            </h5>
+
+            <!-- Sign-Up Form -->
+            <div *ngIf="isSignUpActive">
+              <p class="card-text text-white text-center">
+                Join us and start your fun learning adventure!
+              </p>
+              <form class = "signup-form" [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
+                <div class="row">
+
+                  <!-- Profile Picture -->
+                  <div class="label_input col-lg-4 col-md-6 col-sm-6">
+                    <label for="profilePicture" class="label">Profile Picture</label>
+                    <input 
+                      type="file" 
+                      class="form-control custom-input" 
+                      formControlName="profile_picture" 
+                      (change)="onFileChange($event)">
+                  </div>
+
+                  <!-- Email -->
+                  <div class="label_input col-lg-4 col-md-6 col-sm-6">
+                    <label class="label">Email</label>
+                    <input 
+                      type="email" 
+                      class="form-control custom-input" 
+                      formControlName="email" 
+                      placeholder="Email">
+                  </div>
+
+                  <!-- Password -->
+                  <div class="label_input col-lg-4 col-md-6 col-sm-6">
+                    <label class="label">Password</label>
+                    <input 
+                      type="password" 
+                      class="form-control custom-input" 
+                      formControlName="password" 
+                      placeholder="Password">
+                  </div>
+
+                  <!-- Confirm Password -->
+                  <div class="label_input col-lg-4 col-md-6 col-sm-6">
+                    <label class="label">Confirm Password</label>
+                    <input 
+                      type="password" 
+                      class="form-control custom-input" 
+                      formControlName="confirmPassword" 
+                      placeholder="Confirm Password">
+                  </div>
+
+                  <!-- Username -->
+                  <div class="label_input col-lg-4 col-md-6 col-sm-6">
+                    <label class="label">Username</label>
+                    <input 
+                      type="text" 
+                      class="form-control custom-input" 
+                      formControlName="username" 
+                      placeholder="Username">
+                  </div>
+
+                  <!-- Name -->
+                  <div class="label_input col-lg-4 col-md-6 col-sm-6">
+                    <label class="label">Name</label>
+                    <input 
+                      type="text" 
+                      class="form-control custom-input" 
+                      formControlName="name" 
+                      placeholder="Name">
+                  </div>
+
+                  <!-- Gender -->
+                  <div class="label_input col-lg-4 col-md-6 col-sm-6">
+                    <label class="label">Gender</label>
+                    <select 
+                      class="form-control custom-input" 
+                      formControlName="gender">
+                      <option value="" disabled selected>Select Gender</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+
+                  <!-- Age -->
+                  <div class="label_input col-lg-4 col-md-6 col-sm-6">
+                    <label class="label">Age</label>
+                    <input 
+                      type="number" 
+                      class="form-control custom-input" 
+                      formControlName="age" 
+                      placeholder="Age">
+                  </div>
+
+                  <!-- Place of Residence -->
+                  <div class="label_input col-lg-4 col-md-6 col-sm-6">
+                    <label class="label">Place of Residence</label>
+                    <input 
+                      type="text" 
+                      class="form-control custom-input" 
+                      formControlName="placeOfResidence" 
+                      placeholder="Residence">
+                  </div>
+
+                  <!-- Field of Study -->
+                  <div class="label_input col-lg-4 col-md-6 col-sm-6">
+                    <label class="label">Field of Study</label>
+                    <input 
+                      type="text" 
+                      class="form-control custom-input" 
+                      formControlName="fieldOfStudy" 
+                      placeholder="Field of Study">
+                  </div>
+
+                  <!-- Preferred Language -->
+                  <div class="label_input col-lg-4 col-md-6 col-sm-6">
+                    <label class="label">Preferred Language</label>
+                    <select 
+                      class="form-control custom-input" 
+                      formControlName="preferredLanguage">
+                      <option value="" disabled selected>Select Language</option>
+                      <option *ngFor="let lang of supportedLanguages" [value]="lang.code">
+                        {{ lang.label }}
+                      </option>
+                    </select>
+                  </div>
+
                 </div>
-                
-              <div class="col-lg-4 col-md-6 col-sm-6  mb-2">
-                <label for="" class="label">Email</label>
-                <input type="email" class="form-control custom-input" placeholder="Email"
-                formControlName="email"
-                [ngClass]="{'is-invalid': signUpForm.get('email')!.touched && signUpForm.get('email')!.invalid || submitted &&  signUpForm.get('email')!.invalid }"
-                >
-                <small class="text-danger" *ngIf="(signUpForm.get('email')!.touched || submitted) && signUpForm.get('email')!.errors?.['required']">
-                  Email is required
-              </small>
-              <small class="text-danger" *ngIf="(signUpForm.get('email')!.touched || submitted) && signUpForm.get('email')!.errors?.['email']">
-                 Enter a valid email address
-              </small>
-            </div>  
-            <div class="col-lg-4 col-md-6 col-sm-6 mb-2">
-              <label for="" class="label">Password</label>
-              <input
-                type="password"
-                class="form-control custom-input"
-                placeholder="Password"
-                formControlName="password"
-                [ngClass]="{
-                  'is-invalid': (signUpForm.get('password')!.invalid && signUpForm.get('password')!.touched) || submitted && signUpForm.get('password')!.invalid
-                }"
-              />
-              <small
-                class="text-danger"
-                *ngIf="(signUpForm.get('password')!.touched || submitted) && signUpForm.get('password')!.errors?.['required']"
-              >
-                Password is required
-              </small>
-              <small
-                class="text-danger"
-                *ngIf="(signUpForm.get('password')!.touched || submitted) && 
-                       !signUpForm.get('password')!.errors?.['required'] && 
-                       signUpForm.get('password')!.errors?.['passwordStrength']"
-              >
-                Password must be valid
-              </small>
+                <div class="d-flex gap-4 justify-content-center mt-sm-2">
+                  <button type="submit" class="btn btn-outline-success text-dark rounded-5">
+                    Sign Up
+                  </button>
+                </div>
+              </form>
             </div>
-            
-            <div class="col-lg-4 col-md-6 col-sm-6 mb-2">
-              <label for="" class="label">Confirm Password</label>
-              <input
-                type="password"
-                class="form-control custom-input"
-                formControlName="confirmPassword"
-                placeholder="Confirm Password"
-                [ngClass]="{
-                  'is-invalid': (signUpForm.get('confirmPassword')!.invalid && signUpForm.get('confirmPassword')!.touched) || submitted && signUpForm.get('confirmPassword')!.invalid || signUpForm.hasError('passwordsMismatch')
-                }"
-              />
-              <small
-                class="text-danger"
-                *ngIf="signUpForm.hasError('passwordsMismatch') && (submitted || signUpForm.get('confirmPassword')!.touched)"
-              >
-                Passwords do not match
-              </small>
-              <small
-                class="text-danger"
-                *ngIf="(signUpForm.get('confirmPassword')!.touched || submitted) && signUpForm.get('confirmPassword')!.errors?.['required']"
-              >
-                Confirm Password is required
-              </small>
-            </div>
-            
-            
-            <div class="col-lg-4 col-md-6 col-sm-6 mb-2">
-              <label for="" class="label">Username</label>
-              <input
-                type="text"
-                formControlName="username"
-                class="form-control custom-input"
-                placeholder="Username"
-                [ngClass]="{
-                  'is-invalid': (signUpForm.get('username')!.invalid && signUpForm.get('username')!.touched) || submitted && 
-                  signUpForm.get('username')!.invalid}"
-              />
-              <small
-                class="text-danger"
-                *ngIf="(signUpForm.get('username')!.touched || submitted) && signUpForm.get('username')!.errors?.['required']"
-              >
-                Username is required
-              </small>
-              <small
-                class="text-danger"
-                *ngIf="(signUpForm.get('username')!.touched || submitted) && 
-                       !signUpForm.get('username')!.errors?.['required'] && 
-                       signUpForm.get('username')!.errors?.['minlength']"
-              >
-                Username must be at least 3 characters long
-              </small>
-              <small
-                class="text-danger"
-                *ngIf="(signUpForm.get('username')!.touched || submitted) && 
-                       !signUpForm.get('username')!.errors?.['required'] && 
-                       signUpForm.get('username')!.errors?.['maxlength']"
-              >
-                Username must not exceed 20 characters
-              </small>
-              <small
-                class="text-danger"
-                *ngIf="(signUpForm.get('username')!.touched || submitted) && 
-                       !signUpForm.get('username')!.errors?.['required'] && 
-                       !signUpForm.get('username')!.errors?.['minlength'] && 
-                       !signUpForm.get('username')!.errors?.['maxlength'] && 
-                       signUpForm.get('username')!.errors?.['pattern']"
-              >
-                Username can only contain letters and numbers
-              </small>
-            </div>
-              
-            <div class="col-lg-4 col-md-6 col-sm-6 mb-2">
-              <label for="" class="label">Name</label>
-              <input type="text" class="form-control custom-input"
-              formControlName="name"
-              placeholder="Name"
-              [ngClass]="{'is-invalid': signUpForm.get('name')!.touched && signUpForm.get('name')!.invalid || submitted && signUpForm.get('name')!.invalid }"
-              >
-              <small class="text-danger" *ngIf="(signUpForm.get('name')!.touched || submitted) && signUpForm.get('name')!.errors?.['required']">
-                name is required
-            </small>
-            
-          </div>  
-          <div class="col-lg-4 col-md-6 col-sm-6 mb-2">
-            <label for="" class="label">Age</label>
-            <input
-              type="number"
-              class="form-control custom-input"
-              formControlName="age"
-              placeholder="Age"
-              [ngClass]="{
-                'is-invalid': (signUpForm.get('age')!.invalid && signUpForm.get('age')!.touched) || submitted && signUpForm.get('age')!.invalid
-              }"
-            />
-            <small
-    class="text-danger"
-    *ngIf="(signUpForm.get('age')!.touched || submitted) && signUpForm.get('age')!.errors?.['min'] && !signUpForm.get('age')!.errors?.['required']"
-  >
-    Age must be at least 18
-  </small>
-  <small class="text-danger" *ngIf="(signUpForm.get('age')!.touched || submitted) && signUpForm.get('age')!.errors?.['required']">
-    age is required
-</small>
           </div>
-            
-          <div class="col-lg-4 col-md-6 col-sm-6 mb-2">
-            <label for="" class="label">Gender</label>
-            <select
-              class="form-control custom-input"
-              formControlName="gender"
-              
-              [ngClass]="{
-                'is-invalid': (signUpForm.get('gender')!.invalid && signUpForm.get('gender')!.touched) || submitted && signUpForm.get('gender')!.invalid 
-              }"
-            >
-              <option value="" disabled selected>Select Gender</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-              <option value="other">Other</option>
-            </select>
-            <small
-              class="text-danger"
-              *ngIf="(signUpForm.get('gender')!.touched || submitted) && signUpForm.get('gender')!.errors?.['required']"
-            >
-              Gender is required.
-            </small>
-          </div>
-          
-      <div class="col-lg-4 col-md-6 col-sm-6 mb-2">
-        <label for="" class="label">Place of Residence</label>
-        <input type="text" class="form-control custom-input"
-        formControlName="placeOfResidence"
-        placeholder="Residence">
-    </div>  
-    <div class="col-lg-4 col-md-6 col-sm-6 mb-2">
-      <label for="" class="label">Field of Study</label>
-      <input type="text" class="form-control custom-input"
-      formControlName="fieldOfStudy"
-      placeholder="study">
-  </div> 
-
-  <!-- Preferred Language Dropdown -->
-  <div class="col-lg-4 col-md-6 col-sm-6 mb-2">
-    <label for="preferredLanguage" class="label">Preferred Language</label>
-    <select
-      id="preferredLanguage"
-      class="form-control custom-input"
-      formControlName="preferredLanguage"
-      [ngClass]="{
-        'is-invalid':
-          (signUpForm.get('preferredLanguage')!.invalid && signUpForm.get('preferredLanguage')!.touched) ||
-          submitted && signUpForm.get('preferredLanguage')!.invalid
-      }"
-    >
-      <option value="" disabled selected>Select Language</option>
-      <option *ngFor="let lang of supportedLanguages" [value]="lang.code">
-        {{ lang.label }}
-      </option>
-    </select>
-    <small class="text-danger" *ngIf="(signUpForm.get('preferredLanguage')!.touched || submitted) && signUpForm.get('preferredLanguage')!.errors?.['required']">
-      Preferred Language is required.
-    </small>
-    <small class="text-danger" *ngIf="(signUpForm.get('preferredLanguage')!.touched || submitted) && signUpForm.get('preferredLanguage')!.errors?.['pattern']">
-      Please select a valid language.
-    </small>
+        </div>
+    
   </div>
-
-  <div class="d-flex gap-4 justify-content-center mt-sm-2">
-      <button type="submit" class="btn btn-outline-success text-dark  rounded-5">Sign Up</button>
-   </div>
-   <div class="additional-options">
-    <span>Already have an account?</span>
-    <a routerLink="/auth/sign-in" class="ms-2">Sign In</a>
-  </div>
-</div>
-
-       </form>
-          </div>
-        </div>  
-      </div>
-    </div>
- <div class="col-lg-2"></div>
 </div>

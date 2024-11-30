@@ -1,29 +1,106 @@
+/* Container Styling */
+.signin-container {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  background-color: rgba(5, 95, 114, 1);
+}
+
+/* Left Section: Banner Image */
+.signin-left {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.banner-image {
+  max-width: 80%;
+  max-height: 80%;
+  object-fit: contain;
+}
+
+/* Right Section: Form Card */
+.signin-right {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+
+}
+
 .custom-card {
   border-radius: 15px;
+  width: 100%;
+  max-width: 400px; /* Consistent width */
+  min-height: 450px; /* Ensures consistent height */
+  transition: all 0.3s ease-in-out;
 }
-.card{
-  background: linear-gradient(135deg, #2b8ce1 0%,#dfd5ea 100%);
+
+/* Toggle Buttons */
+// .toggle-buttons {
+//   display: flex;
+//   justify-content: center;
+//   gap: 10px;
+//   margin-bottom: 20px;
+// }
+
+.toggle-btn-left {
+  width: 120px;
+  text-align: center;
+  color: white;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
 }
-.header{
-  // width: 30rem;
-  // height: 23rem;
-  border-radius: 40px;
-}
-a{
-  text-decoration: none;
+
+.toggle-btn-left.active {
+  background-color: #000;
   color: white;
 }
-.btn:hover {
-  background-color: #2b8ce1;
-  color: white !important;
-  border: 1px solid white !important;
-}
-.btn{
-  border: 1px solid black !important ;
+
+.toggle-btn-right {
+  width: 120px;
+  //right border radius
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  text-align: center;
+  color: white;
+  background-color: gray;
 }
 
+/* Media Queries */
+@media (max-width: 768px) {
+  .signin-container {
+    flex-direction: column;
+  }
 
-.text-danger{
-  color: rgb(198 12 15) !important;
+  .signin-left {
+    display: none; /* Hide banner on smaller screens */
+  }
+
+  .custom-card {
+    max-width: 90%;
+  }
+}
+.switch_sign {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 10px; /* Adjust Y-coordinate relative to .signin-right */
+  left: 50%; /* Center horizontally relative to .signin-right */
+  font-family: 'Avenir', sans-serif;
 
 }
+
+.signin-form {
+  width: 100%;
+  padding: 20px;
+  font-family: 'poppins', sans-serif;
+
+}
+
+.card-text {
+  display: flex;
+  justify-content: left;
+  }

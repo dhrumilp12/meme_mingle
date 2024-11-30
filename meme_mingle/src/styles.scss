@@ -9,11 +9,9 @@
 //   }
 
 body {
-  font-family: Roboto, Arial, sans-serif;
-  background: linear-gradient(90deg, #2b8ce1, #dfd5ea);
   background-size: 200% 200%;
-  animation: gradientAnimation 8s ease infinite;
   overflow: hidden; /* Prevent scrollbars */
+  
   margin: 0;
   padding: 0;
 }
