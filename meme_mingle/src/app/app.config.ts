@@ -9,7 +9,7 @@ export const appConfig: ApplicationConfig = {
   providers: [provideRouter(routes), 
     provideAnimations(),
     provideToastr({
-      timeOut: 2000,
+      timeOut: 3000,
       progressBar:true
     })
   ]

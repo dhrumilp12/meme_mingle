@@ -34,18 +34,28 @@
                 <div class="row">
 
                   <!-- Profile Picture -->
-                  <div class="label_input col-lg-4 col-md-6 col-sm-6">
-                    <label for="profilePicture" class="label">Profile Picture</label>
-                    <input 
-                      type="file" 
-                      class="form-control custom-input" 
-                      formControlName="profile_picture" 
-                      (change)="onFileChange($event)"
-                      
+                  <div class="profile-picture-section col-lg-4 col-md-6 col-sm-6">
+                    <label for="profilePicture" class="label fw-bold">Profile Picture
+
+                    </label>
+                    <input type="file" id="profilePicture" (change)="onFileChange($event)" accept="image/*"
+                    style="display: none;" #fileInput 
+                    >
+                    <div *ngIf="currentProfilePicture" class="current-picture" (click)="triggerFileInput(fileInput)">
+                      <img 
+                        [src]="currentProfilePicture" 
+                        class="current" 
+                        alt="Current Profile Picture" 
+                        width="50px" 
+                        height="50px"
+                        style="cursor: pointer;" 
                       >
-                      <small class="text-danger" *ngIf="(signUpForm.get('profile_picture')!.touched || submitted) && signUpForm.get('profile_picture')!.errors?.['required']">
-                        Profile Photo is required.
-                      </small>
+                      <div>
+                        {{data}}
+                      </div>
+                    </div>
+                  
+                  
                   </div>
 
                   <!-- Email -->
