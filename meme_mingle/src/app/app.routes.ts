@@ -20,7 +20,7 @@ export const routes: Routes = [
           import('./user-profile/user-profile.component').then((m) => UserProfileComponent),
   },
   {
-    path: 'AboutUs',
+    path: 'about',
     loadComponent: () =>
       import('./layout/aboutus/aboutus.component').then((m) => AboutusComponent),
   },

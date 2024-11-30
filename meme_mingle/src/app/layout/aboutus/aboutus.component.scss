@@ -1,5 +1,5 @@
 // Import Bootstrap styles
-@import 'bootstrap/scss/bootstrap';
+// @import 'bootstrap/scss/bootstrap'
 
 html, body {
     height: 100%;
@@ -9,10 +9,13 @@ html, body {
   }
   
   .aboutus-container {
-    max-width: 900px;
+    max-width: 100%;
     margin: 0 auto;
     padding: 20px;
     overflow: auto;
+    scrollbar-width: thin;
+    /* max-width: 800px; */
+    max-height: 100%;
   .section {
     background-color: #ffffff;
     border-radius: 8px;
