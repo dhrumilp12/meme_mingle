@@ -7,7 +7,7 @@
   <!-- Right 50%: Sign-in Form -->
   <div class="signin-right">
     <div class="card shadow-lg custom-card headermt-3">
-      <div class="card-body mt-3 ms-3 me-3">
+      <div class="card-body ms-3 me-3">
         <!-- Toggle Buttons -->
         <h5 class="switch_sign title fw-bold fs-3">
           <button
@@ -71,7 +71,7 @@
               <small class="text-danger" *ngIf="(signInForm.get('password')!.touched || submitted) && signInForm.get('password')!.errors?.['required']">
                 Password is required.
               </small>
-              <div class="form-check mt-2">
+              <div class="form-check mt-2 d-flex justify-content-between gap-1">
                 <input
                   type="checkbox"
                   class="form-check-input"
@@ -79,12 +79,15 @@
                   (change)="togglePasswordVisibility()"
                 >
                 <label class="form-check-label" for="showPassword">Show Password</label>
+                <p class="card-text">
+                  <a routerLink="/auth/forgot-password" class="fw-bold for ms-2">Forgot-password?</a>
+                </p>
               </div>
             </div>
 
 
             <!-- Submit Button -->
-            <div class="d-flex flex-column gap-4 justify-content-center mb-3">
+            <div class="d-flex flex-column gap-4 justify-content-center ">
               <button
                 type="submit"
                 class="btn btn-outline-success text-dark rounded-5"
@@ -92,9 +95,7 @@
               >
                 {{ isSubmitting ? 'Logging in...' : 'Log In' }}
               </button>
-              <p class="card-text">
-                <a routerLink="/auth/forgot-password" class="link ms-2">forgot-password</a>
-              </p>
+              
             </div>
  
           </form>
@@ -109,7 +110,7 @@
         </div>
 
         <!-- Divider -->
-        <div class="d-flex align-items-center my-3">
+        <div class="d-flex align-items-center">
           <div class="flex-grow-1 border-bottom"></div>
           <span class="mx-2">OR</span>
           <div class="flex-grow-1 border-bottom"></div>
@@ -125,10 +126,10 @@
           </button>
         </div>
 
-        <!-- Error Message -->
+        <!-- Error Message
         <div *ngIf="errorMessage" class="alert alert-danger mt-3">
           {{ errorMessage }}
-        </div>
+        </div> -->
       </div>
     </div>
   </div>

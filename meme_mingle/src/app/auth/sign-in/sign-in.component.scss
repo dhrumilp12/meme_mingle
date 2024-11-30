@@ -3,6 +3,7 @@
   display: flex;
   height: 100vh;
   width: 100%;
+  // overflow-y: auto;
   background-color: rgba(5, 95, 114, 1);
 }
 
@@ -103,4 +104,9 @@
 .card-text {
   display: flex;
   justify-content: left;
+  }
+  .for{
+    list-style: none;
+    text-decoration-line: none;
+    color:black;
   }

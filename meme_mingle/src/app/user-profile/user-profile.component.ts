@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 import { environment } from '../shared/environments/environment';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { DeleteConfirmationDialogComponent } from './delete-confirmation-dialog.component';
+import { supportedLanguages } from '../shared/constant/data.constant';
 
 @Component({
   selector: 'app-user-profile',
@@ -36,11 +37,12 @@ export class UserProfileComponent implements OnInit {
   successMessage: string = '';
   isLoading: boolean = true;
   isSubmitting: boolean = false;
-
+  submitted= false
   genders: string[] = ['male', 'female', 'other'];
   selectedFile: File | null = null;
-  selectedImageUrl: string | ArrayBuffer | null = null;
-  currentProfilePicture: string = '';
+  selectedImageUrl: any = null;
+  currentProfilePicture: any = '';
+  supportedLanguages = supportedLanguages
   baseUrl: string = environment.baseUrl;
   constructor(
     private fb: FormBuilder,
@@ -64,7 +66,6 @@ export class UserProfileComponent implements OnInit {
       placeOfResidence: [''],
       fieldOfStudy: [''],
       preferredLanguage: [''],
-      // profile_picture is handled separately
     });
 
     this.fetchUserProfile();
@@ -106,14 +107,15 @@ export class UserProfileComponent implements OnInit {
   }
 
   onFileSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
+    const input:any = event.target ;
 
     if (input.files && input.files.length > 0) {
       const file: File = input.files[0];
       const reader = new FileReader();
 
       reader.onload = (e) => {
-        this.selectedImageUrl = e.target?.result as string | ArrayBuffer | null;
+        this.selectedImageUrl  = e.target?.result ;
+        this.currentProfilePicture = e.target?.result;
       };
 
       reader.readAsDataURL(file);
@@ -173,7 +175,9 @@ export class UserProfileComponent implements OnInit {
       }
     });
   }
-
+  triggerFileInput(fileInput: HTMLInputElement): void {
+    fileInput.click(); // Programmatically trigger the file input
+  }
   deleteProfile(): void {
     this.isSubmitting = true;
     this.appService.deleteUserProfile().subscribe(

@@ -19,7 +19,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatOptionModule } from '@angular/material/core';
-import { passwordMatchValidator, passwordStrengthValidator } from 'src/app/shared/constant/data.constant';
+import { passwordMatchValidator, passwordStrengthValidator, supportedLanguages } from 'src/app/shared/constant/data.constant';
 
 @Component({
   selector: 'app-sign-up',
@@ -52,26 +52,7 @@ export class SignUpComponent implements OnInit {
   isSignInActive: boolean = false;
 
   // Define supported languages
-  supportedLanguages = [
-    { code: 'en', label: 'English' },
-    { code: 'es', label: 'Spanish' },
-    { code: 'fr', label: 'French' },
-    { code: 'de', label: 'German' },
-    { code: 'zh', label: 'Chinese' },
-    { code: 'ja', label: 'Japanese' },
-    { code: 'ko', label: 'Korean' },
-    { code: 'ru', label: 'Russian' },
-    { code: 'ar', label: 'Arabic' },
-    { code: 'hi', label: 'Hindi' },
-    { code: 'pt', label: 'Portuguese' },
-    { code: 'it', label: 'Italian' },
-    { code: 'gu', label: 'Gujarati' },
-    { code: 'bn', label: 'Bengali' },
-    { code: 'de', label: 'German' },
-    { code: 'te', label: 'Telugu' },
-    // Add more languages as needed
-  ];
-
+  supportedLanguges = supportedLanguages
   constructor(
     private fb: FormBuilder,
     private authService: AppService,
@@ -102,6 +83,7 @@ export class SignUpComponent implements OnInit {
           Validators.required,
           Validators.pattern('^[a-z]{2}$'),
         ]),
+        profile_picture:new FormControl('',Validators.required)
       },
       { validators: passwordMatchValidator }
     );

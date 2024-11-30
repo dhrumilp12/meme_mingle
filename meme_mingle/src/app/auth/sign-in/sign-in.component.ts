@@ -11,6 +11,7 @@ import { AppService } from '../../app.service';
 import { RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { environment } from 'src/app/shared/constant/environment';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-sign-in',
   standalone: true,
@@ -35,7 +36,8 @@ export class SignInComponent implements OnInit {
   constructor(
     private authService: AppService,
     private router: Router,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private toaster : ToastrService
   ) {}
 
   ngOnInit() {
@@ -69,6 +71,7 @@ export class SignInComponent implements OnInit {
        
       this.authService.signIn(this.signInForm.value).subscribe({
         next: (response) => {
+          this.toaster.success("Login successfull",'User Login')
           localStorage.setItem('access_token', response.access_token);
           localStorage.setItem('user_id', response.userId);
           localStorage.setItem('preferredLanguage', response.preferredLanguage);
@@ -76,13 +79,12 @@ export class SignInComponent implements OnInit {
         },
         error: (error) => {
           console.error('Error during login:', error);
-          // Adjust error handling based on backend response structure
           if (error.status === 401) {
-            this.errorMessage = 'Invalid email/username or password.';
+            this.toaster.error("Invalid email/username or password.",'Login Failed')
           } else if (error.status === 400) {
-            this.errorMessage = error.error.msg || 'Please provide valid credentials.';
+            this.toaster.error(error.error.msg || 'Please provide valid credentials.')
           } else {
-            this.errorMessage = 'An unexpected error occurred. Please try again later.';
+            this.toaster.error('An unexpected error occurred. Please try again later.')
           }
           this.isSubmitting = false;
         },
@@ -117,18 +119,9 @@ export class SignInComponent implements OnInit {
 
   signInWithGoogle() {
     const googleAuthUrl = `${environment.baseUrl}/auth/google`;
-
-    // Open a new window for Google OAuth
-    const width = 500;
-    const height = 600;
-    const left = (window.innerWidth / 2) - (width / 2);
-    const top = (window.innerHeight / 2) - (height / 2);
-    window.open(
-      googleAuthUrl,
-      'GoogleAuth',
-      `width=${width},height=${height},top=${top},left=${left}`
-    );
+    window.location.href = googleAuthUrl;
   }
+  
 
   private handleMessage(event: MessageEvent) {
     const trustedOrigin = window.location.origin;

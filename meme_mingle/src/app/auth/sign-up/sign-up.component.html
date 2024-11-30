@@ -7,7 +7,7 @@
   <!-- Right Section: Conditional Rendering for Sign-In / Sign-Up -->
   <div class="signup-right">
         <div class="card shadow-lg custom-card header">
-          <div class="card-body mt-3 ms-3 me-3">
+          <div class="card-body ms-3 me-3">
 
             <!-- Toggle Buttons -->
             <h5 class="switch_sign title fw-bold fs-4 text-center">
@@ -27,7 +27,7 @@
 
             <!-- Sign-Up Form -->
             <div *ngIf="isSignUpActive">
-              <p class="card-text text-white text-center">
+              <p class="card-text fw-bold text-center">
                 Join us and start your fun learning adventure!
               </p>
               <form class = "signup-form" [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
@@ -40,7 +40,12 @@
                       type="file" 
                       class="form-control custom-input" 
                       formControlName="profile_picture" 
-                      (change)="onFileChange($event)">
+                      (change)="onFileChange($event)"
+                      
+                      >
+                      <small class="text-danger" *ngIf="(signUpForm.get('profile_picture')!.touched || submitted) && signUpForm.get('profile_picture')!.errors?.['required']">
+                        Profile Photo is required.
+                      </small>
                   </div>
 
                   <!-- Email -->
@@ -50,7 +55,16 @@
                       type="email" 
                       class="form-control custom-input" 
                       formControlName="email" 
-                      placeholder="Email">
+                      placeholder="Email"
+                      [ngClass]="{
+                        'is-invalid':
+                          (signUpForm.get('email')!.touched && signUpForm.get('email')!.invalid) ||
+                          (submitted && signUpForm.get('email')!.invalid)
+                      }"
+                      >
+                      <small class="text-danger" *ngIf="(signUpForm.get('email')!.touched || submitted) && signUpForm.get('email')!.errors?.['required']">
+                        Email is required.
+                      </small>
                   </div>
 
                   <!-- Password -->
@@ -143,7 +157,7 @@
                       class="form-control custom-input" 
                       formControlName="preferredLanguage">
                       <option value="" disabled selected>Select Language</option>
-                      <option *ngFor="let lang of supportedLanguages" [value]="lang.code">
+                      <option *ngFor="let lang of supportedLanguges" [value]="lang.code">
                         {{ lang.label }}
                       </option>
                     </select>

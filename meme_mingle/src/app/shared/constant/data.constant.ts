@@ -18,4 +18,25 @@ export function passwordStrengthValidator() {
       return { passwordsMismatch: true };
     }
     return null;
-  }
+}
+  
+
+export const supportedLanguages = [
+  { code: 'en', label: 'English' },
+  { code: 'es', label: 'Spanish' },
+  { code: 'fr', label: 'French' },
+  { code: 'de', label: 'German' },
+  { code: 'zh', label: 'Chinese' },
+  { code: 'ja', label: 'Japanese' },
+  { code: 'ko', label: 'Korean' },
+  { code: 'ru', label: 'Russian' },
+  { code: 'ar', label: 'Arabic' },
+  { code: 'hi', label: 'Hindi' },
+  { code: 'pt', label: 'Portuguese' },
+  { code: 'it', label: 'Italian' },
+  { code: 'gu', label: 'Gujarati' },
+  { code: 'bn', label: 'Bengali' },
+  { code: 'de', label: 'German' },
+  { code: 'te', label: 'Telugu' },
+  // Add more languages as needed
+];
