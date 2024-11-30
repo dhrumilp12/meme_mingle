@@ -10,7 +10,7 @@ import { environment } from './shared/environments/environment'; // Import envir
 @Injectable({
   providedIn: 'root',
 })
-export class AuthService {
+export class AppService {
   private baseUrl = environment.baseUrl; 
 
   constructor(private http: HttpClient, private router: Router) {}
@@ -55,42 +55,6 @@ export class AuthService {
     return this.http.post(`${this.baseUrl}/user/reset_password/${token}`, { password });
   }
 
-  
-
-  // Optional: Method to check if user is authenticated
-  isAuthenticated(): boolean {
-    return !!localStorage.getItem('access_token');
-  }
-
-  // Optional: Method to log out the user
-  signOut() {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('user_id');
-    localStorage.removeItem('preferred_language');
-    this.router.navigate(['/auth/sign-in']);
-  }
-
-  subjectsubscribe = new Subject<number>();
-  behavioutsubscribe = new BehaviorSubject([]);
-
-  // Helper method to get authorization headers
-  private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('access_token') || '';
-    return new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    });
-  }
-}
-
-@Injectable({
-  providedIn: 'root'
-})
-export class AIservice {
-  private baseUrl = environment.baseUrl;
-
-  constructor(private http: HttpClient) { }
-
   // for generating ai mentor chat (welcome message)
   aimentorwelcome(user_id: string, role: string = "educational mentor"): Observable<any> {
     const payload = { role };
@@ -125,4 +89,30 @@ export class AIservice {
     const payload = { text, voice_name: voiceName, style };
     return this.http.post(`${this.baseUrl}/ai_mentor/text-to-speech`, payload, { responseType: 'blob' });
   }
+
+  // Optional: Method to check if user is authenticated
+  isAuthenticated(): boolean {
+    return !!localStorage.getItem('access_token');
+  }
+
+  // Optional: Method to log out the user
+  signOut() {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('user_id');
+    localStorage.removeItem('preferred_language');
+    this.router.navigate(['/auth/sign-in']);
+  }
+
+  subjectsubscribe = new Subject<number>();
+  behavioutsubscribe = new BehaviorSubject([]);
+
+  // Helper method to get authorization headers
+  private getAuthHeaders(): HttpHeaders {
+    const token = localStorage.getItem('access_token') || '';
+    return new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+  }
 }
+

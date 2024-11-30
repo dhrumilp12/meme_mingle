@@ -27,6 +27,15 @@ export const routes: Routes = [
         ),
       },
       {
+        path: 'live-conversation',
+        loadChildren: () =>
+          import('./live-conversation/live-conversation.routes').then(
+            (m) => m.routes
+          ),
+
+      },
+
+      {
         path: '**',
         redirectTo: 'error',
         pathMatch: 'full',
