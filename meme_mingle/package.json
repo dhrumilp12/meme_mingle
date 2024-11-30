@@ -21,6 +21,7 @@
     "@angular/platform-browser-dynamic": "^16.0.0",
     "@angular/router": "^16.0.0",
     "@ar-js-org/ar.js": "^3.4.5",
+    "bootstrap": "^5.3.3",
     "ngx-toastr": "^19.0.0",
     "rxjs": "~7.8.0",
     "three": "^0.171.0",

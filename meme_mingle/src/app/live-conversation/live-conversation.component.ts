@@ -1,14 +1,31 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
 import { AppService } from '../app.service';
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { environment } from '../shared/environments/environment';
-import { MatTooltipModule } from '@angular/material/tooltip'; // Import MatTooltipModule
-
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatButtonModule } from '@angular/material/button';
+import {
+  trigger,
+  state,
+  style,
+  animate,
+  transition,
+} from '@angular/animations';
+import { ChatService } from './chat.service';
 interface ConversationMessage {
-  sender: 'You' | 'AI';
+  sender: 'User' | 'Mentor';
   message: string;
   audioUrl?: string;
+  imageUrl?: string;
   timestamp: Date;
 }
 
@@ -20,39 +37,105 @@ interface IWindow extends Window {
 @Component({
   selector: 'app-live-conversation',
   standalone: true,
-  imports: [CommonModule, MatTooltipModule], // Include MatTooltipModule
+  imports: [
+    CommonModule,
+    MatTooltipModule,
+    MatIconModule,
+    MatProgressBarModule,
+    MatButtonModule,
+  ],
   templateUrl: './live-conversation.component.html',
-  styleUrls: ['./live-conversation.component.scss']
+  styleUrls: ['./live-conversation.component.scss'],
+  animations: [
+    trigger('messageAnimation', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(20px)' }),
+        animate(
+          '300ms ease-out',
+          style({ opacity: 1, transform: 'translateY(0)' })
+        ),
+      ]),
+    ]),
+    trigger('fadeInOut', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('300ms ease-in', style({ opacity: 1 })),
+      ]),
+      transition(':leave', [
+        animate('300ms ease-out', style({ opacity: 0 })),
+      ]),
+    ]),
+    trigger('buttonClick', [
+      transition('* => active', [
+        animate(
+          '200ms',
+          style({ transform: 'scale(0.9)', offset: 0.5 })
+        ),
+        animate('200ms', style({ transform: 'scale(1)' })),
+      ]),
+    ]),
+    trigger('overlayAnimation', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(-20%)' }),
+        animate(
+          '500ms ease-out',
+          style({ opacity: 1, transform: 'translateY(0)' })
+        ),
+      ]),
+      transition(':leave', [
+        animate(
+          '500ms ease-in',
+          style({ opacity: 0, transform: 'translateY(-20%)' })
+        ),
+      ]),
+    ]),
+    trigger('statusAnimation', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('300ms ease-in', style({ opacity: 1 })),
+      ]),
+      transition(':leave', [
+        animate('300ms ease-out', style({ opacity: 0 })),
+      ]),
+    ]),
+  ],
 })
 export class LiveConversationComponent implements OnInit, OnDestroy {
   recognition: any;
-  isListening: boolean = false;
-  isProcessing: boolean = false;
-  isPlaying: boolean = false;
+  isListening = false;
+  isProcessing = false;
+  isPlaying = false;
   conversation: ConversationMessage[] = [];
-  userId: string = 'default_user';
-  chatId: string = '1';
-  turnId: number = 0;
-  audio: HTMLAudioElement = new Audio();
-  subscriptions: Subscription = new Subscription();
-  showOverlay: boolean = true; // Controls the visibility of the overlay
-  backendUrl: string = environment.baseUrl; // Backend base URL
-  isDarkMode: boolean = false; // Dark mode flag
+  userId = 'default_user';
+  chatId = '1';
+  turnId = 0;
+  audio = new Audio();
+  subscriptions = new Subscription();
+  showOverlay = true;
+  backendUrl = environment.baseUrl;
+  isDarkMode = false;
+  isMuted = false;
+  userStopped = false;
+  userProfilePicture: string = '';
+  @ViewChild('messagesContainer') private messagesContainer!: ElementRef;
 
-  constructor(private appService: AppService) { }
+  constructor(private appService: AppService, private chatService: ChatService) {}
 
   ngOnInit(): void {
-    // Initialize userId and chatId from localStorage or default values
+    this.initializeTheme();
+    this.fetchUserProfile();
     this.userId = localStorage.getItem('user_id') || 'default_user';
-    this.chatId = localStorage.getItem('chat_id') || this.generateChatId();
-    localStorage.setItem('chat_id', this.chatId);
+    this.chatId = this.chatService.getChatId() || this.chatService.generateChatId();
 
-    // Initialize Speech Recognition
+
     const windowObj = window as unknown as IWindow;
-    const SpeechRecognition = windowObj.SpeechRecognition || windowObj.webkitSpeechRecognition;
+    const SpeechRecognition =
+      windowObj.SpeechRecognition || windowObj.webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
-      alert('Your browser does not support Speech Recognition. Please try a different browser.');
+      alert(
+        'Your browser does not support Speech Recognition. Please try a different browser.'
+      );
       return;
     }
 
@@ -64,99 +147,166 @@ export class LiveConversationComponent implements OnInit, OnDestroy {
     this.recognition.onresult = (event: any) => {
       const transcript = event.results[0][0].transcript.trim();
       if (transcript) {
-        this.addMessage('You', transcript);
+        this.addMessage('User', transcript);
         this.processUserInput(transcript);
       }
     };
 
     this.recognition.onerror = (event: any) => {
       console.error('Speech Recognition Error:', event.error);
-      alert(`Speech Recognition Error: ${event.error}`);
       this.isListening = false;
       this.isProcessing = false;
     };
 
     this.recognition.onend = () => {
       this.isListening = false;
-      // Automatically start listening again if not processing
-      if (!this.isProcessing) {
+      if (!this.isProcessing && !this.userStopped) {
         this.startListening();
       }
     };
   }
 
-  /**
-   * Handles the unlocking of audio playback by the user.
-   */
-  unlockAudio(): void {
-    // Start a silent audio to unlock playback
-    const silentAudio = new Audio();
-    silentAudio.src = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA=';
-    silentAudio.play().then(() => {
-      silentAudio.pause();
-      this.showOverlay = false;
-      this.initializeConversation();
-    }).catch((error: any) => {
-      console.error('Audio Unlock Error:', error);
-      alert('Failed to unlock audio playback.');
-    });
+  finalizeChat(): void {
+    if (
+      confirm(
+        'Are you sure you want to end the conversation? This will finalize the chat session.'
+      )
+    ) {
+      this.isProcessing = true;
+      const finalizeSub = this.appService
+        .finalizeChat(this.userId, this.chatId)
+        .subscribe({
+          next: () => {
+            this.addMessage(
+              'Mentor',
+              'Thank you for chatting! If you need further assistance, feel free to start a new conversation.'
+            );
+            this.isProcessing = false;
+            this.stopListening();
+            this.showOverlay = true;
+            this.chatService.clearChatId();
+          },
+          error: (error: any) => {
+            console.error('Error finalizing chat:', error);
+            this.isProcessing = false;
+          },
+        });
+      this.subscriptions.add(finalizeSub);
+    }
   }
 
-  /**
-   * Initializes the conversation by fetching the initial AI greeting.
-   */
-  initializeConversation(): void {
-    this.isProcessing = true;
-    const welcomeSub = this.appService.aimentorwelcome(this.userId)
-      .subscribe({
-        next: (response: any) => {
-          this.chatId = response.chat_id;
-          localStorage.setItem('chat_id', this.chatId);
-          const aiMessage = response.message.message;
-          const audioUrl = response.message.audio_url;
-          this.addMessage('AI', aiMessage, audioUrl);
-          if (audioUrl) {
-            this.playAudio(audioUrl);
-          }
-          this.isProcessing = false;
-          // Start listening after the initial greeting
-          this.startListening();
-        },
-        error: (error: any) => {
-          console.error('Error fetching initial greeting:', error);
-          alert('Failed to initialize conversation. Please try again.');
-          this.isProcessing = false;
-        }
-      });
-    this.subscriptions.add(welcomeSub);
+  stopListening(): void {
+    if (this.recognition && this.isListening) {
+      this.recognition.stop();
+      this.isListening = false;
+      this.userStopped = true;
+    }
   }
 
-  /**
-   * Starts the speech recognition.
-   */
   startListening(): void {
     if (this.isListening || this.isProcessing || this.isPlaying) return;
     try {
       this.recognition.start();
       this.isListening = true;
+      this.userStopped = false;
     } catch (error) {
       console.error('Failed to start recognition:', error);
-      alert('Unable to start speech recognition. Please try again.');
     }
   }
 
-  /**
-   * Processes the user's transcript by sending it to the AI and handling the response.
-   * @param transcript The transcribed text from the user's speech.
-   */
+  toggleListening(): void {
+    if (this.isListening) {
+      this.stopListening();
+    } else {
+      this.startListening();
+    }
+  }
+
+  toggleMute(): void {
+    this.isMuted = !this.isMuted;
+    this.audio.muted = this.isMuted;
+  }
+
+  playAudio(url: string): void {
+    if (!url) return;
+    this.isPlaying = true;
+    this.audio.src = url;
+    this.audio.load();
+    this.audio.muted = this.isMuted;
+
+    this.audio
+      .play()
+      .then(() => {
+        if (this.isListening) {
+          this.recognition.stop();
+          this.isListening = false;
+        }
+      })
+      .catch((err) => {
+        console.error('Audio Playback Error:', err);
+        this.isPlaying = false;
+      });
+
+    this.audio.onended = () => {
+      this.isPlaying = false;
+      if (!this.isMuted) {
+        this.startListening();
+      }
+    };
+  }
+
+  unlockAudio(): void {
+    const silentAudio = new Audio();
+    silentAudio.src =
+      'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA=';
+    silentAudio
+      .play()
+      .then(() => {
+        silentAudio.pause();
+        this.showOverlay = false;
+        this.initializeConversation();
+      })
+      .catch((error: any) => {
+        console.error('Audio Unlock Error:', error);
+      });
+  }
+
+  initializeConversation(): void {
+    this.isProcessing = true;
+    const welcomeSub = this.appService.aimentorwelcome(this.userId).subscribe({
+      next: (response: any) => {
+        this.chatId = response.chat_id;
+        this.chatService.setChatId(this.chatId);
+        console.log('response:', response);
+        const aiMessage = response.message.message;
+        const audioUrl = response.message.audio_url;
+        const imageUrl = response.message.meme_url; // Assuming your backend returns image_url
+        this.addMessage('Mentor', aiMessage, audioUrl, imageUrl);
+        if (audioUrl) {
+          this.playAudio(audioUrl);
+        }
+        this.isProcessing = false;
+        this.startListening();
+      },
+      error: (error: any) => {
+        console.error('Error fetching initial greeting:', error);
+        this.isProcessing = false;
+      },
+    });
+    this.subscriptions.add(welcomeSub);
+  }
+
   processUserInput(transcript: string): void {
     this.isProcessing = true;
-    const chatSub = this.appService.aimentorchat(this.userId, this.chatId, this.turnId, transcript)
+    const chatSub = this.appService
+      .aimentorchat(this.userId, this.chatId, this.turnId, transcript)
       .subscribe({
         next: (response: any) => {
           const aiMessage = response.message;
           const audioUrl = response.audio_url;
-          this.addMessage('AI', aiMessage, audioUrl);
+          const imageUrl = response.meme_url; // Assuming your backend returns image_url
+
+          this.addMessage('Mentor', aiMessage, audioUrl, imageUrl);
           if (audioUrl) {
             this.playAudio(audioUrl);
           }
@@ -165,109 +315,46 @@ export class LiveConversationComponent implements OnInit, OnDestroy {
         },
         error: (error: any) => {
           console.error('Error processing user input:', error);
-          alert('Failed to get a response from the AI. Please try again.');
           this.isProcessing = false;
-          // Resume listening after error
           this.startListening();
-        }
+        },
       });
     this.subscriptions.add(chatSub);
   }
 
-  /**
-   * Adds a message to the conversation history.
-   * @param sender The sender of the message ('You' or 'AI').
-   * @param message The message content.
-   * @param audioUrl Optional audio URL for AI messages.
-   */
-  addMessage(sender: 'You' | 'AI', message: string, audioUrl?: string): void {
+  addMessage(sender: 'User' | 'Mentor', message: string, audioUrl?: string,imageUrl?: string): void {
     this.conversation.push({
       sender,
       message,
       audioUrl,
-      timestamp: new Date()
+      imageUrl,
+      timestamp: new Date(),
     });
     this.scrollToBottom();
   }
 
-  /**
-   * Plays the audio from the provided URL.
-   * @param url The URL of the audio file to play.
-   */
-  playAudio(url: string): void {
-    if (!url) return;
-    this.isPlaying = true;
-    this.audio.src = url;
-    this.audio.load();
-    this.audio.play()
-      .then(() => {
-        // Pause listening while AI is speaking
-        if (this.isListening) {
-          this.recognition.stop();
-          this.isListening = false;
-        }
-      })
-      .catch(err => {
-        console.error('Audio Playback Error:', err);
-        alert('Audio playback failed. Please interact with the page to enable sound.');
-        this.isPlaying = false;
-      });
-
-    // Listen for when the audio playback ends to resume listening
-    this.audio.onended = () => {
-      this.isPlaying = false;
-      // Resume listening after AI finishes speaking
-      this.startListening();
-    };
-  }
-
-  /**
-   * Scrolls the messages container to the bottom to show the latest message.
-   */
   scrollToBottom(): void {
     setTimeout(() => {
-      const messagesContainer = document.querySelector('.messages');
-      if (messagesContainer) {
-        messagesContainer.scroll({
-          top: messagesContainer.scrollHeight,
-          behavior: 'smooth'
-        });
+      if (this.messagesContainer) {
+        this.messagesContainer.nativeElement.scrollTop =
+          this.messagesContainer.nativeElement.scrollHeight;
       }
     }, 100);
   }
-  
 
-  /**
-   * Generates a unique chat ID based on the current timestamp.
-   * @returns A string representing the chat ID.
-   */
   generateChatId(): string {
     return Date.now().toString();
   }
 
-  /**
-   * Toggles between light and dark themes.
-   */
   toggleTheme(): void {
     this.isDarkMode = !this.isDarkMode;
-    const container = document.querySelector('.conversation-container');
-    if (container) {
-      container.classList.toggle('dark-mode', this.isDarkMode);
-    }
     localStorage.setItem('theme', this.isDarkMode ? 'dark' : 'light');
   }
 
-  /**
-   * Initializes the theme based on user's previous selection.
-   */
   initializeTheme(): void {
     const theme = localStorage.getItem('theme');
     if (theme === 'dark') {
       this.isDarkMode = true;
-      const container = document.querySelector('.conversation-container');
-      if (container) {
-        container.classList.add('dark-mode');
-      }
     }
   }
 
@@ -280,5 +367,24 @@ export class LiveConversationComponent implements OnInit, OnDestroy {
       this.audio.pause();
       this.audio.src = '';
     }
+  }
+
+  fetchUserProfile(): void {
+    this.appService.getUserProfile().subscribe({
+      next: (response) => {
+        
+        // Construct the full URL for the profile picture
+        if (response.profile_picture) {
+          this.userProfilePicture = `${response.profile_picture}`;
+          console.log('User profile picture:', this.userProfilePicture);
+        } else {
+          this.userProfilePicture = 'assets/user-avatar.png'; // Fallback image
+        }
+      },
+      error: (error) => {
+        console.error('Error fetching user profile:', error);
+        this.userProfilePicture = 'assets/user-avatar.png'; // Fallback image
+      },
+    });
   }
 }

@@ -1,73 +1,121 @@
-<div class="conversation-container">
-  <h2>Live Conversational AI</h2>
-
-  <!-- Overlay for Initial User Interaction -->
-  <div *ngIf="showOverlay" class="overlay">
-    <button (click)="unlockAudio()" class="unlock-button">
-      Start Conversation
+<div
+  class="conversation-container"
+  [ngClass]="{ 'dark-mode': isDarkMode }"
+  [@fadeInOut]
+>
+  <!-- Header -->
+  <header class="header">
+    <h1>Live Conversational AI</h1>
+    <button
+      class="theme-toggle"
+      (click)="toggleTheme()"
+      matTooltip="Toggle Theme"
+      [@buttonClick]
+    >
+      <mat-icon>{{ isDarkMode ? 'brightness_7' : 'brightness_2' }}</mat-icon>
     </button>
-  </div>
+  </header>
 
-  <!-- Status Indicators -->
-  <div class="status-indicators">
-    <div *ngIf="isListening" class="indicator listening">
-      <span class="icon">🎤</span> Listening...
-    </div>
-    <div *ngIf="isProcessing" class="indicator processing">
-      <span class="icon">⏳</span> Processing...
-    </div>
-    <div *ngIf="isPlaying" class="indicator playing">
-      <span class="icon">🔊</span> AI is speaking...
-    </div>
-  </div>
-
-  <!-- Messages -->
-  <div class="messages" aria-live="polite" aria-atomic="false">
-    <div *ngFor="let msg of conversation" class="message-wrapper">
-      <div
-        [ngClass]="{
-          'user-message': msg.sender === 'You',
-          'ai-message': msg.sender === 'AI'
-        }"
-        class="message"
+  <!-- Initial Overlay -->
+  <div *ngIf="showOverlay" class="overlay" [@overlayAnimation]>
+    <div class="overlay-content">
+      <h2>Welcome to AI Chat</h2>
+      <p>Click below to start your conversation.</p>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="unlockAudio()"
+        [@buttonClick]
       >
+        Start Conversation
+      </button>
+    </div>
+  </div>
+
+  <!-- Conversation Area -->
+  <div class="conversation-area">
+    <div class="messages" #messagesContainer>
+      <div
+        *ngFor="let msg of conversation"
+        class="message-wrapper"
+        [ngClass]="msg.sender === 'User' ? 'User' : 'Mentor'"
+        [@messageAnimation]
+      >
+      <div class="message">
         <img
-          *ngIf="msg.sender === 'You'"
-          src="assets/user-avatar.png"
-          alt="User Avatar"
-          class="avatar"
-        />
-        <img
-          *ngIf="msg.sender === 'AI'"
-          src="assets/ai-avatar.png"
-          alt="AI Avatar"
+          [src]="msg.sender === 'User' ? userProfilePicture : 'assets/img/banner.png'"
+          alt="{{ msg.sender }} Avatar"
           class="avatar"
         />
         <div class="message-content">
-          <strong>{{ msg.sender }}</strong>
-          <span>{{ msg.message }}</span>
-          <div class="timestamp">{{ msg.timestamp | date: 'shortTime' }}</div>
+          <!-- Text Messages -->
+          <span class="text">{{ msg.message }}</span>
+          <!-- Meme Images -->
+          <ng-container *ngIf="msg.imageUrl">
+            <img [src]="msg.imageUrl" alt="Meme" class="meme-image" />
+          </ng-container>
+          <span class="timestamp">{{ msg.timestamp | date: 'shortTime' }}</span>
         </div>
-        <!-- Replay Button -->
+        <!-- Replay Button for Mentor Messages with Audio -->
         <button
-          *ngIf="msg.audioUrl"
+          *ngIf="msg.audioUrl && msg.sender === 'Mentor'"
+          mat-icon-button
           (click)="playAudio(msg.audioUrl)"
-          class="replay-button"
-          aria-label="Replay AI response audio"
           matTooltip="Replay Audio"
+          [@buttonClick]
         >
-          🔁
+          <mat-icon>replay</mat-icon>
         </button>
+      </div>
+      
       </div>
     </div>
   </div>
 
-  <!-- Optional: Dark Mode Toggle -->
-  <div class="theme-toggle">
-    <label class="switch">
-      <input type="checkbox" (change)="toggleTheme()" />
-      <span class="slider round"></span>
-    </label>
-    <span>{{ isDarkMode ? 'Dark Mode' : 'Light Mode' }}</span>
+  <!-- Status Indicators -->
+  <div class="status-indicators" [@fadeInOut]>
+    <mat-progress-bar
+      *ngIf="isProcessing"
+      mode="indeterminate"
+      color="accent"
+    ></mat-progress-bar>
+    <div *ngIf="isListening" class="status-message" [@statusAnimation]>
+      <mat-icon>mic</mat-icon> Listening...
+    </div>
+    <div *ngIf="isPlaying" class="status-message" [@statusAnimation]>
+      <mat-icon>volume_up</mat-icon> AI is speaking...
+    </div>
+  </div>
+
+  <!-- Control Panel -->
+  <div class="control-panel">
+    <button
+      mat-mini-fab
+      color="warn"
+      (click)="finalizeChat()"
+      matTooltip="End Conversation"
+      [@buttonClick]
+    >
+      <mat-icon>stop</mat-icon>
+    </button>
+    <button
+      mat-mini-fab
+      color="primary"
+      (click)="toggleListening()"
+      matTooltip="{{
+        isListening ? 'Pause Listening' : 'Resume Listening'
+      }}"
+      [@buttonClick]
+    >
+      <mat-icon>{{ isListening ? 'pause' : 'play_arrow' }}</mat-icon>
+    </button>
+    <button
+      mat-mini-fab
+      (click)="toggleMute()"
+      matTooltip="{{ isMuted ? 'Unmute' : 'Mute' }}"
+      [@buttonClick]
+    >
+      <mat-icon>{{ isMuted ? 'volume_off' : 'volume_up' }}</mat-icon>
+    </button>
   </div>
 </div>
