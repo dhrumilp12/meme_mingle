@@ -18,7 +18,7 @@ class User(BaseModel):
     placeOfResidence: str = None
     fieldOfStudy: str = None
     preferredLanguage: str = Field(None, pattern='^[a-z]{2}$')  
-    profile_picture: Optional[str] = None
+    profile_picture: Optional[str] = Field("https://i.pinimg.com/736x/0d/64/98/0d64989794b1a4c9d89bff571d3d5842.jpg")
     google_id: str = None
     
 
