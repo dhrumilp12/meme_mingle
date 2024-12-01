@@ -27,6 +27,7 @@ import {
   transition,
 } from '@angular/animations';
 import { ChatService } from './chat.service';
+
 interface ConversationMessage {
   sender: 'User' | 'Mentor';
   message: string;
@@ -124,22 +125,25 @@ export class LiveConversationComponent implements OnInit, OnDestroy {
   subscriptions = new Subscription();
   showOverlay = true;
   backendUrl = environment.baseUrl;
-  isDarkMode = false;
   isMuted = false;
   userStopped = false;
   userProfilePicture: string = '';
   userInputText: string = '';
   selectedFile: File | null = null;
+  selectedImage: string | null = null; 
+  isLiveMode: boolean = false;
   @ViewChild('messagesContainer') private messagesContainer!: ElementRef;
 
-  constructor(private appService: AppService, private chatService: ChatService,private sanitizer: DomSanitizer) {}
+  constructor(
+    private appService: AppService, 
+    private chatService: ChatService,
+    private sanitizer: DomSanitizer
+  ) {}
 
   ngOnInit(): void {
-    this.initializeTheme();
     this.fetchUserProfile();
     this.userId = localStorage.getItem('user_id') || 'default_user';
     this.chatId = this.chatService.getChatId() || this.chatService.generateChatId();
-
 
     const windowObj = window as unknown as IWindow;
     const SpeechRecognition =
@@ -284,32 +288,7 @@ export class LiveConversationComponent implements OnInit, OnDestroy {
       });
   }
 
-  initializeConversation(): void {
-    this.isProcessing = true;
-    const welcomeSub = this.appService.aimentorwelcome(this.userId).subscribe({
-      next: (response: any) => {
-        this.chatId = response.chat_id;
-        this.chatService.setChatId(this.chatId);
-        console.log('response:', response);
-        const aiMessage = response.message.message;
-        const audioUrl = response.message.audio_url;
-        const imageUrl = response.message.meme_url; // Assuming your backend returns image_url
-        this.addMessage('Mentor', aiMessage, audioUrl, imageUrl);
-        if (audioUrl) {
-          this.playAudio(audioUrl);
-        }
-        this.isProcessing = false;
-        this.startListening();
-      },
-      error: (error: any) => {
-        console.error('Error fetching initial greeting:', error);
-        this.isProcessing = false;
-      },
-    });
-    this.subscriptions.add(welcomeSub);
-  }
-
-  addMessage(sender: 'User' | 'Mentor', message: string, audioUrl?: string,imageUrl?: string): void {
+  addMessage(sender: 'User' | 'Mentor', message: string, audioUrl?: string, imageUrl?: string): void {
     // Convert markdown to HTML
     const rawHtml = marked(message);
     // Sanitize HTML to prevent XSS attacks
@@ -339,18 +318,6 @@ export class LiveConversationComponent implements OnInit, OnDestroy {
     return Date.now().toString();
   }
 
-  toggleTheme(): void {
-    this.isDarkMode = !this.isDarkMode;
-    localStorage.setItem('theme', this.isDarkMode ? 'dark' : 'light');
-  }
-
-  initializeTheme(): void {
-    const theme = localStorage.getItem('theme');
-    if (theme === 'dark') {
-      this.isDarkMode = true;
-    }
-  }
-
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
     if (this.recognition) {
@@ -365,33 +332,30 @@ export class LiveConversationComponent implements OnInit, OnDestroy {
   fetchUserProfile(): void {
     this.appService.getUserProfile().subscribe({
       next: (response) => {
-        
         // Construct the full URL for the profile picture
         if (response.profile_picture) {
           this.userProfilePicture = `${response.profile_picture}`;
           console.log('User profile picture:', this.userProfilePicture);
         } else {
-          this.userProfilePicture = '/assets/img/user_avtar.jpg'; // Fallback image
+          this.userProfilePicture = '/assets/img/user_avatar.jpg'; // Fallback image
         }
       },
       error: (error) => {
         console.error('Error fetching user profile:', error);
-        this.userProfilePicture = '/assets/img/user_avtar.jpg'; // Fallback image
+        this.userProfilePicture = '/assets/img/user_avatar.jpg'; // Fallback image
       },
     });
   }
-  // New method to handle file selection
-  selectedFileName: string = '';
 
+  // New method to handle file selection
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
-      this.selectedFileName = input.files[0].name; // Display the file name
+      this.selectedFile = input.files[0];
     } else {
-      this.selectedFileName = ''; // Reset if no file is selected
+      this.selectedFile = null;
     }
   }
-  
 
   // New method to send text input and file
   sendTextInput(): void {
@@ -400,7 +364,9 @@ export class LiveConversationComponent implements OnInit, OnDestroy {
     }
 
     // Add user's message to the conversation
-    this.addMessage('User', this.userInputText);
+    if (this.userInputText.trim() !== '') {
+      this.addMessage('User', this.userInputText);
+    }
 
     // Stop any ongoing processes
     this.stopListening();
@@ -425,9 +391,10 @@ export class LiveConversationComponent implements OnInit, OnDestroy {
           const imageUrl = response.meme_url;
 
           this.addMessage('Mentor', aiMessage, audioUrl, imageUrl);
-          if (audioUrl) {
-            this.playAudio(audioUrl);
-          }
+           // Play AI audio only in Live Mode
+        if (this.isLiveMode && response.audioUrl) {
+          this.playAudio(response.audioUrl);
+        }
           this.turnId += 1;
           this.isProcessing = false;
         },
@@ -439,5 +406,143 @@ export class LiveConversationComponent implements OnInit, OnDestroy {
       });
     this.subscriptions.add(chatSub);
   }
-}
 
+  // Image Modal Methods
+  openImageModal(imageUrl: string): void {
+    this.selectedImage = imageUrl;
+    // Optionally, set focus to the modal for accessibility
+    setTimeout(() => {
+      const modal = document.querySelector('.image-modal') as HTMLElement;
+      if (modal) {
+        modal.focus();
+      }
+    }, 100);
+  }
+
+  closeImageModal(): void {
+    this.selectedImage = null;
+  }
+
+  // Initialize Conversation
+  initializeConversation(): void {
+    this.isProcessing = true;
+    const welcomeSub = this.appService.aimentorwelcome(this.userId).subscribe({
+      next: (response: any) => {
+        this.chatId = response.chat_id;
+        this.chatService.setChatId(this.chatId);
+        console.log('response:', response);
+        const aiMessage = response.message.message;
+        const audioUrl = response.message.audio_url;
+        const imageUrl = response.message.meme_url; // Assuming your backend returns image_url
+        this.addMessage('Mentor', aiMessage, audioUrl, imageUrl);
+        // Play AI audio only in Live Mode
+        if (audioUrl && this.isLiveMode) {
+          this.playAudio(audioUrl);
+        }
+        this.isProcessing = false;
+        // Only start listening if in Live Mode
+        if (this.isLiveMode) {
+          this.startListening();
+        }
+      },
+      error: (error: any) => {
+        console.error('Error fetching initial greeting:', error);
+        this.isProcessing = false;
+      },
+    });
+    this.subscriptions.add(welcomeSub);
+  }
+  // Method to toggle between Standard Mode and Live Mode
+  toggleLiveMode(): void {
+    this.isLiveMode = !this.isLiveMode;
+    if (this.isLiveMode) {
+      this.initializeLiveMode();
+    } else {
+      this.exitLiveMode();
+    }
+  }
+
+  // Initialize Live Mode functionalities
+  initializeLiveMode(): void {
+    // Stop listening in Standard Mode if active
+    if (this.isListening) {
+      this.stopListening();
+    }
+
+    // Initialize speech recognition for Live Mode
+    this.initializeSpeechRecognitionLiveMode();
+  }
+
+  // Exit Live Mode functionalities
+  exitLiveMode(): void {
+    // Stop speech recognition in Live Mode if active
+    if (this.isLiveMode && this.recognitionLiveMode) {
+      this.recognitionLiveMode.stop();
+      this.isRecordingLiveMode = false;
+    }
+
+    // Resume listening in Standard Mode if previously active
+    if (!this.userStopped && !this.isProcessing && !this.isPlaying) {
+      this.startListening();
+    }
+  }
+
+  // Properties and methods specific to Live Mode
+  recognitionLiveMode: any;
+  isRecordingLiveMode: boolean = false;
+  transcript: string = '';
+
+  initializeSpeechRecognitionLiveMode(): void {
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert('Your browser does not support Speech Recognition. Please try a different browser.');
+      return;
+    }
+
+    this.recognitionLiveMode = new SpeechRecognition();
+    this.recognitionLiveMode.lang = 'en-US';
+    this.recognitionLiveMode.continuous = true;
+    this.recognitionLiveMode.interimResults = false;
+
+    this.recognitionLiveMode.onresult = (event: any) => {
+      const speechResult = event.results[event.results.length - 1][0].transcript.trim();
+      if (speechResult) {
+        this.transcript += ` ${speechResult}`;
+        this.scrollToBottom();
+        this.sendLiveModeMessage(speechResult);
+      }
+    };
+
+    this.recognitionLiveMode.onerror = (event: any) => {
+      console.error('Live Mode Speech Recognition Error:', event.error);
+      this.isRecordingLiveMode = false;
+    };
+
+    this.recognitionLiveMode.onend = () => {
+      this.isRecordingLiveMode = false;
+      if (this.isLiveMode) {
+        // Automatically restart recognition for continuous live mode
+        this.recognitionLiveMode.start();
+        this.isRecordingLiveMode = true;
+      }
+    };
+  }
+
+  toggleRecordingLiveMode(): void {
+    if (this.isRecordingLiveMode) {
+      this.recognitionLiveMode.stop();
+    } else {
+      this.transcript = '';
+      this.recognitionLiveMode.start();
+    }
+    this.isRecordingLiveMode = !this.isRecordingLiveMode;
+  }
+
+  sendLiveModeMessage(message: string): void {
+    // Add user's speech message to the conversation
+    this.addMessage('User', message);
+
+    // Process the message as in standard mode
+    this.processUserInput(message);
+  }
+}

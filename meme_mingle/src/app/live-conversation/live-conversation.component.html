@@ -1,29 +1,28 @@
-
 <app-navbar-main></app-navbar-main>
 <div
   class="conversation-container"
-  [ngClass]="{ 'dark-mode': isDarkMode }"
   [@fadeInOut]
 >
-
+  
   <!-- Initial Overlay -->
-  <div *ngIf="showOverlay" class="overlay" [@overlayAnimation]>
+  <div *ngIf="showOverlay" class="overlay" [@overlayAnimation] role="dialog" aria-modal="true" aria-labelledby="welcome-title">
     <div class="overlay-content">
-      <h2>Welcome to AI Chat</h2>
+      <h2 id="welcome-title">Welcome to AI Chat</h2>
       <p>Click below to start your conversation.</p>
       <button
         mat-raised-button
         color="primary"
         (click)="unlockAudio()"
         [@buttonClick]
+        aria-label="Start Conversation"
       >
         Start Conversation
       </button>
     </div>
   </div>
 
-  <!-- Conversation Area -->
-  <div class="conversation-area">
+  <!-- Standard Conversation Area -->
+  <div *ngIf="!isLiveMode" class="conversation-area" role="log" aria-live="polite">
     <div class="messages" #messagesContainer>
       <div
         *ngFor="let msg of conversation"
@@ -31,111 +30,147 @@
         [ngClass]="msg.sender === 'User' ? 'User' : 'Mentor'"
         [@messageAnimation]
       >
-      <div class="message">
-
-        <img
-          [src]="msg.sender === 'User' ? userProfilePicture : 'assets/img/banner.png'"
-          alt="{{ msg.sender }} Avatar"
-          class="avatar"
-        />
-        <div class="message-content">
-          <!-- Text Messages -->
-          <div class="text" [innerHTML]="msg.htmlContent"></div>
-          <span class="timestamp">{{ msg.timestamp | date: 'shortTime' }}</span>
-
-          <!-- Meme Images -->
-          <ng-container *ngIf="msg.imageUrl">
-            <img [src]="msg.imageUrl" alt="Meme" class="meme-image" />
-
-          </ng-container>
-
+        <div class="message">
+          <img
+            [src]="msg.sender === 'User' ? userProfilePicture : 'assets/img/banner.png'"
+            alt="{{ msg.sender }} Avatar"
+            class="avatar"
+          />
+          <div class="message-content" tabindex="0">
+            <!-- Text Messages -->
+            <div class="text" [innerHTML]="msg.htmlContent"></div>
+            <!-- Meme Images -->
+            <ng-container *ngIf="msg.imageUrl">
+              <img 
+                [src]="msg.imageUrl" 
+                alt="Meme" 
+                class="meme-image" 
+                (click)="openImageModal(msg.imageUrl)"
+                role="button"
+                aria-label="View image in full screen"
+              />
+            </ng-container>
+            <span class="timestamp">{{ msg.timestamp | date: 'shortTime' }}</span>
+          </div>
+          <!-- Replay Button for Mentor Messages with Audio -->
+          <button
+            *ngIf="msg.audioUrl && msg.sender === 'Mentor'"
+            mat-icon-button
+            (click)="playAudio(msg.audioUrl)"
+            matTooltip="Replay Audio"
+            [@buttonClick]
+            [attr.aria-label]=" 'Replay Audio' "
+          >
+            <mat-icon>replay</mat-icon>
+          </button>
         </div>
-
-        <!-- Replay Button for Mentor Messages with Audio -->
-        <button
-          *ngIf="msg.audioUrl && msg.sender === 'Mentor'"
-          mat-icon-button
-          (click)="playAudio(msg.audioUrl)"
-          matTooltip="Replay Audio"
-          [@buttonClick]
-        >
-          <mat-icon>replay</mat-icon>
-        </button>
       </div>
-
-      
-      </div>
-      
     </div>
   </div>
 
-  <!-- New Input Area -->
-  <div class="input-area">
+  <!-- Live Mode Area -->
+  <div *ngIf="isLiveMode" class="live-mode-area" role="log" aria-live="polite">
+    <div class="transcript-area" #transcriptArea aria-live="polite">
+      <p>{{ transcript }}</p>
+    </div>
+  </div>
+
+  <!-- New Input Area for Standard Mode -->
+  <div *ngIf="!isLiveMode" class="input-area" role="region" aria-label="Message input">
     <textarea
       [(ngModel)]="userInputText"
       placeholder="Type your message here..."
       (keydown.enter)="sendTextInput()"
+      aria-label="Message input"
     ></textarea>
-    <label class="custom-file-label">
-      <mat-icon>upload</mat-icon>
-      <span>{{ selectedFileName || '' }}</span>
-      <input type="file" class="file-input" (change)="onFileSelected($event)" />
+    <label class="file-upload">
+      <input type="file" (change)="onFileSelected($event)" aria-label="Upload image" />
+      <mat-icon>attach_file</mat-icon>
     </label>
-    
     <button
       mat-raised-button
+      color="primary"
       (click)="sendTextInput()"
+      [disabled]="!userInputText && !selectedFile"
       [@buttonClick]
-      class="send-button"
+      aria-label="Send Message"
     >
       Send
     </button>
   </div>
 
   <!-- Status Indicators -->
-  <div class="status-indicators" [@fadeInOut]>
+  <div class="status-indicators" [@fadeInOut] role="status" aria-live="polite">
     <mat-progress-bar
       *ngIf="isProcessing"
       mode="indeterminate"
       color="accent"
+      aria-label="Processing"
     ></mat-progress-bar>
-    <div *ngIf="isListening" class="status-message" [@statusAnimation]>
+    <div *ngIf="isListening" class="status-message" [@statusAnimation] aria-label="Listening">
       <mat-icon>mic</mat-icon> Listening...
     </div>
-    <div *ngIf="isPlaying" class="status-message" [@statusAnimation]>
+    <div *ngIf="isPlaying" class="status-message" [@statusAnimation] aria-label="AI is speaking">
       <mat-icon>volume_up</mat-icon> AI is speaking...
     </div>
   </div>
 
   <!-- Control Panel -->
-  <div class="control-panel">
+  <div class="control-panel" role="toolbar" aria-label="Chat controls">
     <button
       mat-mini-fab
       color="warn"
       (click)="finalizeChat()"
       matTooltip="End Conversation"
       [@buttonClick]
+      [attr.aria-label]="'End Conversation'"
     >
       <mat-icon>stop</mat-icon>
     </button>
+    
     <button
       mat-mini-fab
       color="primary"
       (click)="toggleListening()"
-      matTooltip="{{
-        isListening ? 'Pause Listening' : 'Resume Listening'
-      }}"
+      matTooltip="{{ isListening ? 'Pause Listening' : 'Resume Listening' }}"
       [@buttonClick]
-    >
+      [attr.aria-label]="isListening ? 'Pause Listening' : 'Resume Listening'"
+      *ngIf="isLiveMode"    
+      >
       <mat-icon>{{ isListening ? 'pause' : 'play_arrow' }}</mat-icon>
     </button>
+    
     <button
       mat-mini-fab
       (click)="toggleMute()"
       matTooltip="{{ isMuted ? 'Unmute' : 'Mute' }}"
       [@buttonClick]
+      [attr.aria-label]="isMuted ? 'Unmute' : 'Mute'"
+      *ngIf="isLiveMode"
     >
       <mat-icon>{{ isMuted ? 'volume_off' : 'volume_up' }}</mat-icon>
     </button>
+
+    <!-- Live Mode Toggle Button -->
+    <button
+      mat-mini-fab
+      color="accent"
+      (click)="toggleLiveMode()"
+      matTooltip="{{ isLiveMode ? 'Exit Live Mode' : 'Enter Live Mode' }}"
+      [@buttonClick]
+      [attr.aria-label]="isLiveMode ? 'Exit Live Mode' : 'Enter Live Mode'"
+    >
+      <mat-icon>{{ isLiveMode ? 'exit_to_app' : 'live_tv' }}</mat-icon>
+    </button>
+  </div>
+
+  <!-- Image Modal -->
+  <div class="image-modal" *ngIf="selectedImage" (click)="closeImageModal()" role="dialog" aria-modal="true" aria-labelledby="image-modal-title">
+    <div class="modal-content">
+      <img [src]="selectedImage" alt="Full Screen Image" />
+      <button mat-icon-button class="close-button" (click)="closeImageModal()" aria-label="Close Image">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
   </div>
 </div>
