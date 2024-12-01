@@ -368,7 +368,9 @@ export class LiveConversationComponent implements OnInit, OnDestroy {
         
         // Construct the full URL for the profile picture
         if (response.profile_picture) {
-          this.userProfilePicture = `${response.profile_picture}`;
+          this.userProfilePicture = response.profile_picture.startsWith('http') 
+            ? response.profile_picture 
+            : `${this.backendUrl}${response.profile_picture}`;
           console.log('User profile picture:', this.userProfilePicture);
         } else {
           this.userProfilePicture = '/assets/img/user_avtar.jpg'; // Fallback image

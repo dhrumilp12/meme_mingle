@@ -143,7 +143,7 @@ export class SignUpComponent implements OnInit {
           console.log('User registered successfully', response);
           localStorage.setItem('access_token', response.access_token);
           localStorage.setItem('user_id', response.userId);
-          this.router.navigate(['/main/home']);
+          this.router.navigate(['/home']);
           this.toaster.success('User Register Successfull','Hey there ! ')
         },
         error: (error) => {

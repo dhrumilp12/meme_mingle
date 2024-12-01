@@ -2,7 +2,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { AppService } from '../../app.service';
-
+import { environment } from '../../shared/environments/environment';
 @Component({
   selector: 'app-navbar-main',
   standalone: true,
@@ -14,6 +14,7 @@ export class NavbarMainComponent implements OnInit {
   dropdownOpen = false;
   userProfilePicture: string = '/assets/img/user_avtar.jpg'; 
   menuOpen = false;
+  backendUrl = environment.baseUrl;
   constructor(private appService: AppService, private router: Router) {}
 
   ngOnInit(): void {
@@ -32,7 +33,9 @@ export class NavbarMainComponent implements OnInit {
       next: (response) => {
         console.log('User profile:', response);
         if (response.profile_picture) {
-          this.userProfilePicture = `${response.profile_picture}`;
+          this.userProfilePicture = response.profile_picture.startsWith('http') 
+            ? response.profile_picture 
+            : `${this.backendUrl}${response.profile_picture}`;
           console.log('User profile picture:', this.userProfilePicture);
         } else {
           this.userProfilePicture = '/assets/img/user_avtar.jpg';
