@@ -47,15 +47,27 @@
           <span class="timestamp">{{ msg.timestamp | date: 'shortTime' }}</span>
         </div>
         <!-- Replay Button for Mentor Messages with Audio -->
-        <button
-          *ngIf="msg.audioUrl && msg.sender === 'Mentor'"
-          mat-icon-button
-          (click)="playAudio(msg.audioUrl)"
-          matTooltip="Replay Audio"
-          [@buttonClick]
-        >
-          <mat-icon>play_arrow</mat-icon>
-        </button>
+        <!-- <button
+        *ngIf="msg.audioUrl && msg.sender === 'Mentor'"
+        mat-icon-button
+        (click)="playAudio(msg.audioUrl)"
+        matTooltip="Replay Audio"
+        [@buttonClick]
+        class="circular-button"
+      >
+        <mat-icon>reply</mat-icon>
+      </button> -->
+      <button
+      *ngIf="msg.audioUrl && msg.sender === 'Mentor'"
+      mat-icon-button
+      (click)="playAudio(msg.audioUrl)"
+      matTooltip="Replay Audio"
+      [@buttonClick]
+    >
+      <mat-icon>replay</mat-icon>
+    </button>
+    
+      
       </div>
       
       </div>
@@ -69,19 +81,33 @@
       placeholder="Type your message here..."
       (keydown.enter)="sendTextInput()"
     ></textarea>
-    <input type="file" (change)="onFileSelected($event)" />
+    <label class="file_upload_button">
+        <button
+          mat-mini-fab
+          color="primary"
+          (click)="finalizeChat()"
+          matTooltip="End Conversation"
+          [@buttonClick]
+        >
+          <input class = "file_upload" type="file" (change)="onFileSelected($event)" aria-label="Upload image" />
+          <mat-icon>attach_file</mat-icon>    
+        </button>
+
+    </label>
+    
     <button
-      mat-raised-button
-      color="primary"
+      mat-mini-fab
+      color= "primary"
       (click)="sendTextInput()"
       [@buttonClick]
     >
-      Send
+    <mat-icon class="send-icon">send</mat-icon>
     </button>
+
   </div>
 
   <!-- Status Indicators -->
-  <div class="status-indicators" [@fadeInOut]>
+  <!-- <div class="status-indicators" [@fadeInOut]>
     <mat-progress-bar
       *ngIf="isProcessing"
       mode="indeterminate"
@@ -93,8 +119,22 @@
     <div *ngIf="isPlaying" class="status-message" [@statusAnimation]>
       <mat-icon>volume_up</mat-icon> AI is speaking...
     </div>
+  </div> -->
+  <div class="status-indicators" [@fadeInOut]>
+    <mat-progress-bar
+      *ngIf="isProcessing"
+      mode="indeterminate"
+      color="accent"
+    ></mat-progress-bar>
+    
+    <div *ngIf="isListening" class="status-message listening" [@statusAnimation]>
+      <mat-icon>mic</mat-icon> Listening...
+    </div>
+    
+    <div *ngIf="isPlaying" class="status-message speaking" [@statusAnimation]>
+      <mat-icon>volume_up</mat-icon> AI is speaking...
+    </div>
   </div>
-
   <!-- Control Panel -->
   <div class="control-panel">
     <button
