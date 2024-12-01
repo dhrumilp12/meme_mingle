@@ -29,6 +29,7 @@
     "rxjs": "~7.8.0",
     "three": "^0.171.0",
     "tslib": "^2.3.0",
+    "uuid": "^11.0.3",
     "zone.js": "~0.13.0"
   },
   "devDependencies": {
