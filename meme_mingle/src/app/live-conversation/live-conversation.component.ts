@@ -13,9 +13,15 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatButtonModule } from '@angular/material/button';
+import { NavbarMainComponent } from '../layout/navbar-main/navbar-main.component';
+import { FormsModule } from '@angular/forms';
+import { MarkdownModule } from 'ngx-markdown';
+import { HttpClientModule } from '@angular/common/http';
+import { marked } from 'marked';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+
 import {
   trigger,
-  state,
   style,
   animate,
   transition,
@@ -27,6 +33,7 @@ interface ConversationMessage {
   audioUrl?: string;
   imageUrl?: string;
   timestamp: Date;
+  htmlContent?: SafeHtml;
 }
 
 interface IWindow extends Window {
@@ -43,6 +50,10 @@ interface IWindow extends Window {
     MatIconModule,
     MatProgressBarModule,
     MatButtonModule,
+    NavbarMainComponent,
+    FormsModule,
+    HttpClientModule, 
+    MarkdownModule, 
   ],
   templateUrl: './live-conversation.component.html',
   styleUrls: ['./live-conversation.component.scss'],
@@ -117,9 +128,11 @@ export class LiveConversationComponent implements OnInit, OnDestroy {
   isMuted = false;
   userStopped = false;
   userProfilePicture: string = '';
+  userInputText: string = '';
+  selectedFile: File | null = null;
   @ViewChild('messagesContainer') private messagesContainer!: ElementRef;
 
-  constructor(private appService: AppService, private chatService: ChatService) {}
+  constructor(private appService: AppService, private chatService: ChatService,private sanitizer: DomSanitizer) {}
 
   ngOnInit(): void {
     this.initializeTheme();
@@ -296,39 +309,19 @@ export class LiveConversationComponent implements OnInit, OnDestroy {
     this.subscriptions.add(welcomeSub);
   }
 
-  processUserInput(transcript: string): void {
-    this.isProcessing = true;
-    const chatSub = this.appService
-      .aimentorchat(this.userId, this.chatId, this.turnId, transcript)
-      .subscribe({
-        next: (response: any) => {
-          const aiMessage = response.message;
-          const audioUrl = response.audio_url;
-          const imageUrl = response.meme_url; // Assuming your backend returns image_url
-
-          this.addMessage('Mentor', aiMessage, audioUrl, imageUrl);
-          if (audioUrl) {
-            this.playAudio(audioUrl);
-          }
-          this.turnId += 1;
-          this.isProcessing = false;
-        },
-        error: (error: any) => {
-          console.error('Error processing user input:', error);
-          this.isProcessing = false;
-          this.startListening();
-        },
-      });
-    this.subscriptions.add(chatSub);
-  }
-
   addMessage(sender: 'User' | 'Mentor', message: string, audioUrl?: string,imageUrl?: string): void {
+    // Convert markdown to HTML
+    const rawHtml = marked(message);
+    // Sanitize HTML to prevent XSS attacks
+    const sanitizedHtml = this.sanitizer.bypassSecurityTrustHtml(rawHtml as string);
+  
     this.conversation.push({
       sender,
       message,
       audioUrl,
       imageUrl,
       timestamp: new Date(),
+      htmlContent: sanitizedHtml, // Use sanitized HTML
     });
     this.scrollToBottom();
   }
@@ -387,4 +380,61 @@ export class LiveConversationComponent implements OnInit, OnDestroy {
       },
     });
   }
+  // New method to handle file selection
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+    } else {
+      this.selectedFile = null;
+    }
+  }
+
+  // New method to send text input and file
+  sendTextInput(): void {
+    if (this.userInputText.trim() === '' && !this.selectedFile) {
+      return; // Do nothing if both fields are empty
+    }
+
+    // Add user's message to the conversation
+    this.addMessage('User', this.userInputText);
+
+    // Stop any ongoing processes
+    this.stopListening();
+    this.isProcessing = true;
+
+    // Call the backend service
+    this.processUserInput(this.userInputText, this.selectedFile || undefined);
+
+    // Reset input fields
+    this.userInputText = '';
+    this.selectedFile = null;
+  }
+
+  processUserInput(transcript: string, file?: File): void {
+    this.isProcessing = true;
+    const chatSub = this.appService
+      .aimentorchat(this.userId, this.chatId, this.turnId, transcript, file)
+      .subscribe({
+        next: (response: any) => {
+          const aiMessage = response.message;
+          const audioUrl = response.audio_url;
+          const imageUrl = response.meme_url;
+
+          this.addMessage('Mentor', aiMessage, audioUrl, imageUrl);
+          if (audioUrl) {
+            this.playAudio(audioUrl);
+          }
+          this.turnId += 1;
+          this.isProcessing = false;
+        },
+        error: (error: any) => {
+          console.error('Error processing user input:', error);
+          this.isProcessing = false;
+          this.startListening();
+        },
+      });
+    this.subscriptions.add(chatSub);
+  }
 }
+

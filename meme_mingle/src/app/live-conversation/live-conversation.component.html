@@ -1,20 +1,10 @@
+
+<app-navbar-main></app-navbar-main>
 <div
   class="conversation-container"
   [ngClass]="{ 'dark-mode': isDarkMode }"
   [@fadeInOut]
 >
-  <!-- Header -->
-  <header class="header">
-    <h1>Live Conversational AI</h1>
-    <button
-      class="theme-toggle"
-      (click)="toggleTheme()"
-      matTooltip="Toggle Theme"
-      [@buttonClick]
-    >
-      <mat-icon>{{ isDarkMode ? 'brightness_7' : 'brightness_2' }}</mat-icon>
-    </button>
-  </header>
 
   <!-- Initial Overlay -->
   <div *ngIf="showOverlay" class="overlay" [@overlayAnimation]>
@@ -49,7 +39,7 @@
         />
         <div class="message-content">
           <!-- Text Messages -->
-          <span class="text">{{ msg.message }}</span>
+          <div class="text" [innerHTML]="msg.htmlContent"></div>
           <!-- Meme Images -->
           <ng-container *ngIf="msg.imageUrl">
             <img [src]="msg.imageUrl" alt="Meme" class="meme-image" />
@@ -70,6 +60,24 @@
       
       </div>
     </div>
+  </div>
+
+  <!-- New Input Area -->
+  <div class="input-area">
+    <textarea
+      [(ngModel)]="userInputText"
+      placeholder="Type your message here..."
+      (keydown.enter)="sendTextInput()"
+    ></textarea>
+    <input type="file" (change)="onFileSelected($event)" />
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="sendTextInput()"
+      [@buttonClick]
+    >
+      Send
+    </button>
   </div>
 
   <!-- Status Indicators -->
