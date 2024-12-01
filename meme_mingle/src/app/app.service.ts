@@ -16,7 +16,7 @@ export class AppService {
   constructor(private http: HttpClient, private router: Router) {}
 
   // for sign up
-  signUp(userData: any): Observable<any> {
+  signUp(userData:FormData): Observable<any> {
     return this.http.post(`${this.baseUrl}/user/signup`, userData);
   }
 
@@ -32,8 +32,13 @@ export class AppService {
   }
 
   // for updating user profile
-  updateUserProfile( updatedData: any): Observable<any> {
-    const headers = this.getAuthHeaders();
+  updateUserProfile(updatedData: FormData): Observable<any> {
+    const token = localStorage.getItem('access_token') || '';
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+      // 'Content-Type' is omitted to allow browser to set it for FormData
+    });
+  
     return this.http.patch(`${this.baseUrl}/user/profile`, updatedData, { headers });
   }
 

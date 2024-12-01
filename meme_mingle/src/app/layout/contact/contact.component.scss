@@ -1,0 +1,106 @@
+// Import Bootstrap styles
+// @import 'bootstrap/scss/bootstrap';
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: auto;
+  }
+  
+  .contact-container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    overflow: auto;
+    scrollbar-width: thin;
+    max-height: 100%;
+  
+    .section {
+      background-color: rgba(5, 95, 114, 1);
+      border-radius: 8px;
+      margin-bottom: 30px;
+      padding: 20px 30px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  
+      .section-title {
+        position: relative;
+        font-size: 1.75rem;
+        margin-bottom: 20px;
+        color: white;
+        font-weight: 600;
+  
+        &::after {
+          content: '';
+          position: absolute;
+          left: 0;
+          bottom: -10px;
+          width: 60px;
+          height: 4px;
+          background-color: #e74c3c;
+        }
+      }
+  
+      .contact-form {
+        .form-group {
+          margin-bottom: 1.5rem;
+  
+          label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: white;
+          }
+  
+          .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+  
+            &:focus {
+              border-color: #e74c3c;
+              outline: none;
+              box-shadow: none;
+            }
+  
+            &.is-invalid {
+              border-color: #dc3545;
+            }
+          }
+  
+          .invalid-feedback {
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+          }
+        }
+  
+        .btn {
+          padding: 0.75rem 1.5rem;
+          background-color: #e74c3c;
+          color: #fff;
+          border: none;
+          border-radius: 4px;
+          font-size: 1rem;
+          cursor: pointer;
+  
+          &:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+          }
+  
+          &:hover:not(:disabled) {
+            background-color: #c0392b;
+          }
+        }
+      }
+    }
+  
+    // Specific styles for the Contact section
+    .contact-section {
+      border-left: 5px solid #e74c3c; // Matching one of the section colors
+    }
+  }
+  

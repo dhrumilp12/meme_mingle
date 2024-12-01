@@ -16,8 +16,9 @@ html, body {
     scrollbar-width: thin;
     /* max-width: 800px; */
     max-height: 100%;
+    
   .section {
-    background-color: #ffffff;
+    background-color: rgba(5, 95, 114, 1);
     border-radius: 8px;
     margin-bottom: 30px;
     padding: 20px 30px;
@@ -27,7 +28,7 @@ html, body {
       position: relative;
       font-size: 1.75rem;
       margin-bottom: 20px;
-      color: #343a40;
+      color: white;
       font-weight: 600;
 
       &::after {
@@ -45,7 +46,7 @@ html, body {
     li {
       font-size: 1.1rem;
       line-height: 1.7;
-      color: #555;
+      color: white;
     }
 
     ul {

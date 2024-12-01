@@ -24,11 +24,12 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./layout/aboutus/aboutus.component').then((m) => AboutusComponent),
   },
-  {
-    path: 'Contact',
-    loadComponent: () =>
-      import('./layout/contact/contact.component').then((m) => ContactComponent),
-  },
+  
+    {
+      path: 'contact',
+      loadComponent: () =>
+        import('./layout/contact/contact.component').then((m) => m.ContactComponent),
+    },
   {
     path: 'FAQ',
     loadComponent: () =>

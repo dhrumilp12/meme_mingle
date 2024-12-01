@@ -378,12 +378,12 @@ export class LiveConversationComponent implements OnInit, OnDestroy {
           this.userProfilePicture = `${response.profile_picture}`;
           console.log('User profile picture:', this.userProfilePicture);
         } else {
-          this.userProfilePicture = 'assets/user-avatar.png'; // Fallback image
+          this.userProfilePicture = '/assets/img/user_avtar.jpg'; // Fallback image
         }
       },
       error: (error) => {
         console.error('Error fetching user profile:', error);
-        this.userProfilePicture = 'assets/user-avatar.png'; // Fallback image
+        this.userProfilePicture = '/assets/img/user_avtar.jpg'; // Fallback image
       },
     });
   }

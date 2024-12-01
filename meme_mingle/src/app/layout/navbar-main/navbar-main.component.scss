@@ -1,61 +1,182 @@
 /* Navbar container */
 .mememingle-headernav {
-    width: 100%;
-    height: 60px;
-    display: flex;
-    justify-content: center; /* Center-align content horizontally */
-    align-items: center; /* Center-align content vertically */
-    padding: 0 20px;
-    background-color: rgba(255, 255, 255, 0.9);
-    position: relative;
-    z-index: 2;
-  }
-  
-  /* Logo styling */
+  width: 100%;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  background-color: rgba(255, 255, 255, 0.9);
+  position: relative;
+  z-index: 2;
+  justify-content: space-between; /* Distribute space between items */
+}
+
+/* Left Section: Logo and Dashboard */
+.left-section {
+  display: flex;
+  align-items: center;
+
   .mememingle-logo {
     width: 60px;
     height: auto;
-    position: absolute; /* Remove it from the flow */
-    left: 20px; /* Keep it on the left side */
+    margin-right: 15px;
   }
-  
-  /* Navigation links container */
-  .mememingle-links {
-    display: flex;
-    gap: 20px;
-    align-items: center;
-    justify-content: center; /* Ensure links are center-aligned */
-  }
-  
-  /* Individual link styling */
-  .mememingle-links span {
+
+  .mememingle-text12 {
     color: rgba(17, 17, 17, 1);
     font-size: 16px;
     font-family: 'Poppins', sans-serif;
     font-weight: 500;
     cursor: pointer;
     transition: color 0.3s ease;
-  }
-  
-  .mememingle-links span:hover {
-    color: rgba(5, 95, 114, 1); /* Highlight effect */
-  }
-  
-  /* Responsive Adjustments */
-  @media screen and (max-width: 768px) {
-    .mememingle-headernav {
-      flex-direction: column;
-      height: auto;
-      padding: 10px;
+
+    &:hover {
+      color: rgba(5, 95, 114, 1);
     }
-  
-    .mememingle-links {
-      gap: 10px;
-      flex-wrap: wrap; /* Allow links to wrap on smaller screens */
+  }
+}
+
+/* Center Links */
+.mememingle-links {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+
+  span {
+    color: rgba(17, 17, 17, 1);
+    font-size: 16px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: rgba(5, 95, 114, 1);
     }
-  
+  }
+}
+
+/* Menu Icon for Center Links */
+.menu-icon {
+  display: none; /* Hidden on larger screens */
+  cursor: pointer;
+
+  .material-icons {
+    font-size: 32px;
+    color: rgba(17, 17, 17, 1);
+  }
+}
+
+/* Center Dropdown Menu */
+.center-dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 60px; /* Adjust based on navbar height */
+  left: 0;
+  right: 0;
+  background-color: rgba(255, 255, 255, 0.95);
+  border-top: 1px solid #ccc;
+  flex-direction: column;
+  padding: 10px 0;
+  z-index: 3;
+
+  a {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    color: rgba(17, 17, 17, 1);
+    text-decoration: none;
+    font-size: 16px;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgba(5, 95, 114, 0.1);
+    }
+
+    .material-icons {
+      font-size: 20px;
+      margin-right: 10px;
+    }
+  }
+
+  &.show {
+    display: flex;
+  }
+}
+
+/* User Avatar Dropdown */
+.user-avatar-dropdown {
+  position: relative;
+
+  .user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  .dropdown-menu {
+    position: absolute;
+    right: 0;
+    top: 50px;
+    background-color: rgba(255, 255, 255, 0.95);
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: 180px; /* Adjusted width to accommodate icons */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: none;
+    flex-direction: column;
+    padding: 10px 0;
+    z-index: 3;
+
+    &.show {
+      display: flex;
+    }
+
+    a {
+      display: flex;
+      align-items: center;
+      padding: 10px 20px;
+      color: rgba(17, 17, 17, 1);
+      text-decoration: none;
+      font-size: 14px;
+      font-family: 'Poppins', sans-serif;
+      cursor: pointer;
+
+      &:hover {
+        background-color: rgba(5, 95, 114, 0.1);
+      }
+
+      .material-icons {
+        font-size: 20px;
+        margin-right: 10px;
+      }
+    }
+  }
+}
+
+/* Responsive Adjustments */
+@media screen and (max-width: 768px) {
+  /* Hide center links and show menu icon */
+  .mememingle-links {
+    display: none;
+  }
+
+  .menu-icon {
+    display: block;
+  }
+
+  /* Adjust navbar height if needed */
+  .mememingle-headernav {
+    height: 60px;
+  }
+
+  /* Adjust left-section */
+  .left-section {
     .mememingle-logo {
       width: 50px;
     }
   }
-  
+}

@@ -1,1 +1,26 @@
-<p>faq works!</p>
+<app-navbar></app-navbar>
+<div class="container faq-container mt-5">
+    <div class="row">
+      <div class="col-12 mb-4 text-center">
+        <h1 class="display-4">Frequently Asked Questions</h1>
+        <p class="lead">Find answers to common queries about Meme Mingle</p>
+      </div>
+    </div>
+  
+    <!-- FAQ Section -->
+    <div class="row section faq-section py-4 mb-5">
+      <div class="col-12">
+        <mat-accordion>
+          <mat-expansion-panel *ngFor="let faq of faqs">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                {{ faq.question }}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <p>{{ faq.answer }}</p>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+    </div>
+  </div>
+  

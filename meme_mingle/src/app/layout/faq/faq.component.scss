@@ -1,0 +1,83 @@
+// Import Bootstrap styles
+// @import 'bootstrap/scss/bootstrap';
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: auto;
+  }
+  
+  .faq-container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    overflow: auto;
+    scrollbar-width: thin;
+    max-height: 100%;
+  
+    .section {
+      background-color: rgba(5, 95, 114, 1);
+      border-radius: 8px;
+      margin-bottom: 30px;
+      padding: 20px 30px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  
+      .section-title {
+        position: relative;
+        font-size: 1.75rem;
+        margin-bottom: 20px;
+        color: white;
+        font-weight: 600;
+  
+        &::after {
+          content: '';
+          position: absolute;
+          left: 0;
+          bottom: -10px;
+          width: 60px;
+          height: 4px;
+          background-color: #e74c3c;
+        }
+      }
+  
+      mat-accordion {
+        width: 100%;
+  
+        mat-expansion-panel {
+          margin-bottom: 15px;
+          border-radius: 8px;
+          background-color: transparent;
+          border-left: 5px solid #3498db;
+          padding: 10px 20px;
+  
+          mat-expansion-panel-header {
+            padding: 0;
+  
+            mat-panel-title {
+              font-weight: bold;
+              font-size: 1.2rem;
+              color: white;
+            }
+          }
+  
+          p {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: white;
+          }
+  
+          // Optional: Change the border color for expanded panels
+          &.mat-expanded {
+            border-left-color: #e74c3c;
+          }
+        }
+      }
+    }
+  
+    // Specific styles for the FAQ section
+    .faq-section {
+      border-left: 5px solid #3498db; // Matching one of the section colors
+    }
+  }
+  

@@ -1,64 +1,15 @@
-/* user-profile.component.scss */
-
-// .user-profile-container {
-//     max-width: 600px;
-//     margin: 0 auto;
-//     padding: 20px;
-  
-//     h2 {
-//       text-align: center;
-//       margin-bottom: 20px;
-//     }
-  
-//     .full-width {
-//       width: 100%;
-//     }
-  
-//     button {
-//       width: 100%;
-//       margin-top: 20px;
-//     }
-  
-//     .success-message {
-//       color: green;
-//       margin-top: 10px;
-//       text-align: center;
-//     }
-  
-//     .error-message {
-//       color: red;
-//       margin-top: 10px;
-//       text-align: center;
-//     }
-//   }
-  
-//   .loading-container {
-//     display: flex;
-//     flex-direction: column;
-//     align-items: center;
-//     justify-content: center;
-//     height: 100vh;
-  
-//     mat-progress-spinner {
-//       margin-bottom: 16px;
-//     }
-  
-//     p {
-//       font-size: 18px;
-//       font-weight: 500;
-//     }
-//   }
-  /* Container Styling */
+/* Container Styling */
 .signup-container {
   display: flex;
-  height: 100vh;
+  flex-wrap: wrap; /* Allow wrapping on small screens */
+  min-height: 100vh;
   width: 100%;
   background-color: rgba(5, 95, 114, 1);
 }
 
 /* Left Section: Banner Image */
 .signup-left {
-  flex: 1;
+  flex: 1 1 50%; /* Allow the section to shrink on small screens */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -72,88 +23,42 @@
 
 /* Right Section: Form Card */
 .signup-right {
-  flex: 1;
+  flex: 1 1 50%; /* Allow the section to shrink on small screens */
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 20px;
-
 }
 
 .custom-card {
   border-radius: 15px;
   width: 100%;
-  min-height: 450px; /* Ensures consistent height */
+  max-width: 800px;
+  min-height: 450px;
   transition: all 0.3s ease-in-out;
+  background-color: #fff;
 }
 
-/* Toggle Buttons */
-.toggle-btn-left {
-  width: 120px;
-  text-align: center;
-  color: white;
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
-  background-color: gray;
-
-}
-
-.toggle-btn-right {
-  width: 120px;
-  //right border radius
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
-  text-align: center;
-  color: white;
-}
-.toggle-btn-right.active {
-  background-color: #000;
-  color: white;
-}
-
-
-/* Media Queries */
-@media (max-width: 768px) {
-  .signup-container {
-    flex-direction: column;
-  }
-
-  .signup-left {
-    display: none; /* Hide banner on smaller screens */
-  }
-
-  .custom-card {
-    max-width: 90%;
-  }
-}
-
-.switch_sign {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  top: 10px; /* Adjust Y-coordinate relative to .signin-right */
-  left: 50%; /* Center horizontally relative to .signin-right */
-  font-family: 'Avenir', sans-serif;
-}
-
+/* Form Styling */
 .signup-form {
   width: 100%;
   padding: 20px;
-  font-family: 'poppins', sans-serif;
+  font-family: 'Poppins', sans-serif;
 
+  .label {
+    font-weight: bold;
+  }
+
+  .custom-input {
+    border-radius: 8px;
+  }
+
+  .is-invalid {
+    border-color: #dc3545;
+  }
 }
 
-.label_input{
-  color: #000;
-  padding: auto;
-  padding-bottom: 20px;
-  font-weight: bold;
-}
-// .current{
-//   width: 30px;
-//   height: 30px;
-// }
-
+/* Profile Picture Styling */
 .current-picture img {
   border-radius: 50%;
   border: 2px solid #ccc;
@@ -165,7 +70,38 @@
   transform: scale(1.1);
 }
 
-.image-preview img {
-  border-radius: 50%;
-  margin-top: 10px;
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+  /* Medium devices (tablets, 992px and down) */
+  .signup-container {
+    flex-direction: column;
+  }
+
+  .signup-left {
+    display: none; /* Hide banner on medium screens */
+  }
+
+  .custom-card {
+    max-width: 90%;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Small devices (landscape phones, 768px and down) */
+  .signup-right {
+    padding: 10px;
+  }
+
+  .custom-card {
+    max-width: 100%;
+    margin: 0 10px;
+  }
+}
+
+/* Adjust form field spacing on small screens */
+@media (max-width: 576px) {
+  
+  .signup-form .row > div {
+    margin-bottom: 15px;
+  }
 }
