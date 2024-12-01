@@ -381,14 +381,17 @@ export class LiveConversationComponent implements OnInit, OnDestroy {
     });
   }
   // New method to handle file selection
+  selectedFileName: string = '';
+
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
-      this.selectedFile = input.files[0];
+      this.selectedFileName = input.files[0].name; // Display the file name
     } else {
-      this.selectedFile = null;
+      this.selectedFileName = ''; // Reset if no file is selected
     }
   }
+  
 
   // New method to send text input and file
   sendTextInput(): void {

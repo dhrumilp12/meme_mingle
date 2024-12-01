@@ -1,83 +1,78 @@
-.conversation-container {
-  display: flex;
-  flex-direction: column;
-  height: 90vh;
-  background-color: #f5f5f5;
-  color: #333;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  
-  &.dark-mode {
-    background-color: #121212;
-    color: #e0e0e0;
-
-    .header {
-      background-color: #1e1e1e;
-    }
-
-    .conversation-area {
-      background-color: #181818;
-    }
-
-    .message-content {
-      background-color: #262626;
-    }
-
-    .status-indicators {
-      background-color: #1e1e1e;
-    }
-
-    .control-panel {
-      background-color: #1e1e1e;
-    }
-  }
-  .input-area {
-    display: flex;
-    align-items: center;
-    padding: 8px;
-    background-color: #fff;
-
-    textarea {
-      flex-grow: 1;
-      resize: none;
-      padding: 8px;
-      margin-right: 8px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-
-    input[type='file'] {
-      margin-right: 8px;
-    }}
-  .header {
+/* ==========================
+   Styles for Navbar Component
+   ========================== */
+   .header {
     display: flex;
     align-items: center;
     padding: 0 16px;
     height: 64px;
     background-color: #1976d2;
     color: #fff;
-
+  
     h1 {
       flex-grow: 1;
       font-size: 1.5em;
     }
-
+  
     .theme-toggle {
       background: none;
       border: none;
       color: inherit;
       cursor: pointer;
       transition: transform 0.2s ease;
-
+  
       &:hover {
         transform: rotate(20deg);
       }
-
+  
       mat-icon {
         font-size: 24px;
       }
     }
   }
-
+  
+  /* ==========================
+     Styles for Chat Container
+     ========================== */
+  .conversation-container {
+    display: flex;
+    flex-direction: column;
+    height: 90vh;
+    background-color: #f5f5f5;
+    color: #333;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  
+    /* Dark mode styles */
+    &.dark-mode {
+      background-color: #055F72;
+      color: #e0e0e0;
+  
+      .header {
+        background-color: #1e1e1e;
+      }
+  
+      .conversation-area {
+        background-color: #181818;
+      }
+  
+      .message-content {
+        background-color: #262626;
+        
+      }
+  
+      .status-indicators {
+        background-color: #1e1e1e;
+      }
+  
+      .control-panel {
+        background-color: #1e1e1e;
+      }
+    }
+  }
+  
+  /* ==========================
+     Styles for Overlay (Welcome Screen)
+     ========================== */
   .overlay {
     position: absolute;
     top: 0;
@@ -89,31 +84,35 @@
     justify-content: center;
     align-items: center;
     color: #fff;
-
+  
     .overlay-content {
       text-align: center;
       animation: slideDown 0.5s ease;
-
+  
       h2 {
         margin-bottom: 16px;
       }
-
+  
       p {
         margin-bottom: 24px;
       }
-
+  
       button {
         animation: pulse 1.5s infinite;
       }
     }
   }
-
+  
+  /* ==========================
+     Styles for Conversation Area
+     ========================== */
   .conversation-area {
     flex-grow: 1;
     overflow-y: auto;
     padding: 16px;
     background-color: #fafafa;
-
+  
+    /* Individual message wrapper styles */
     .message-wrapper {
       display: flex;
       margin-bottom: 16px;
@@ -121,11 +120,13 @@
       transform: translateY(20px);
       animation: fadeInUp 0.5s forwards;
   
+      /* Styles for user messages */
       &.User {
         flex-direction: row-reverse;
   
         .message {
           flex-direction: row-reverse;
+
   
           .avatar {
             margin-left: 8px;
@@ -133,28 +134,32 @@
           }
   
           .message-content {
-            background-color: #dcf8c6; // Light green for user messages
+            background-color: #055F72; /* Light green for user messages */
             align-items: flex-end;
             text-align: right;
-  
+            padding:30%;
+
             .timestamp {
               right: auto;
               left: 0;
+              color:black;
             }
           }
         }
       }
   
+      /* Styles for mentor messages */
       &.Mentor {
         .message-content {
-          background-color: #fff; // White background for mentor messages
+          background-color: #fff; /* White background for mentor messages */
           align-items: flex-start;
           text-align: left;
   
           .timestamp {
             left: auto;
             right: 0;
-          }
+            color: white;        
+            }
         }
       }
   
@@ -170,52 +175,48 @@
         }
   
         .message-content {
-          background-color: #e0e0e0;
+          background-color: #055F72;
           padding: 12px;
           border-radius: 12px;
           position: relative;
           transition: background-color 0.3s ease;
+          color: #fff;
   
+          /* Markdown content styles */
           .text {
             display: block;
-        
-            // Style headings
+  
             h1, h2, h3, h4, h5, h6 {
               margin: 0 0 10px 0;
               font-weight: bold;
             }
-        
-            // Style bold text
+  
             strong, b {
               font-weight: bold;
             }
-        
-            // Style italic text
+  
             em, i {
               font-style: italic;
             }
-        
-            // Style links
+  
             a {
               color: #1a0dab;
               text-decoration: none;
-        
+  
               &:hover {
                 text-decoration: underline;
               }
             }
-        
-            // Style lists
+  
             ul, ol {
               padding-left: 20px;
               margin: 0 0 10px 0;
             }
-        
+  
             li {
               margin-bottom: 5px;
             }
-        
-            // Style blockquotes
+  
             blockquote {
               margin: 0 0 10px 0;
               padding-left: 10px;
@@ -223,8 +224,7 @@
               color: #666;
               font-style: italic;
             }
-        
-            // Style code blocks
+  
             pre {
               background-color: #f5f5f5;
               padding: 10px;
@@ -232,27 +232,24 @@
               border-radius: 4px;
               margin: 0 0 10px 0;
             }
-        
+  
             code {
               background-color: #f5f5f5;
               padding: 2px 4px;
               font-family: monospace;
               border-radius: 4px;
             }
-        
-            // Style paragraphs
+  
             p {
               margin: 0 0 10px 0;
             }
-        
-            // Style horizontal rule
+  
             hr {
               border: none;
               border-top: 1px solid #ccc;
               margin: 10px 0;
             }
           }
-        
   
           .timestamp {
             font-size: 0.75em;
@@ -265,78 +262,135 @@
     }
   }
   
-  .meme-image {
-    max-width: 100%;
-    border-radius: 8px;
-    margin-top: 8px;
+  /* ==========================
+     Styles for Input Area
+     ========================== */
+  .input-area {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    background-color: #055F72;
+    color: #fff;
+  
+    textarea {
+      flex-grow: 1;
+      resize: none;
+      padding: 4px;
+      margin-right: 8px;
+      border: 1px solid #055F72;
+      border-radius: 12px;
+      height:70%;
+    }
+  
+    input[type='file'] {
+      margin-right: 8px;
+    }
   }
-
+  
+  /* ==========================
+     Styles for Status Indicators
+     ========================== */
   .status-indicators {
     display: flex;
     align-items: center;
     padding: 8px 16px;
-    background-color: #fff;
-
+    background-color: #055F72;
+  
     .status-message {
       display: flex;
       align-items: center;
       font-size: 0.9em;
       animation: pulse 2s infinite;
-
+  
       mat-icon {
         margin-right: 8px;
       }
     }
   }
-
+  
+  /* ==========================
+     Styles for Control Panel
+     ========================== */
   .control-panel {
     display: flex;
     justify-content: space-around;
     padding: 8px 0;
-    background-color: #fff;
-
+    background-color: #055F72;
+  
     button {
       transition: transform 0.2s ease;
-
+  
       &:active {
         transform: scale(0.9);
       }
-
+  
       mat-icon {
         font-size: 24px;
       }
     }
   }
-}
 
 
-/* Animations */
-@keyframes fadeInUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  .file-input {
+    display: none;
   }
-}
+  
+  /* Style the custom label */
+  .custom-file-label {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 10px;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: center;
+    background-color: #3f51b5;
+    transition: background-color 0.3s ease;
+    margin-right: 10px;
+    box-shadow: black 0px 0px 2px;
 
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-20%);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 
-@keyframes pulse {
-  0% {
-    transform: scale(1);
   }
-  50% {
-    transform: scale(1.05);
+  
+  .custom-file-label:hover {
+    background-color: #0288d1;
   }
-  100% {
-    transform: scale(1);
+  
+  /* Style the upload icon */
+  .custom-file-label mat-icon {
+    font-size: 20px;
+    vertical-align: middle;
   }
-}
+  /* ==========================
+     Keyframe Animations
+     ========================== */
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20%);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
