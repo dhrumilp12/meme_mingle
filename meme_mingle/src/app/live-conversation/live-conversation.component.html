@@ -1,26 +1,26 @@
 
-<app-navbar-main></app-navbar-main>
+<!-- <app-navbar-main></app-navbar-main> -->
 <div
   class="conversation-container"
-  [ngClass]="{ 'dark-mode': isDarkMode }"
   [@fadeInOut]
 >
 
   <!-- Initial Overlay -->
-  <div *ngIf="showOverlay" class="overlay" [@overlayAnimation]>
-    <div class="overlay-content">
+  <div *ngIf="showOverlay" class="custom-overlay" [@overlayAnimation]>
+    <div class="custom-overlay-content">
       <h2>Welcome to AI Chat</h2>
       <p>Click below to start your conversation.</p>
       <button
         mat-raised-button
-        color="primary"
         (click)="unlockAudio()"
         [@buttonClick]
+        class="custom-start-conversation-button"
       >
         Start Conversation
       </button>
     </div>
   </div>
+  
 
   <!-- Conversation Area -->
   <div class="conversation-area">
@@ -44,7 +44,7 @@
           <ng-container *ngIf="msg.imageUrl">
             <img [src]="msg.imageUrl" alt="Meme" class="meme-image" />
           </ng-container>
-          <span class="timestamp">{{ msg.timestamp | date: 'shortTime' }}</span>
+          <!-- <span class="timestamp">{{ msg.timestamp | date: 'shortTime' }}</span> -->
         </div>
         <!-- Replay Button for Mentor Messages with Audio -->
         <!-- <button

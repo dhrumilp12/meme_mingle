@@ -1,61 +1,71 @@
+
+
+
+
 /* Navbar container */
 .mememingle-headernav {
-    width: 100%;
-    height: 60px;
-    display: flex;
-    justify-content: center; /* Center-align content horizontally */
-    align-items: center; /* Center-align content vertically */
-    padding: 0 20px;
-    background-color: rgba(255, 255, 255, 0.9);
-    position: relative;
-    z-index: 2;
-  }
-  
-  /* Logo styling */
-  .mememingle-logo {
-    width: 60px;
+  width: 100%;
+  height: 60px;
+  display: flex;
+  justify-content: center; /* Center-align content horizontally */
+  align-items: center; /* Center-align content vertically */
+  padding: 0 20px;
+  background: linear-gradient(135deg, #4c00ff, #ff007f); /* Neon blue to pink gradient */
+  box-shadow: 0 0 15px rgba(76, 0, 255, 0.7), 0 0 30px rgba(255, 0, 127, 0.5); /* Neon glow */
+  position: relative;
+  z-index: 2;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2); /* Subtle border effect */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Logo styling */
+.mememingle-logo {
+  width: 60px;
+  height: auto;
+  position: absolute; /* Remove it from the flow */
+  left: 20px; /* Keep it on the left side */
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8)); /* Neon glow for logo */
+}
+
+/* Navigation links container */
+.mememingle-links {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: center; /* Ensure links are center-aligned */
+}
+
+/* Individual link styling */
+.mememingle-links span {
+  color: #ffffff; /* White text for contrast */
+  font-size: 16px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.8); /* Text neon glow */
+  cursor: pointer;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.mememingle-links span:hover {
+  color: #00d1ff; /* Neon cyan on hover */
+  transform: scale(1.1); /* Slight zoom effect */
+  text-shadow: 0 0 15px #00d1ff, 0 0 30px rgba(0, 209, 255, 0.8); /* Stronger neon glow */
+}
+
+/* Responsive Adjustments */
+@media screen and (max-width: 768px) {
+  .mememingle-headernav {
+    flex-direction: column;
     height: auto;
-    position: absolute; /* Remove it from the flow */
-    left: 20px; /* Keep it on the left side */
+    padding: 10px;
   }
-  
-  /* Navigation links container */
+
   .mememingle-links {
-    display: flex;
-    gap: 20px;
-    align-items: center;
-    justify-content: center; /* Ensure links are center-aligned */
+    gap: 10px;
+    flex-wrap: wrap; /* Allow links to wrap on smaller screens */
   }
-  
-  /* Individual link styling */
-  .mememingle-links span {
-    color: rgba(17, 17, 17, 1);
-    font-size: 16px;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 500;
-    cursor: pointer;
-    transition: color 0.3s ease;
+
+  .mememingle-logo {
+    width: 50px;
   }
-  
-  .mememingle-links span:hover {
-    color: rgba(5, 95, 114, 1); /* Highlight effect */
-  }
-  
-  /* Responsive Adjustments */
-  @media screen and (max-width: 768px) {
-    .mememingle-headernav {
-      flex-direction: column;
-      height: auto;
-      padding: 10px;
-    }
-  
-    .mememingle-links {
-      gap: 10px;
-      flex-wrap: wrap; /* Allow links to wrap on smaller screens */
-    }
-  
-    .mememingle-logo {
-      width: 50px;
-    }
-  }
-  
+}
