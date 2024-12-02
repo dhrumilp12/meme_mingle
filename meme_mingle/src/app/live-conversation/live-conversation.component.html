@@ -81,20 +81,32 @@
       placeholder="Type your message here..."
       (keydown.enter)="sendTextInput()"
     ></textarea>
-    <label class="file_upload_button">
-        <button
-          mat-mini-fab
-          color="primary"
-          (click)="finalizeChat()"
-          matTooltip="End Conversation"
-          [@buttonClick]
-        >
-          <input class = "file_upload" type="file" (change)="onFileSelected($event)" aria-label="Upload image" />
-          <mat-icon>attach_file</mat-icon>    
-        </button>
+    <!-- live-conversation.component.html -->
+<!-- live-conversation.component.html -->
+<label class="file_upload_button">
+  <input
+    #fileInput
+    class="file_upload"
+    type="file"
+    (change)="onFileSelected($event)"
+    aria-label="Upload image"
+    hidden
+  />
+  <button
+    mat-mini-fab
+    color="primary"
+    matTooltip="File upload"
+    [@buttonClick]
+    (click)="fileInput.click()"
+  >
+    <mat-icon>attach_file</mat-icon>    
+  </button>
+</label>
 
-    </label>
-    
+<!-- Display Selected File Name -->
+<span *ngIf="selectedFile" class="file-name">
+  {{ selectedFile.name }}
+</span>
     <button
       mat-mini-fab
       color= "primary"
