@@ -1,9 +1,59 @@
 // Gradients
 $primary-gradient: linear-gradient(135deg, #ff007f, #4c00ff); // Neon pink to neon blue gradient
+$primary-gradient2: linear-gradient(135deg, #4c00ff, #ff007f); // Red to neon cyan gradient
 $hover-gradient: linear-gradient(135deg, #ff007f, #00d1ff); // Neon pink to cyan gradient
 $hover-gradient2: linear-gradient(135deg, #ff1f1f, #3700ff); // Red to cyan gradient
 $active-gradient: linear-gradient(135deg, #00d1ff, #ff007f); // Cyan and magenta gradient
 $active-gradient2: linear-gradient(135deg, #ff1f1f, rgb(0, 255, 217)); // Red and magenta gradient
+
+// Gradient 1: Red to Blue
+$new-chat-gradient-1: linear-gradient(135deg, #ff0000, #0000ff); // Bright red to blue
+
+// Gradient 2: Light Red to Light Blue
+$new-chat-gradient-2: linear-gradient(135deg, #ff7f7f, #7fcfff); // Soft light red to light blue
+
+// Gradient 3: Red to Light Blue
+$new-chat-gradient-3: linear-gradient(135deg, #ff0000, #add8e6); // Bright red to light blue
+
+// Gradient 4: Blue to Light Red
+$new-chat-gradient-4: linear-gradient(135deg, #0000ff, #ffb3b3); // Bright blue to soft light red
+
+// Gradient 5: Dark Red to Dark Blue
+$new-chat-gradient-5: linear-gradient(135deg, #8b0000, #00008b); // Deep red to dark blue
+
+// Gradient 6: Soft Red to Soft Blue
+$new-chat-gradient-6: linear-gradient(135deg, #ffa07a, #87cefa); // Soft coral red to soft sky blue
+
+// Gradient 7: Blue to Cyan
+$new-chat-gradient-7: linear-gradient(135deg, #0000ff, #00ffff); // Bright blue to cyan
+
+// Gradient 8: Red to Magenta
+$new-chat-gradient-8: linear-gradient(135deg, #ff0000, #ff00ff); // Bright red to magenta
+
+// Gradient 1: Bright Red to Dark Blue
+$mentor-gradient-1: linear-gradient(135deg, #ff0000, #00008b); // Bold and striking
+
+// Gradient 2: Bright Red to Cyan
+$mentor-gradient-2: linear-gradient(135deg, #ff0000, #00ffff); // Vibrant red to cyan
+
+// Gradient 3: Light Coral to Light Blue
+$mentor-gradient-3: linear-gradient(135deg, #ff7f7f, #87cefa); // Soft light tones for contrast
+
+// Gradient 4: Dark Red to Deep Purple
+$mentor-gradient-4: linear-gradient(135deg, #8b0000, #4b0082); // Dark and rich
+
+// Gradient 5: Bright Red to Magenta
+$mentor-gradient-5: linear-gradient(135deg, #ff0000, #ff00ff); // High-energy red to magenta
+
+// Gradient 6: Neon Pink to Neon Blue
+
+// Gradient 7: Red to Light Cyan
+$mentor-gradient-7: linear-gradient(135deg, #ff0000, #e0ffff); // Strong red fading to gentle cyan
+
+// Gradient 8: Crimson to Midnight Blue
+$mentor-gradient-8: linear-gradient(135deg, #dc143c, #191970); // Intense crimson fading to deep blue
+
+
 
 // Glow Effects
 $neon-glow: 0 4px 15px rgba(127, 90, 240, 0.5); // Neon glow
@@ -103,7 +153,7 @@ body {
 .conversation-container {
   display: flex;
   flex-direction: column;
-  height: 90vh;
+  height: 100vh;
   background-color: #f5f5f5;
   color: #333;
   transition: background-color 0.3s ease, color 0.3s ease;
@@ -283,13 +333,15 @@ body {
               margin-right: 0;
               box-shadow: $shadow-neon; // Neon glow around avatar.
             }
-
+            //me
             .message-content {
-              background-color: $neon-cyan; // Neon cyan for user messages.
+              background: linear-gradient(135deg, #ff0000, #fcfdfd); // Replace with any gradient variable
               align-items: flex-end;
               text-align: right;
-              color: $text-white; // White text for user messages.
-              text-shadow: 0 0 10px rgba(255, 255, 255, 0.6); // Subtle text glow.
+              color: $text-white; // White text
+              text-shadow: 0 0 10px rgba(255, 255, 255, 0.6); // Subtle text glow
+              box-shadow: $neon-glow; // Subtle neon glow
+              
 
               .timestamp {
                 right: auto;
@@ -301,20 +353,24 @@ body {
         }
 
         &.Mentor {
+          //AI
           .message-content {
-            background-color: $neon-cyan; // Neon purple for mentor messages.
+            background: linear-gradient(135deg, #0000ff, #00ffff); // Replace with any gradient variable
+            // background: linear-gradient(135deg, #ff0000, #fcfdfd); // Replace with any gradient variable
             align-items: flex-start;
             text-align: left;
-            color: $text-white; // White text for mentor messages.
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.6); // Subtle text glow.
-
+            color: $text-white;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.6); // Subtle text glow
+            box-shadow: $neon-glow; // Subtle neon glow for depth and emphasis
+        
             .timestamp {
               left: auto;
               right: 0;
-              color: lighten($text-white, 20%); // Lightened white for timestamp.
+              color: lighten($text-white, 20%); // Slightly lighter white for timestamp
             }
           }
         }
+        
 
         .message {
           display: flex;
@@ -329,7 +385,7 @@ body {
           }
 
           .message-content {
-            background-color: $neon-cyan; // Dark blue for neutral background.
+            // background-color: $neon-cyan; // Dark blue for neutral background.
             padding: 12px;
             border-radius: 12px;
             position: relative;
@@ -415,8 +471,12 @@ body {
     display: flex;
     align-items: center;
     padding: 8px 16px;
-    background-color: orange; // Neon purple background.
-
+    //help me add neon color
+    background: $primary-gradient2; // Neon pink to neon blue gradient
+    box-shadow: $neon-glow; // Add a neon glow effect
+    color: $text-white; // White text for readability
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+    
     .status-message {
       display: flex;
       align-items: center;
@@ -428,12 +488,12 @@ body {
       }
     }
   }
-
+// final_icons
   .control-panel {
     display: flex;
     justify-content: space-around;
     padding: 8px 0;
-    background-color: green; // Neon purple background.
+    background-color: $neon-purple; // Neon purple background.
 
     button {
       transition: transform 0.2s ease;
