@@ -57,7 +57,7 @@ class MemeMingleAIAgent(AIAgent):
 
     """Step 3: Define the MentalHealthAIAgent class methods"""
     
-    def __init__(self, system_message: str = SYSTEM_MESSAGE, tool_names: list[str] = [], desired_role: str = "educational mentor"):
+    def __init__(self, system_message: str = SYSTEM_MESSAGE, tool_names: list[str] = [], desired_role: str = "MemeMingle"):
         """
         Initializes a MentalHealthAgent object.
 

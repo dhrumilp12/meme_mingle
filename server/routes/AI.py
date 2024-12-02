@@ -31,7 +31,7 @@ def get_mental_health_agent_welcome(user_id):
     if not body:
         return jsonify({"error": "No data provided"}), 400
     
-    desired_role = body.get("role", "educational mentor")  # Default to 'educational mentor' if not specified
+    desired_role = body.get("role", "MemeMingle")  # Default to 'educational mentor' if not specified
 
     agent = MemeMingleAIAgent(
         tool_names=[
