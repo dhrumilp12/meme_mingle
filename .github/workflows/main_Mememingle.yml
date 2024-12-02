@@ -23,14 +23,14 @@ jobs:
       uses: docker/login-action@v2
       with:
         registry: https://mememingle.azurecr.io/
-        username: ${{ secrets.AzureAppService_ContainerUsername_5855c45aa0d446dd91d46440e57879f3 }}
-        password: ${{ secrets.AzureAppService_ContainerPassword_7d5b95ba832647a189463218139a5103 }}
+        username: ${{ secrets.AzureAppService_ContainerUsername_9d966e2ffc5b4cca98a33d470769a36b }}
+        password: ${{ secrets.AzureAppService_ContainerPassword_1c379303e21241f6af5f07983cbcec05 }}
 
     - name: Build and push container image to registry
       uses: docker/build-push-action@v3
       with:
         push: true
-        tags: mememingle.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_5855c45aa0d446dd91d46440e57879f3 }}/meme-mingle:${{ github.sha }}
+        tags: mememingle.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_9d966e2ffc5b4cca98a33d470769a36b }}/meme-mingle:${{ github.sha }}
         file: ./Dockerfile
 
   deploy:
@@ -47,5 +47,5 @@ jobs:
       with:
         app-name: 'Mememingle'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_bd7150a240744e08a99bd8ee6dfa16bd }}
-        images: 'mememingle.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_5855c45aa0d446dd91d46440e57879f3 }}/meme-mingle:${{ github.sha }}'
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_404f312314f041ac8161e9a78fff96fd }}
+        images: 'mememingle.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_9d966e2ffc5b4cca98a33d470769a36b }}/meme-mingle:${{ github.sha }}'
