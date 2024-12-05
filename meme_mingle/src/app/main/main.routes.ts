@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 // import { authGuard } from '../shared/guard/auth.guard';
 
-export const routes: Routes = [
+export const main_routes: Routes = [
   {
     path: '',
     loadComponent: () =>
@@ -9,13 +9,13 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'home',
+        redirectTo: 'live-conversion',
         pathMatch: 'full',
       },
       {
-        path: 'home',
+        path: 'live-conversion',
         loadComponent: () =>
-          import('../live-conversation/live-conversation.component').then((m) => m.LiveConversationComponent),
+          import('./live-conversation/live-conversation.component').then((m) => m.LiveConversationComponent),
       },
       
       

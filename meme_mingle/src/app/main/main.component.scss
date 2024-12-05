@@ -1,0 +1,36 @@
+/* Wrapper for layout */
+.wrapper {
+    display: flex;
+    height: 100vh;
+}
+
+/* Sidebar styles */
+.sidebar {
+    width: 264px;
+    min-width: 264px;
+    background-color: #333;
+    transition: width 0.3s ease;
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+/* Content area */
+.content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Adjustments for header and main */
+.header {
+    background-color: #f8f9fa;
+    padding: 10px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.main {
+    flex: 1;
+    padding: 0px;
+    overflow-y: auto;
+}
