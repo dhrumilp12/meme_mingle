@@ -5,15 +5,15 @@ import {
   ViewChild,
   ElementRef,
 } from '@angular/core';
-import { AppService } from '../app.service';
+import { AppService } from '../../app.service';
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { environment } from '../shared/environments/environment';
+import { environment } from '../../shared/environments/environment';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatButtonModule } from '@angular/material/button';
-import { NavbarMainComponent } from '../layout/navbar-main/navbar-main.component';
+import { NavbarMainComponent } from '../../layout/navbar-main/navbar-main.component';
 import { FormsModule } from '@angular/forms';
 import { MarkdownModule } from 'ngx-markdown';
 import { HttpClientModule } from '@angular/common/http';
