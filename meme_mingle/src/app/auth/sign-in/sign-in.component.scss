@@ -3,7 +3,7 @@
   display: flex;
   height: 100vh;
   width: 100%;
-  background-color: #0a0f28; /* Neon dark blue for background */
+  background-color: #0a2a3f; /* Dark teal-blue for background */
 }
 
 /* Left Section: Banner Image */
@@ -18,7 +18,7 @@
   max-width: 80%;
   max-height: 80%;
   object-fit: contain;
-  filter: drop-shadow(0 0 20px #ff007f); /* Neon pink glow effect */
+  filter: drop-shadow(0 0 20px #1e90ff); /* Neon blue glow effect */
 }
 
 /* Right Section: Form Card */
@@ -30,40 +30,34 @@
   padding: 20px;
 }
 
-
-
-
-
-
-
 /* Toggle Buttons */
 .toggle-btn-left {
   width: 120px;
   text-align: center;
-  color: #00d1ff; /* Neon cyan text */
+  color: #00ff9d; /* Neon green text */
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
-  background-color: #1a103d; /* Matching neon purple background */
+  background-color: #003f47; /* Matching dark greenish background */
   transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 
 .toggle-btn-left.active {
-  background-color: #ff007f; /* Neon pink for active state */
+  background-color: #00ff9d; /* Neon green for active state */
   color: #ffffff; /* White text */
 }
 
 .toggle-btn-right {
   width: 120px;
   text-align: center;
-  color: #00d1ff; /* Neon cyan text */
+  color: #00ff9d; /* Neon green text */
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
-  background-color: #1a103d; /* Matching neon purple background */
+  background-color: #000c0e; /* Matching dark greenish background */
   transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 
 .toggle-btn-right.active {
-  background-color: #4c00ff; /* Neon blue for active state */
+  background-color: #006994; /* Soft blue for active state */
   color: #ffffff; /* White text */
 }
 
@@ -88,12 +82,12 @@
   width: 100%;
   max-width: 400px;
   min-height: 450px;
-  background: linear-gradient(135deg, #1f1b36, #2a213e); /* Subtle deep neon gradient */
+  background: linear-gradient(135deg, #141c1f, #21282b); /* Subtle teal-blue gradient */
   color: #ffffff; /* White text for contrast */
   box-shadow: 
-    0 0 30px rgba(76, 0, 255, 0.8), /* Intense blue glow */
-    0 0 50px rgba(255, 0, 127, 0.8), /* Intense pink glow */
-    0 0 70px rgba(76, 0, 255, 0.6); /* Slight outer blue glow */
+    0 0 30px rgba(0, 168, 145, 0.8), /* Intense green glow */
+    0 0 50px rgba(0, 133, 255, 0.8), /* Intense blue glow */
+    0 0 70px rgba(0, 168, 145, 0.6); /* Slight outer green glow */
   padding: 20px;
   animation: twinkleGlow 4s ease-in-out infinite; /* Slow, glowing effect */
 }
@@ -102,19 +96,17 @@
 @keyframes twinkleGlow {
   0%, 100% {
     box-shadow: 
-      0 0 30px rgba(76, 0, 255, 0.8), 
-      0 0 50px rgba(255, 0, 127, 0.8), 
-      0 0 70px rgba(76, 0, 255, 0.6);
+      0 0 30px rgba(0, 168, 145, 0.8), 
+      0 0 50px rgba(0, 133, 255, 0.8), 
+      0 0 70px rgba(0, 168, 145, 0.6);
   }
   50% {
     box-shadow: 
-      0 0 40px rgba(255, 0, 127, 1), /* Brighter pink glow at peak */
-      0 0 60px rgba(76, 0, 255, 1), /* Stronger blue glow at peak */
-      0 0 80px rgba(0, 209, 255, 0.8); /* Cyan accent glow */
+      0 0 40px rgba(0, 168, 145, 1), /* Brighter green glow at peak */
+      0 0 60px rgba(0, 133, 255, 1), /* Stronger blue glow at peak */
+      0 0 80px rgba(0, 255, 255, 0.8); /* Cyan accent glow */
   }
 }
-
-
 
 /* Switch Sign Section */
 .switch_sign {
@@ -122,15 +114,15 @@
   display: inline-block;
   margin: 20px auto;
   padding: 10px 20px;
-  background: linear-gradient(135deg, #ff007f, #4c00ff); /* Neon pink to neon blue gradient */
+  background: linear-gradient(135deg, #00ff9d, #006994); /* Green to blue gradient */
   border-radius: 10px;
   font-weight: bold;
-  box-shadow: 0 4px 15px rgba(127, 90, 240, 0.5); /* Neon glow */
+  box-shadow: 0 4px 15px rgba(0, 168, 145, 0.5); /* Neon green glow */
   animation: float 3s ease-in-out infinite, neon 1.5s ease-in-out infinite;
   border: 2px solid rgba(255, 255, 255, 0.1);
   text-shadow: 
-    0 0 10px rgba(255, 0, 127, 0.6), /* Neon pink inner glow */
-    0 0 20px rgba(255, 0, 127, 0.8); /* Neon pink outer glow */
+    0 0 10px rgba(0, 168, 145, 0.6), /* Neon green inner glow */
+    0 0 20px rgba(0, 168, 145, 0.8); /* Neon green outer glow */
   text-align: center;
 }
 
@@ -150,20 +142,16 @@
 
 .switch_sign .toggle-btn-left.active,
 .switch_sign .toggle-btn-right.active {
-  background: linear-gradient(135deg, #00d1ff, #ff007f); /* Cyan and magenta gradient */
-  box-shadow: 0 4px 15px rgba(127, 90, 240, 0.6); /* Enhanced glow on hover */
+  background: linear-gradient(135deg, #00d1ff, #00ff9d); /* Cyan and green gradient */
+  box-shadow: 0 4px 15px rgba(0, 168, 145, 0.6); /* Enhanced glow on hover */
   color: #ffffff; /* Black text for contrast */
   transform: scale(1.08); /* Moderate scale for attention */
 }
 
-
-
-
-
 .switch_sign .toggle-btn-left:hover,
 .switch_sign .toggle-btn-right:hover {
-  background: linear-gradient(135deg, #ff007f, #00d1ff); /* Hover state gradient */
-  box-shadow: 0 4px 15px rgba(127, 90, 240, 0.6); /* Enhanced glow on hover */
+  background: linear-gradient(135deg, #00ff9d, #00d1ff); /* Hover state gradient */
+  box-shadow: 0 4px 15px rgba(0, 168, 145, 0.6); /* Enhanced glow on hover */
   color: #ffffff; /* White text for hover */
   transform: scale(1.1); /* Slight scale for hover effect */
 }
@@ -180,10 +168,10 @@
 
 @keyframes neon {
   0%, 100% {
-    box-shadow: 0 0 15px rgba(255, 0, 127, 0.7), 0 0 30px rgba(76, 0, 255, 0.5);
+    box-shadow: 0 0 15px rgba(0, 168, 145, 0.7), 0 0 30px rgba(0, 133, 255, 0.5);
   }
   50% {
-    box-shadow: 0 0 30px rgba(255, 0, 127, 1), 0 0 45px rgba(76, 0, 255, 0.7);
+    box-shadow: 0 0 30px rgba(0, 168, 145, 1), 0 0 45px rgba(0, 133, 255, 0.7);
   }
 }
 
@@ -199,19 +187,19 @@
 .card-text {
   display: flex;
   justify-content: left;
-  color: #00d1ff; /* Neon cyan for text */
+  color: #00ff9d; /* Neon green for text */
 }
 
 /* Links */
 .for {
   list-style: none;
   text-decoration: none;
-  color: #ff007f; /* Neon pink for links */
+  color: #00ff9d; /* Neon green for links */
   transition: color 0.3s ease-in-out;
 }
 
 .for:hover {
-  color: #4c00ff; /* Neon blue hover effect */
+  color: #006994; /* Soft blue hover effect */
 }
 
 .login {
@@ -229,18 +217,18 @@
   font-weight: bold;
   text-transform: uppercase;
   color: #ffffff; /* White text for contrast */
-  background: linear-gradient(135deg, #4c00ff, #ff007f); /* Neon blue to pink gradient */
+  background: linear-gradient(135deg, #006994, #00ff9d); /* Blue to green gradient */
   border: 2px solid transparent;
   border-radius: 30px; /* Rounded button */
-  box-shadow: 0 0 15px rgba(76, 0, 255, 0.7), 0 0 30px rgba(255, 0, 127, 0.5); /* Neon glow */
+  box-shadow: 0 0 15px rgba(0, 133, 255, 0.7), 0 0 30px rgba(0, 168, 145, 0.5); /* Neon glow */
   transition: all 0.3s ease-in-out;
   cursor: pointer;
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.6); /* Text glow */
 }
 
 .login .btn:hover {
-  background: linear-gradient(135deg, #ff007f, #00d1ff); /* Gradient on hover */
-  box-shadow: 0 0 20px rgba(255, 0, 127, 0.8), 0 0 40px rgba(0, 209, 255, 0.6); /* Stronger neon glow */
+  background: linear-gradient(135deg, #00ff9d, #00d1ff); /* Gradient on hover */
+  box-shadow: 0 0 20px rgba(0, 168, 145, 0.8), 0 0 40px rgba(0, 255, 255, 0.6); /* Stronger neon glow */
   transform: scale(1.05); /* Slightly increase size on hover */
 }
 
@@ -254,7 +242,7 @@
 
 .login .btn:active {
   transform: scale(0.98); /* Subtle press effect */
-  box-shadow: 0 0 15px rgba(255, 0, 127, 0.5), 0 0 25px rgba(0, 209, 255, 0.4); /* Slightly reduced glow */
+  box-shadow: 0 0 15px rgba(0, 168, 145, 0.5), 0 0 25px rgba(0, 255, 255, 0.4); /* Slightly reduced glow */
 }
 
 .google {
@@ -262,9 +250,9 @@
   justify-content: center;
   align-items: center;
   gap: 10px;
-  background: linear-gradient(135deg, #4c00ff, #ff007f); /* Neon blue to pink gradient */
+  background: linear-gradient(135deg, #006994, #00ff9d); /* Blue to green gradient */
   border-radius: 30px; /* Rounded button */
-  box-shadow: 0 0 15px rgba(76, 0, 255, 0.7), 0 0 30px rgba(255, 0, 127, 0.5); /* Neon glow */
+  box-shadow: 0 0 15px rgba(0, 133, 255, 0.7), 0 0 30px rgba(0, 168, 145, 0.5); /* Neon glow */
   transition: all 0.3s ease-in-out;
   cursor: pointer;
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.6); /* Text glow */
@@ -287,6 +275,5 @@
 }
 
 .form-check-end {
-
   font-size: small;
 }
