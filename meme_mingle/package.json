@@ -23,7 +23,7 @@
     "@ar-js-org/ar.js": "^3.4.5",
     "bootstrap": "^5.3.3",
     "dompurify": "^3.2.2",
-    "marked": "^15.0.3",
+    "marked": "^4.3.0",
     "ngx-markdown": "^16.0.0",
     "ngx-toastr": "^19.0.0",
     "rxjs": "~7.8.0",
