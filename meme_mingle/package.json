@@ -24,7 +24,6 @@
     "bootstrap": "^5.3.3",
     "dompurify": "^3.2.2",
     "marked": "^15.0.3",
-    "ngx-markdown": "^16.0.0",
     "ngx-toastr": "^19.0.0",
     "rxjs": "~7.8.0",
     "three": "^0.171.0",
