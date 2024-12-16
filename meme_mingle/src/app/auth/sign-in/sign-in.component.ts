@@ -10,7 +10,7 @@ import {
 import { AppService } from '../../app.service';
 import { RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { environment } from 'src/app/shared/constant/environment';
+import { environment } from 'src/app/shared/environments/environment';
 import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-sign-in',
