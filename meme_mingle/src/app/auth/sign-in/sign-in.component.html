@@ -1,164 +1,136 @@
-<!-- sign-in.component.html -->
-<div class="sign-in-container">
-  <div class="content-wrapper">
-    <!-- Authentication Section -->
-    <section class="auth-section">
-      <div class="auth-content">
-        <!-- Branding Section -->
-        <div class="branding-section">
-          <div class="logo-container">
-            <img
-              loading="lazy"
-              src="../../../assets/img/meme_ mingle.png"
-              alt="Company logo"
-              class="company-logo"
-            />
-            <div class="welcome-content">
-              <h1 class="heading-primary">Sign In</h1>
-              <p class="welcome-text">Back for more? We've got you covered.</p>
-            </div>
-          </div>
-        </div>
+<div class="signin-container">
+  <!-- Left 50%: Banner Image -->
+  <div class="signin-left">
+    <img src="../../assets/img/banner.png" alt="Banner Image" class="banner-image" />
+  </div>
 
-        <!-- Signup Prompt -->
-        <div class="signup-prompt">
-          <p class="signup-text">
-            Not a member? <span class="signup-link" (click)="showSignUp()">Sign Up</span>
-          </p>
-          <img
-            loading="lazy"
-            src="../../../assets/img/decorative-image.png"
-            alt="Decorative element"
-            class="decorative-image"
-          />
-        </div>
-      </div>
+  <!-- Right 50%: Sign-in Form -->
+  <div class="signin-right">
+    <div class="card shadow-lg custom-card headermt-3">
+      <div class="card-body ms-3 me-3">
+        <!-- Toggle Buttons -->
+        <h5 class="switch_sign title fw-bold fs-3">
+          <button
+            class="toggle-btn-left"
+            [class.active]="isSignInActive"
+            (click)="showSignIn()"
+          >
+            Sign In
+          </button>
+          <button
+            class="toggle-btn-right"
+            [class.active]="!isSignInActive"
+            (click)="showSignUp()"
+          >
+            Sign Up
+          </button>
 
-      <!-- Sign-In Form -->
-      <form [formGroup]="signInForm" class="auth-form" (ngSubmit)="onSubmit()">
-        <!-- Identifier Field -->
-        <div class="form-group">
-          <label for="identifier" class="visually-hidden">Email or Username</label>
-          <div class="input-wrapper">
-            <img
-              loading="lazy"
-              src="../../../assets/img/email-icon.png"
-              alt="Email icon"
-              class="input-icon"
-            />
-            <input
-              id="identifier"
-              type="text"
-              formControlName="identifier"
-              class="form-input"
-              placeholder="Enter Your Email or Username"
-              aria-label="Enter your email or username"
-              [ngClass]="{
-                'is-invalid':
-                  (signInForm.get('identifier')!.touched && signInForm.get('identifier')!.invalid) ||
-                  (submitted && signInForm.get('identifier')!.invalid)
-              }"
-            />
-          </div>
-          <small class="text-danger" *ngIf="(signInForm.get('identifier')!.touched || submitted) && signInForm.get('identifier')!.errors?.['required']">
-            Email or Username is required.
-          </small>
-        </div>
+        </h5>
 
-        <!-- Password Field -->
-        <div class="form-group">
-          <label for="password" class="visually-hidden">Password</label>
-          <div class="input-wrapper">
-            <img
-              loading="lazy"
-              src="../../../assets/img/lock-icon.png"
-              alt="Password icon"
-              class="input-icon"
-            />
-            <input
-              id="password"
-              [type]="showPassword ? 'text' : 'password'"
-              formControlName="password"
-              class="form-input"
-              placeholder="Enter Your Password"
-              aria-label="Enter your password"
-              [ngClass]="{
-                'is-invalid':
-                  (signInForm.get('password')!.touched && signInForm.get('password')!.invalid) ||
-                  (submitted && signInForm.get('password')!.invalid)
-              }"
-            />
-          </div>
-          <small class="text-danger" *ngIf="(signInForm.get('password')!.touched || submitted) && signInForm.get('password')!.errors?.['required']">
-            Password is required.
-          </small>
-          <div class="form-check-end mt-2 d-flex justify-content-between align-items-center">
-            <div>
+
+        <!-- Sign-In Form -->
+        <div *ngIf="isSignInActive">
+
+          <form class = "signin-form" [formGroup]="signInForm" (ngSubmit)="onSubmit()">
+            <!-- Identifier Field -->
+            <div class="mb-3">
+              <label for="identifier" class="fw-bold">Email or Username</label>
               <input
-                type="checkbox"
-                class="form-check-input"
-                id="showPassword"
-                (change)="togglePasswordVisibility()"
-              />
-              <label class="form-check-label" for="showPassword">Show Password</label>
+                type="text"
+                class="form-control custom-input"
+                id="identifier"
+                formControlName="identifier"
+                placeholder="Enter your email or username"
+                [ngClass]="{
+                  'is-invalid':
+                    (signInForm.get('identifier')!.touched && signInForm.get('identifier')!.invalid) ||
+                    (submitted && signInForm.get('identifier')!.invalid)
+                }"
+              >
+              <small class="text-danger" *ngIf="(signInForm.get('identifier')!.touched || submitted) && signInForm.get('identifier')!.errors?.['required']">
+                Email or Username is required.
+              </small>
+            </div>          
+ 
+
+            <!-- Password Field -->
+            <div class="mb-3">
+              <label for="password" class="fw-bold">Password</label>
+              <input
+                [type]="showPassword ? 'text' : 'password'"
+                class="form-control custom-input"
+                id="password"
+                formControlName="password"
+                placeholder="Password"
+                [ngClass]="{
+                  'is-invalid':
+                    (signInForm.get('password')!.touched && signInForm.get('password')!.invalid) ||
+                    (submitted && signInForm.get('password')!.invalid)
+                }"
+              >
+              <small class="text-danger" *ngIf="(signInForm.get('password')!.touched || submitted) && signInForm.get('password')!.errors?.['required']">
+                Password is required.
+              </small>
+              <div class="form-check-end mt-2 d-flex justify-content-between gap-1">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="showPassword"
+                  (change)="togglePasswordVisibility()"
+                >
+                <label class="form-check-label" for="showPassword">Show Password</label>
+                <p class="card-text">
+                  <a routerLink="/auth/forgot-password" class="fw-bold for ms-2">Forgot-password?</a>
+                </p>
+              </div>
             </div>
-            <p class="card-text">
-              <a routerLink="/auth/forgot-password" class="fw-bold for">Forgot Password?</a>
-            </p>
+
+
+            <!-- Submit Button -->
+            <div class="login d-flex flex-column gap-4 justify-content-center ">
+              <button
+                type="submit"
+                class="btn"
+                [disabled]="isSubmitting"
+              >
+                {{ isSubmitting ? 'Logging in...' : 'Log In' }}
+              </button>
+              
+            </div>
+ 
+          </form>
+        </div>
+
+        <!-- Sign-Up Placeholder -->
+        <div *ngIf="!isSignInActive" class="card shadow-lg custom-card headermt-3">
+          <div class="card-body text-center">
+            <h5 class="card-title title fw-bold fs-4">Sign Up</h5>
+            <!-- Add sign-up form here if needed in future -->
           </div>
         </div>
 
-        <!-- Submit Button -->
-        <div class="action-container">
-          <button type="submit" class="signin-button" [disabled]="isSubmitting">
-            <span>{{ isSubmitting ? 'Logging in...' : 'Sign In' }}</span>
-            <div class="icon-container">
-              <img
-                loading="lazy"
-                src="../../../assets/img/Rectangle 14.png"
-                alt="Sign In Icon Background"
-                class="signin-icon-background"
-              />
-              <img
-                loading="lazy"
-                src="../../../assets/img/left.png"
-                alt="Sign In Icon"
-                class="signin-icon-logo"
-              />
-            </div>
-          </button>
-          <span class="divider">OR</span>
-          <button type="button" class="social-signin" (click)="signInWithGoogle()">
-            <div class="icon-container">
-              <img
-                loading="lazy"
-                src="../../../assets/img/Rectangle 15.png"
-                alt="Google Icon Background"
-                class="social-icon-background"
-              />
-              <img
-                loading="lazy"
-                src="../../../assets/img/google 1.png"
-                alt="Google Sign-In"
-                class="social-icon-logo"
-              />
-            </div>
-            Sign in with Google
+        <!-- Divider -->
+        <div class="OR d-flex align-items-center">
+          <div class="flex-grow-1 border-bottom"></div>
+          <span class="mx-2">OR</span>
+          <div class="flex-grow-1 border-bottom"></div>
+        </div>
+
+        <!-- Google Sign-In Button -->
+        <div class="google d-flex justify-content-center">
+          <button
+            class="btn"
+            (click)="signInWithGoogle()"
+          >
+            <i class="bi bi-google me-2"></i> Sign in with Google
           </button>
         </div>
-      </form>
-    </section>
 
-    <!-- Analytics Section -->
-    <section class="analytics-section">
-      <div class="analytics-container">
-        <img
-          loading="lazy"
-          src="../../../assets/img/bg.webp"
-          alt="Analytics background"
-          class="analytics-bg"
-        />
+        <!-- Error Message
+        <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+          {{ errorMessage }}
+        </div> -->
       </div>
-    </section>
+    </div>
   </div>
 </div>
