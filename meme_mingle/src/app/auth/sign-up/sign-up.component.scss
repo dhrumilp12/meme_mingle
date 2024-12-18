@@ -3,7 +3,7 @@
   display: flex;
   height: 100vh;
   width: 100%;
-  background-color: rgba(5, 95, 114, 1);
+  background-color: #0a2a3f; /* Dark teal-blue background */
 }
 
 /* Left Section: Banner Image */
@@ -18,6 +18,7 @@
   max-width: 80%;
   max-height: 80%;
   object-fit: contain;
+  filter: drop-shadow(0 0 20px #1e90ff); /* Blue glow effect */
 }
 
 /* Right Section: Form Card */
@@ -27,40 +28,70 @@
   justify-content: center;
   align-items: center;
   padding: 20px;
-
 }
 
+/* Custom Card Styling */
 .custom-card {
-  border-radius: 15px;
+  position: relative;
+  border-radius: 20px;
   width: 100%;
-  min-height: 450px; /* Ensures consistent height */
-  transition: all 0.3s ease-in-out;
+  min-height: 450px;
+  background: linear-gradient(135deg, #141c1f, #21282b); /* Subtle teal-blue gradient */
+  color: #ffffff; /* White text */
+  box-shadow: 
+    0 0 30px rgba(0, 168, 145, 0.8), /* Neon green glow */
+    0 0 50px rgba(0, 133, 255, 0.8), /* Neon blue glow */
+    0 0 70px rgba(0, 168, 145, 0.6); /* Outer green glow */
+  padding: 20px;
+  animation: twinkleGlow 4s ease-in-out infinite;
+}
+
+/* Twinkling Glow Animation */
+@keyframes twinkleGlow {
+  0%, 100% {
+    box-shadow: 
+      0 0 30px rgba(0, 168, 145, 0.8),
+      0 0 50px rgba(0, 133, 255, 0.8),
+      0 0 70px rgba(0, 168, 145, 0.6);
+  }
+  50% {
+    box-shadow: 
+      0 0 40px rgba(0, 168, 145, 1),
+      0 0 60px rgba(0, 133, 255, 1),
+      0 0 80px rgba(0, 255, 255, 0.8);
+  }
 }
 
 /* Toggle Buttons */
 .toggle-btn-left {
   width: 120px;
   text-align: center;
-  color: white;
+  color: #00ff9d; /* Neon green text */
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
-  background-color: gray;
+  background-color: #003f47; /* Dark green background */
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
 
+.toggle-btn-left.active {
+  background-color: #00ff9d; /* Neon green for active state */
+  color: #ffffff;
 }
 
 .toggle-btn-right {
   width: 120px;
-  //right border radius
+  text-align: center;
+  color: #00ff9d; /* Neon green text */
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
-  text-align: center;
-  color: white;
-}
-.toggle-btn-right.active {
-  background-color: #000;
-  color: white;
+  background-color: #003f47; /* Dark green background */
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+.toggle-btn-right.active {
+  background-color: #006994; /* Soft blue for active state */
+  color: #ffffff;
+}
 
 /* Media Queries */
 @media (max-width: 768px) {
@@ -77,26 +108,126 @@
   }
 }
 
-.switch_sign {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  top: 10px; /* Adjust Y-coordinate relative to .signin-right */
-  left: 50%; /* Center horizontally relative to .signin-right */
-  font-family: 'Avenir', sans-serif;
-}
-
+/* Sign Up Form Styling */
 .signup-form {
   width: 100%;
   padding: 20px;
-  font-family: 'poppins', sans-serif;
-
+  font-family: 'Poppins', sans-serif;
 }
 
-.label_input{
-  color: #000;
-  padding: auto;
+/* Label for Inputs */
+.label_input {
+  color: #00ff9d; /* Neon green label text */
   padding-bottom: 20px;
   font-weight: bold;
 }
 
+/* Switch Sign Section */
+.switch_sign {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 10px;
+  left: 50%;
+  font-family: 'Avenir', sans-serif;
+}
+
+.switch_sign .toggle-btn-left,
+.switch_sign .toggle-btn-right {
+  width: 120px;
+  text-align: center;
+  color: #ffffff; /* White text */
+  font-size: 0.8em;
+  border: none;
+  padding: 10px 20px;
+  background-color: transparent;
+  border-radius: 10px;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
+}
+
+.switch_sign .toggle-btn-left.active,
+.switch_sign .toggle-btn-right.active {
+  background: linear-gradient(135deg, #00d1ff, #00ff9d); /* Cyan and green gradient */
+  box-shadow: 0 4px 15px rgba(0, 168, 145, 0.6); /* Enhanced glow on active state */
+  color: #ffffff;
+  transform: scale(1.08);
+}
+
+.switch_sign .toggle-btn-left:hover,
+.switch_sign .toggle-btn-right:hover {
+  background: linear-gradient(135deg, #00ff9d, #00d1ff); /* Gradient on hover */
+  box-shadow: 0 4px 15px rgba(0, 168, 145, 0.6); /* Enhanced glow */
+  color: #ffffff;
+  transform: scale(1.1);
+}
+
+/* Signup Button Styling */
+.signup .btn {
+  display: inline-block;
+  padding: 12px 30px;
+  font-size: 1.2em;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #ffffff; /* White text */
+  background: linear-gradient(135deg, #006994, #00ff9d); /* Blue to green gradient */
+  border: 2px solid transparent;
+  border-radius: 30px;
+  box-shadow: 0 0 15px rgba(0, 133, 255, 0.7), 0 0 30px rgba(0, 168, 145, 0.5); /* Neon glow */
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.6); /* Text glow */
+}
+
+.signup .btn:hover {
+  background: linear-gradient(135deg, #00ff9d, #00d1ff); /* Gradient on hover */
+  box-shadow: 0 0 20px rgba(0, 168, 145, 0.8), 0 0 40px rgba(0, 255, 255, 0.6); /* Stronger glow */
+  transform: scale(1.05);
+}
+
+.signup .btn:disabled {
+  background: linear-gradient(135deg, #3a3a3a, #6a6a6a); /* Disabled state */
+  color: #888888;
+  border: 2px solid #6a6a6a;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.signup .btn:active {
+  transform: scale(0.98);
+  box-shadow: 0 0 15px rgba(0, 168, 145, 0.5), 0 0 25px rgba(0, 255, 255, 0.4);
+}
+
+/* Google Button */
+.google {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, #006994, #00ff9d); /* Blue to green gradient */
+  border-radius: 30px;
+  box-shadow: 0 0 15px rgba(0, 133, 255, 0.7), 0 0 30px rgba(0, 168, 145, 0.5);
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.6); /* Text glow */
+  margin-top: 10px;
+}
+
+.google .btn {
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 0.9em;
+  text-transform: uppercase;
+  border: none;
+  background: transparent;
+  padding: 8px 20px;
+}
+
+.google .btn:hover {
+  color: #ffffff;
+  transform: scale(1.05);
+}
+
+.form-check-end {
+  font-size: small;
+}
