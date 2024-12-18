@@ -1,0 +1,11 @@
+{
+  "name": "meme_mingle",
+  "version": "1.0.0",
+  "description": "Meme Mingle was inspired by the growing need for engaging and supportive educational tools that cater to students' mental well-being. By integrating humor through memes and leveraging AI-driven interactions, we aim to create a platform that not only facilitates learning but also promotes a positive and enjoyable user experience.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
