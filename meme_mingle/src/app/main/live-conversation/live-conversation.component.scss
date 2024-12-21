@@ -1,63 +1,62 @@
 // Gradients
-$primary-gradient: linear-gradient(135deg, #ff007f, #4c00ff); // Neon pink to neon blue gradient
-$primary-gradient2: linear-gradient(135deg, #4c00ff, #ff007f); // Red to neon cyan gradient
-$hover-gradient: linear-gradient(135deg, #ff007f, #00d1ff); // Neon pink to cyan gradient
-$hover-gradient2: linear-gradient(135deg, #ff1f1f, #3700ff); // Red to cyan gradient
-$active-gradient: linear-gradient(135deg, #00d1ff, #ff007f); // Cyan and magenta gradient
-$active-gradient2: linear-gradient(135deg, #ff1f1f, rgb(0, 255, 217)); // Red and magenta gradient
+$primary-gradient: linear-gradient(135deg, #00ff00, #00d1ff); // Neon green to neon cyan gradient
+$primary-gradient2: linear-gradient(135deg, #00d1ff, #00ff00); // Cyan to neon green gradient
+$hover-gradient: linear-gradient(135deg, #00ff00, #00ffff); // Neon green to cyan gradient
+$hover-gradient2: linear-gradient(135deg, #00ff00, #007f7f); // Neon green to teal gradient
+$active-gradient: linear-gradient(135deg, #00ffff, #00ff00); // Cyan and neon green gradient
+$active-gradient2: linear-gradient(135deg, #00ff00, #00ffff); // Neon green and cyan gradient
 
-// Gradient 1: Red to Blue
-$new-chat-gradient-1: linear-gradient(135deg, #ff0000, #0000ff); // Bright red to blue
+// Gradient 1: Green to Blue
+$new-chat-gradient-1: linear-gradient(135deg, #00ff00, #18b9f8); // Neon green to blue
 
-// Gradient 2: Light Red to Light Blue
-$new-chat-gradient-2: linear-gradient(135deg, #ff7f7f, #7fcfff); // Soft light red to light blue
+// Gradient 2: Light Green to Light Blue
+$new-chat-gradient-2: linear-gradient(135deg, #7fff7f, #7fcfff); // Soft light green to light cyan
 
-// Gradient 3: Red to Light Blue
-$new-chat-gradient-3: linear-gradient(135deg, #ff0000, #add8e6); // Bright red to light blue
+// Gradient 3: Green to Light Blue
+$new-chat-gradient-3: linear-gradient(135deg, #00ff00, #add8e6); // Neon green to light blue
 
-// Gradient 4: Blue to Light Red
-$new-chat-gradient-4: linear-gradient(135deg, #0000ff, #ffb3b3); // Bright blue to soft light red
+// Gradient 4: Blue to Light Green
+$new-chat-gradient-4: linear-gradient(135deg, #40a9ff, #b3ffb3); // Blue to soft light green
 
-// Gradient 5: Dark Red to Dark Blue
-$new-chat-gradient-5: linear-gradient(135deg, #8b0000, #00008b); // Deep red to dark blue
+// Gradient 5: Dark Green to Dark Blue
+$new-chat-gradient-5: linear-gradient(135deg, #006400, #00008b); // Deep green to dark blue
 
-// Gradient 6: Soft Red to Soft Blue
-$new-chat-gradient-6: linear-gradient(135deg, #ffa07a, #87cefa); // Soft coral red to soft sky blue
+// Gradient 6: Soft Green to Soft Blue
+$new-chat-gradient-6: linear-gradient(135deg, #7fff7f, #87cefa); // Soft light green to soft sky blue
 
 // Gradient 7: Blue to Cyan
-$new-chat-gradient-7: linear-gradient(135deg, #0000ff, #00ffff); // Bright blue to cyan
+$new-chat-gradient-7: linear-gradient(135deg, #41c9ff, #00ffff); // Blue to cyan
 
-// Gradient 8: Red to Magenta
-$new-chat-gradient-8: linear-gradient(135deg, #ff0000, #ff00ff); // Bright red to magenta
+// Gradient 8: Green to Cyan
+$new-chat-gradient-8: linear-gradient(135deg, #00ff00, #00ffff); // Bright green to cyan
 
-// Gradient 1: Bright Red to Dark Blue
-$mentor-gradient-1: linear-gradient(135deg, #ff0000, #00008b); // Bold and striking
+// Gradient 1: Bright Green to Dark Blue
+$mentor-gradient-1: linear-gradient(135deg, #00ff00, #20e0a0); // Bold and striking
 
-// Gradient 2: Bright Red to Cyan
-$mentor-gradient-2: linear-gradient(135deg, #ff0000, #00ffff); // Vibrant red to cyan
+// Gradient 2: Bright Green to Cyan
+$mentor-gradient-2: linear-gradient(135deg, #00ff00, #00ffff); // Vibrant green to cyan
 
-// Gradient 3: Light Coral to Light Blue
-$mentor-gradient-3: linear-gradient(135deg, #ff7f7f, #87cefa); // Soft light tones for contrast
+// Gradient 3: Light Green to Light Blue
+$mentor-gradient-3: linear-gradient(135deg, #7fff7f, #87cefa); // Soft light green to soft blue
 
-// Gradient 4: Dark Red to Deep Purple
-$mentor-gradient-4: linear-gradient(135deg, #8b0000, #4b0082); // Dark and rich
+// Gradient 4: Dark Green to Deep Teal
+$mentor-gradient-4: linear-gradient(135deg, #006400, #008080); // Dark green to deep teal
 
-// Gradient 5: Bright Red to Magenta
-$mentor-gradient-5: linear-gradient(135deg, #ff0000, #ff00ff); // High-energy red to magenta
+// Gradient 5: Bright Green to Cyan
+$mentor-gradient-5: linear-gradient(135deg, #00ff00, #00ffff); // High-energy green to cyan
 
-// Gradient 6: Neon Pink to Neon Blue
+// Gradient 6: Neon Green to Neon Blue
 
-// Gradient 7: Red to Light Cyan
-$mentor-gradient-7: linear-gradient(135deg, #ff0000, #e0ffff); // Strong red fading to gentle cyan
+// Gradient 7: Green to Light Cyan
+$mentor-gradient-7: linear-gradient(135deg, #00ff00, #e0ffff); // Strong green fading to light cyan
 
-// Gradient 8: Crimson to Midnight Blue
-$mentor-gradient-8: linear-gradient(135deg, #dc143c, #191970); // Intense crimson fading to deep blue
-
+// Gradient 8: Green to Midnight Cyan
+$mentor-gradient-8: linear-gradient(135deg, #32cd32, #00dbdb); // Intense lime green fading to deep cyan
 
 
 // Glow Effects
-$neon-glow: 0 4px 15px rgba(127, 90, 240, 0.5); // Neon glow
-$glow-mixed: 0 0 30px rgba(76, 0, 255, 0.7), 0 0 50px rgba(255, 0, 127, 0.5); // Combined blue and pink glow
+$neon-glow: 0 4px 15px rgba(50, 205, 50, 0.5); // Neon green glow
+$glow-mixed: 0 0 30px rgba(0, 255, 255, 0.7), 0 0 50px rgba(0, 128, 128, 0.5); // Combined cyan and teal glow
 
 // Primary Colors
 $background-dark-blue: #0a0f28; // Neon dark blue for background
@@ -75,7 +74,7 @@ $text-muted: #888888; // Dimmed text for disabled state
 // Shadows
 $shadow-neon: 0 4px 15px rgba(127, 90, 240, 0.5); // Neon button shadow
 $shadow-hover: 0 6px 20px rgba(127, 90, 240, 0.6); // Hover state shadow
-$shadow-active: 0 0 15px rgba(255, 0, 127, 0.5), 0 0 25px rgba(0, 209, 255, 0.4); // Active button shadow
+$shadow-active: 0 0 15px rgba(0, 255, 128, 0.5), 0 0 25px rgba(0, 209, 255, 0.4); // Active button shadow
 body {
   font-family: 'Poppins', sans-serif;
   margin: 0;
@@ -108,8 +107,8 @@ body {
       font-weight: bold;
       color: $text-white; // White text for heading.
       text-shadow: 
-        0 0 10px rgba(255, 0, 127, 0.6), /* Neon pink inner glow */
-        0 0 20px rgba(255, 0, 127, 0.8); /* Neon pink outer glow */
+        0 0 10px rgba(0, 255, 221, 0.6), /* Neon pink inner glow */
+        0 0 20px rgba(0, 255, 149, 0.8); /* Neon pink outer glow */
       margin-bottom: 1rem;
     }
 
