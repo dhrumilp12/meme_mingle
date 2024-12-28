@@ -3,13 +3,13 @@
   display: flex;
   height: 100vh;
   width: 100%;
-  background-color: #0a0f28; /* Neon dark blue for background */
 }
 
 /* Left Section: Banner Image */
 .signin-left {
   flex: 1;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
@@ -18,8 +18,14 @@
   max-width: 80%;
   max-height: 80%;
   object-fit: contain;
-  filter: drop-shadow(0 0 20px #ff007f); /* Neon pink glow effect */
 }
+
+.text-meme{
+  size: 48px;
+  font-weight:600;
+  margin: 10px;
+}
+
 
 /* Right Section: Form Card */
 .signin-right {
@@ -32,10 +38,6 @@
 
 
 
-
-
-
-
 /* Toggle Buttons */
 .toggle-btn-left {
   width: 120px;
@@ -43,8 +45,6 @@
   color: #00d1ff; /* Neon cyan text */
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
-  background-color: #1a103d; /* Matching neon purple background */
-  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 
 .toggle-btn-left.active {
@@ -53,33 +53,12 @@
 }
 
 .toggle-btn-right {
-  width: 120px;
-  text-align: center;
-  color: #00d1ff; /* Neon cyan text */
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
-  background-color: #1a103d; /* Matching neon purple background */
-  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+  background-color: #fff;
 }
 
 .toggle-btn-right.active {
   background-color: #4c00ff; /* Neon blue for active state */
   color: #ffffff; /* White text */
-}
-
-/* Media Queries */
-@media (max-width: 768px) {
-  .signin-container {
-    flex-direction: column;
-  }
-
-  .signin-left {
-    display: none; /* Hide banner on smaller screens */
-  }
-
-  .custom-card {
-    max-width: 90%;
-  }
 }
 
 .custom-card {
@@ -88,13 +67,7 @@
   width: 100%;
   max-width: 400px;
   min-height: 450px;
-  background: linear-gradient(135deg, #1f1b36, #2a213e); /* Subtle deep neon gradient */
-  color: #ffffff; /* White text for contrast */
-  box-shadow: 
-    0 0 30px rgba(76, 0, 255, 0.8), /* Intense blue glow */
-    0 0 50px rgba(255, 0, 127, 0.8), /* Intense pink glow */
-    0 0 70px rgba(76, 0, 255, 0.6); /* Slight outer blue glow */
-  padding: 20px;
+   padding: 20px;
   animation: twinkleGlow 4s ease-in-out infinite; /* Slow, glowing effect */
 }
 
@@ -122,15 +95,10 @@
   display: inline-block;
   margin: 20px auto;
   padding: 10px 20px;
-  background: linear-gradient(135deg, #ff007f, #4c00ff); /* Neon pink to neon blue gradient */
   border-radius: 10px;
   font-weight: bold;
-  box-shadow: 0 4px 15px rgba(127, 90, 240, 0.5); /* Neon glow */
   animation: float 3s ease-in-out infinite, neon 1.5s ease-in-out infinite;
   border: 2px solid rgba(255, 255, 255, 0.1);
-  text-shadow: 
-    0 0 10px rgba(255, 0, 127, 0.6), /* Neon pink inner glow */
-    0 0 20px rgba(255, 0, 127, 0.8); /* Neon pink outer glow */
   text-align: center;
 }
 
@@ -138,7 +106,6 @@
 .switch_sign .toggle-btn-right {
   width: 120px;
   text-align: center;
-  color: #ffffff; /* White text for contrast */
   font-size: 0.8em;
   border: none;
   padding: 10px 20px;
@@ -150,9 +117,6 @@
 
 .switch_sign .toggle-btn-left.active,
 .switch_sign .toggle-btn-right.active {
-  background: linear-gradient(135deg, #00d1ff, #ff007f); /* Cyan and magenta gradient */
-  box-shadow: 0 4px 15px rgba(127, 90, 240, 0.6); /* Enhanced glow on hover */
-  color: #ffffff; /* Black text for contrast */
   transform: scale(1.08); /* Moderate scale for attention */
 }
 
@@ -162,7 +126,6 @@
 
 .switch_sign .toggle-btn-left:hover,
 .switch_sign .toggle-btn-right:hover {
-  background: linear-gradient(135deg, #ff007f, #00d1ff); /* Hover state gradient */
   box-shadow: 0 4px 15px rgba(127, 90, 240, 0.6); /* Enhanced glow on hover */
   color: #ffffff; /* White text for hover */
   transform: scale(1.1); /* Slight scale for hover effect */

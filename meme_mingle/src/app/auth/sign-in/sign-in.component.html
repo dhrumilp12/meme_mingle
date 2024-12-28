@@ -1,7 +1,12 @@
 <div class="signin-container">
-  <!-- Left 50%: Banner Image -->
+  <!-- Left corner - Study Buddy Logo -->
   <div class="signin-left">
-    <img src="../../assets/img/banner.png" alt="Banner Image" class="banner-image" />
+    <img src="../../assets/img/study-buddy.png" alt="Banner Image" class="banner-image" />
+    <div class="text-meme">
+      <h1>Meme Mingle: Your Daily Dose of LOLs!
+        <img src="../../assets/img/smiley.png" />
+      </h1>
+    </div>
   </div>
 
   <!-- Right 50%: Sign-in Form -->
@@ -9,75 +14,54 @@
     <div class="card shadow-lg custom-card headermt-3">
       <div class="card-body ms-3 me-3">
         <!-- Toggle Buttons -->
-        <h5 class="switch_sign title fw-bold fs-3">
-          <button
-            class="toggle-btn-left"
-            [class.active]="isSignInActive"
-            (click)="showSignIn()"
-          >
-            Sign In
-          </button>
-          <button
-            class="toggle-btn-right"
-            [class.active]="!isSignInActive"
-            (click)="showSignUp()"
-          >
+        <h5>
+          Not a member ?
+          <button class="toggle-btn-right" [class.active]="!isSignInActive" (click)="showSignUp()">
             Sign Up
           </button>
-
+        </h5>
+        <h5 class="switch_sign title fw-bold fs-3">
+          <button class="toggle-btn-left" [class.active]="isSignInActive" (click)="showSignIn()">
+            Sign In
+          </button>
         </h5>
 
 
         <!-- Sign-In Form -->
         <div *ngIf="isSignInActive">
 
-          <form class = "signin-form" [formGroup]="signInForm" (ngSubmit)="onSubmit()">
+          <form class="signin-form" [formGroup]="signInForm" (ngSubmit)="onSubmit()">
             <!-- Identifier Field -->
             <div class="mb-3">
               <label for="identifier" class="fw-bold">Email or Username</label>
-              <input
-                type="text"
-                class="form-control custom-input"
-                id="identifier"
-                formControlName="identifier"
-                placeholder="Enter your email or username"
-                [ngClass]="{
+              <input type="text" class="form-control custom-input" id="identifier" formControlName="identifier"
+                placeholder="Enter your email or username" [ngClass]="{
                   'is-invalid':
                     (signInForm.get('identifier')!.touched && signInForm.get('identifier')!.invalid) ||
                     (submitted && signInForm.get('identifier')!.invalid)
-                }"
-              >
-              <small class="text-danger" *ngIf="(signInForm.get('identifier')!.touched || submitted) && signInForm.get('identifier')!.errors?.['required']">
+                }">
+              <small class="text-danger"
+                *ngIf="(signInForm.get('identifier')!.touched || submitted) && signInForm.get('identifier')!.errors?.['required']">
                 Email or Username is required.
               </small>
-            </div>          
- 
+            </div>
+
 
             <!-- Password Field -->
             <div class="mb-3">
               <label for="password" class="fw-bold">Password</label>
-              <input
-                [type]="showPassword ? 'text' : 'password'"
-                class="form-control custom-input"
-                id="password"
-                formControlName="password"
-                placeholder="Password"
-                [ngClass]="{
+              <input [type]="showPassword ? 'text' : 'password'" class="form-control custom-input" id="password"
+                formControlName="password" placeholder="Password" [ngClass]="{
                   'is-invalid':
                     (signInForm.get('password')!.touched && signInForm.get('password')!.invalid) ||
                     (submitted && signInForm.get('password')!.invalid)
-                }"
-              >
-              <small class="text-danger" *ngIf="(signInForm.get('password')!.touched || submitted) && signInForm.get('password')!.errors?.['required']">
+                }">
+              <small class="text-danger"
+                *ngIf="(signInForm.get('password')!.touched || submitted) && signInForm.get('password')!.errors?.['required']">
                 Password is required.
               </small>
               <div class="form-check-end mt-2 d-flex justify-content-between gap-1">
-                <input
-                  type="checkbox"
-                  class="form-check-input"
-                  id="showPassword"
-                  (change)="togglePasswordVisibility()"
-                >
+                <input type="checkbox" class="form-check-input" id="showPassword" (change)="togglePasswordVisibility()">
                 <label class="form-check-label" for="showPassword">Show Password</label>
                 <p class="card-text">
                   <a routerLink="/auth/forgot-password" class="fw-bold for ms-2">Forgot-password?</a>
@@ -88,16 +72,12 @@
 
             <!-- Submit Button -->
             <div class="login d-flex flex-column gap-4 justify-content-center ">
-              <button
-                type="submit"
-                class="btn"
-                [disabled]="isSubmitting"
-              >
+              <button type="submit" class="btn" [disabled]="isSubmitting">
                 {{ isSubmitting ? 'Logging in...' : 'Log In' }}
               </button>
-              
+
             </div>
- 
+
           </form>
         </div>
 
@@ -118,10 +98,7 @@
 
         <!-- Google Sign-In Button -->
         <div class="google d-flex justify-content-center">
-          <button
-            class="btn"
-            (click)="signInWithGoogle()"
-          >
+          <button class="btn" (click)="signInWithGoogle()">
             <i class="bi bi-google me-2"></i> Sign in with Google
           </button>
         </div>
