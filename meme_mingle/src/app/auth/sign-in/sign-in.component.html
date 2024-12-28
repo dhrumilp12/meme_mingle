@@ -2,11 +2,12 @@
   <!-- Left corner - Study Buddy Logo -->
   <div class="signin-left">
     <img src="../../assets/img/study-buddy.png" alt="Banner Image" class="banner-image" />
-    <div class="text-meme">
-      <h1>Meme Mingle: Your Daily Dose of LOLs!
-        <img src="../../assets/img/smiley.png" />
+      <h1 class="text-meme">Meme Mingle: Your Daily Dose of LOLs!
+        <img src="../../assets/img/smiley.png" alt="Smiley face" class="smiley-face-image"/>
       </h1>
-    </div>
+
+      <img src="../../assets/img/pookies.png" alt="Pookies" class="pookies-image"/>
+      <img src="../../assets/img/design.png" alt="Design" class="design-image"/>
   </div>
 
   <!-- Right 50%: Sign-in Form -->
@@ -14,17 +15,19 @@
     <div class="card shadow-lg custom-card headermt-3">
       <div class="card-body ms-3 me-3">
         <!-- Toggle Buttons -->
-        <h5>
-          Not a member ?
-          <button class="toggle-btn-right" [class.active]="!isSignInActive" (click)="showSignUp()">
-            Sign Up
-          </button>
-        </h5>
-        <h5 class="switch_sign title fw-bold fs-3">
+       <h5>
+        Not a member ? 
+        <button class="toggle-btn-right" [class.active]="!isSignInActive" (click)="showSignUp()">
+          Sign Up
+        </button>
+       </h5>
+       <h1>Sign In</h1>
+       <p>Back for more? We've got you covered .</p>
+        <!-- <h5 class="switch_sign title fw-bold fs-3">
           <button class="toggle-btn-left" [class.active]="isSignInActive" (click)="showSignIn()">
             Sign In
           </button>
-        </h5>
+        </h5> -->
 
 
         <!-- Sign-In Form -->
@@ -33,25 +36,23 @@
           <form class="signin-form" [formGroup]="signInForm" (ngSubmit)="onSubmit()">
             <!-- Identifier Field -->
             <div class="mb-3">
-              <label for="identifier" class="fw-bold">Email or Username</label>
               <input type="text" class="form-control custom-input" id="identifier" formControlName="identifier"
-                placeholder="Enter your email or username" [ngClass]="{
+                placeholder="Enter your email" [ngClass]="{
                   'is-invalid':
                     (signInForm.get('identifier')!.touched && signInForm.get('identifier')!.invalid) ||
                     (submitted && signInForm.get('identifier')!.invalid)
                 }">
               <small class="text-danger"
                 *ngIf="(signInForm.get('identifier')!.touched || submitted) && signInForm.get('identifier')!.errors?.['required']">
-                Email or Username is required.
+                Email is required.
               </small>
             </div>
 
 
             <!-- Password Field -->
             <div class="mb-3">
-              <label for="password" class="fw-bold">Password</label>
               <input [type]="showPassword ? 'text' : 'password'" class="form-control custom-input" id="password"
-                formControlName="password" placeholder="Password" [ngClass]="{
+                formControlName="password" placeholder="Enter your Password" [ngClass]="{
                   'is-invalid':
                     (signInForm.get('password')!.touched && signInForm.get('password')!.invalid) ||
                     (submitted && signInForm.get('password')!.invalid)
@@ -64,7 +65,7 @@
                 <input type="checkbox" class="form-check-input" id="showPassword" (change)="togglePasswordVisibility()">
                 <label class="form-check-label" for="showPassword">Show Password</label>
                 <p class="card-text">
-                  <a routerLink="/auth/forgot-password" class="fw-bold for ms-2">Forgot-password?</a>
+                  <a routerLink="/auth/forgot-password" class="fw-bold for ms-2">Forgot password?</a>
                 </p>
               </div>
             </div>
@@ -81,13 +82,6 @@
           </form>
         </div>
 
-        <!-- Sign-Up Placeholder -->
-        <div *ngIf="!isSignInActive" class="card shadow-lg custom-card headermt-3">
-          <div class="card-body text-center">
-            <h5 class="card-title title fw-bold fs-4">Sign Up</h5>
-            <!-- Add sign-up form here if needed in future -->
-          </div>
-        </div>
 
         <!-- Divider -->
         <div class="OR d-flex align-items-center">
