@@ -14,6 +14,7 @@ This module defines a class used to generate AI agents centered around Education
 # -- Standard libraries --
 from datetime import datetime
 import logging
+import json
 import asyncio
 from operator import itemgetter
 import os
@@ -364,11 +365,18 @@ class MemeMingleAIAgent(AIAgent):
             # Convert AI text response to speech
             audio_url = self.convert_text_to_speech(ai_text_response, user_id, chat_id, turn_id)
 
+             # 4) Determine Facial Expression & Animation
+            fa_data = self.determine_facial_expression_and_animation(ai_text_response)
+            facial_expression = fa_data["facial_expression"]
+            animation = fa_data["animation"]
+
             # Structure the response to include both text and meme/GIF
             response = {
                 "message": ai_text_response,
                 "meme_url": meme_url,
-                "audio_url": audio_url
+                "audio_url": audio_url,
+                "facial_expression": facial_expression,
+                "animation": animation
             }
 
             return response
@@ -611,3 +619,88 @@ class MemeMingleAIAgent(AIAgent):
         except Exception as e:
             logging.error(f"Text-to-speech conversion failed: {e}")
             return ""
+        
+    def determine_facial_expression_and_animation(self, ai_response: str) -> dict:
+        """
+        Determines a suitable facial expression and animation based on the AI's message.
+
+        Returns:
+            dict: A dictionary with keys 'facial_expression' and 'animation'.
+        """
+
+        # The available options you want the LLM to choose from
+        facial_expressions_list = [
+            "smile", 
+            "sad", 
+            "angry", 
+            "surprised", 
+            "funnyFace", 
+            "default"
+        ]
+
+        animations_list = [
+            "Talking_0", 
+            "Talking_1", 
+            "Talking_2", 
+            "Crying", 
+            "Laughing", 
+            "Rumba", 
+            "Idle", 
+            "Terrified", 
+            "Angry"
+        ]
+
+        prompt = f"""
+You are given a list of possible facial expressions and animations. Based on the content and sentiment of the AI's response, choose the best matching facial expression and animation.
+
+- Facial expressions: {', '.join(facial_expressions_list)}
+- Animations: {', '.join(animations_list)}
+
+Only respond with valid choices. If you are unsure, default to:
+  facial_expression = "default"
+  animation = "Idle"
+
+Return your answer in JSON format with two keys: "facial_expression" and "animation".
+
+AI Response to analyze:
+"{ai_response}"
+"""
+
+        try:
+            # Invoke the LLM with the prompt
+            response = self.llm.invoke(prompt)
+
+            # Attempt to parse the LLM response as JSON
+            parsed = {}
+            try:
+                parsed = json.loads(response.content)
+            except json.JSONDecodeError:
+                # If the LLM doesn't return valid JSON, fallback to defaults
+                logging.warning("LLM returned non-JSON response. Reverting to defaults.")
+                parsed = {
+                    "facial_expression": "default",
+                    "animation": "Idle"
+                }
+
+            # Extract the fields or use defaults if absent
+            facial_expression = parsed.get("facial_expression", "default")
+            animation = parsed.get("animation", "Idle")
+
+            # Validate the results
+            if facial_expression not in facial_expressions_list:
+                facial_expression = "default"
+            if animation not in animations_list:
+                animation = "Idle"
+
+            return {
+                "facial_expression": facial_expression,
+                "animation": animation
+            }
+
+        except Exception as e:
+            logging.error(f"AI-based facial expression & animation determination failed: {e}")
+            # Fallback to defaults in case of error
+            return {
+                "facial_expression": "default",
+                "animation": "Idle"
+            }
