@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { SidebarService } from 'src/app/shared/service/sidebar.service';
@@ -6,22 +6,21 @@ import { SidebarService } from 'src/app/shared/service/sidebar.service';
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule ,RouterModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.scss']
+  styleUrls: ['./sidebar.component.scss'],
 })
-export class SidebarComponent {
-  sidebarVisible: boolean = true; // Default to true or manage initial state
+export class SidebarComponent implements OnInit {
+  sidebarVisible: boolean = true;
 
-  constructor(private sidebarService: SidebarService) { }
+  constructor(private sidebarService: SidebarService) {}
 
   ngOnInit(): void {
-    this.sidebarService.getSidebarState().subscribe((visible:any) => {
+    this.sidebarService.getSidebarState().subscribe((visible: boolean) => {
       this.sidebarVisible = visible;
     });
   }
 
-  // Toggle sidebar visibility
   toggleSidebar() {
     this.sidebarService.toggleSidebar();
   }
