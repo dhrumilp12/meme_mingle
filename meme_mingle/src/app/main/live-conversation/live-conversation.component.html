@@ -9,15 +9,30 @@
   <div *ngIf="showOverlay" class="custom-overlay" [@overlayAnimation]>
     <div class="custom-overlay-content">
       <h2>Welcome to AI Chat</h2>
-      <p>Click below to start your conversation.</p>
+      <p>Choose a historical figure to inspire your conversation.</p>
+      
+      <!-- Container for Dropdown and Button -->
+     <div class="selection-container">
+      <!-- Dropdown for Selecting Historical Figure -->
+      <mat-form-field appearance="fill" class="role-select">
+        <mat-label>Select Your Mentor</mat-label>
+        <mat-select [(value)]="selectedRole">
+          <mat-option *ngFor="let figure of historicalFigures" [value]="figure.value">
+            {{ figure.display }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
       <button
         mat-raised-button
         (click)="unlockAudio()"
         [@buttonClick]
         class="custom-start-conversation-button"
+        [disabled]="!selectedRole" 
       >
         Start Conversation
       </button>
+     </div>
     </div>
   </div>
   

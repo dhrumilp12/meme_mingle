@@ -1,4 +1,4 @@
-// live-conversation.component.scss
+
 
 /*******************************************
  * Variables
@@ -43,66 +43,142 @@
  
  
    /* Overlay Styles */
-   .custom-overlay {
-     background-color: rgba(42, 42, 42, 0.85);
-     display: flex;
-     align-items: center;
-     justify-content: center;
-     height: 100%;
-     width: 100%;
-     position: fixed;
-     top: 0;
-     left: 0;
-     z-index: 1000;
- 
-     .custom-overlay-content {
-       background: #3a3a3a; // Slightly lighter than main background
-       border-radius: $border-radius;
-       padding: 2rem;
-       box-shadow: $box-shadow;
-       text-align: center;
-       border: 2px solid $highlight-color;
- 
-       h2 {
-         font-size: 2rem;
-         font-weight: bold;
-         color: $text-color;
-         margin-bottom: 1rem;
-         
-       }
- 
-       p {
-         font-size: 1.1rem;
-         color: lighten($text-color, 20%);
-         margin-bottom: 2rem;
-       }
- 
-       .custom-start-conversation-button {
-         background: $primary-color;
-         color: $text-color;
-         font-weight: bold;
-         font-size: 1rem;
-         padding: 0.8rem 2rem;
-         border: none;
-         border-radius: $border-radius;
-         box-shadow: $box-shadow;
-         cursor: pointer;
-         transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
- 
-         &:hover {
-           background: darken($primary-color, 10%);
-           box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-           transform: scale(1.05);
-         }
- 
-         &:active {
-           background: lighten($primary-color, 10%);
-           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-           transform: scale(0.95);
-         }
-       }
-     }
-   }
+  /* Overlay Styles */
+.custom-overlay {
+  background-color: rgba(42, 42, 42, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh; /* Full viewport height */
+  width: 100vw;  /* Full viewport width */
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  overflow: auto; /* Handle overflow on smaller screens */
+
+  .custom-overlay-content {
+    background: #3a3a3a; // Slightly lighter than main background
+    border-radius: $border-radius;
+    padding: 2rem;
+    box-shadow: $box-shadow;
+    text-align: center;
+    border: 2px solid $highlight-color;
+    max-width: 500px; // Increased for better content spacing
+    width: 90%;
+    color: $text-color;
+
+    h2 {
+      font-size: 2rem;
+      font-weight: bold;
+      color: $text-color;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      font-size: 1.1rem;
+      color: lighten($text-color, 20%);
+      margin-bottom: 2rem;
+    }
+    
+    /* Container for Dropdown and Button */
+    .selection-container {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch; /* Make children stretch to container's width */
+      gap: 1.5rem; // Space between dropdown and button
+
+      /* Dropdown Styles */
+      .role-select {
+        width: 100%;
+       
+
+        mat-form-field {
+          background-color: #4a4a4a; // Slightly darker for contrast
+          border-radius: $border-radius;
+          color: $text-color;
+          width: 100%;
+          
+
+          .mat-label {
+            color: $text-color;
+          }
+
+          .mat-select-trigger {
+            color: $text-color;
+          }
+
+          .mat-select-arrow {
+            color: $text-color;
+          }
+
+          .mat-option {
+            color: $text-color;
+            background-color: #4a4a4a;
+
+            &:hover {
+              background-color: darken(#4a4a4a, 5%);
+            }
+          }
+
+          .mat-form-field-underline {
+            background-color: $highlight-color;
+          }
+
+          .mat-form-field-ripple {
+            background-color: $highlight-color;
+          }
+
+          input.mat-input-element {
+            color: $text-color;
+          }
+        }
+      }
+
+      /* Button Styles */
+      .custom-start-conversation-button {
+        background: $primary-color;
+        color: $text-color;
+        font-weight: bold;
+        font-size: 1rem;
+        padding: 0.8rem 1.5rem;
+        border: none;
+        border-radius: $border-radius;
+        box-shadow: $box-shadow;
+        cursor: pointer;
+        transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+        width: 100%; // Full width for consistency
+        height: 45px;
+
+        &:hover {
+          background: darken($primary-color, 10%);
+          box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+          
+        }
+
+        &:active {
+          background: lighten($primary-color, 10%);
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+          transform: translateY(0);
+        }
+
+        &:disabled {
+          background: lighten($primary-color, 20%);
+          cursor: not-allowed;
+          box-shadow: none;
+          color: lighten($text-color, 30%);
+        }
+
+        /* Focus State for Accessibility */
+        &:focus {
+          outline: 2px solid $highlight-color;
+          outline-offset: 2px;
+        }
+      }
+    }
+  }
+}
+
  
    /* Conversation Area */
    .conversation-area {

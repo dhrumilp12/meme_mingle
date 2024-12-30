@@ -19,7 +19,8 @@ import { MarkdownModule } from 'ngx-markdown';
 import { HttpClientModule } from '@angular/common/http';
 import { marked } from 'marked';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-
+import { MatFormFieldModule } from '@angular/material/form-field'; 
+import { MatSelectModule } from '@angular/material/select'; 
 import {
   trigger,
   style,
@@ -41,6 +42,11 @@ interface IWindow extends Window {
   webkitSpeechRecognition: any;
 }
 
+interface HistoricalFigure {
+  display: string;
+  value: string;
+}
+
 @Component({
   selector: 'app-live-conversation',
   standalone: true,
@@ -54,6 +60,8 @@ interface IWindow extends Window {
     FormsModule,
     HttpClientModule, 
     MarkdownModule, 
+    MatFormFieldModule, 
+    MatSelectModule,    
   ],
   templateUrl: './live-conversation.component.html',
   styleUrls: ['./live-conversation.component.scss'],
@@ -130,6 +138,18 @@ export class LiveConversationComponent implements OnInit, OnDestroy {
   userProfilePicture: string = '';
   userInputText: string = '';
   selectedFile: File | null = null;
+  selectedRole: string = ''; // New property to hold the selected role
+  historicalFigures: HistoricalFigure[] = [ // Define historical figures
+    { display: 'Albert Einstein', value: 'Albert Einstein' },
+    { display: 'Isaac Newton', value: 'Isaac Newton' },
+    { display: 'Marie Curie', value: 'Marie Curie' },
+    { display: 'Leonardo da Vinci', value: 'Leonardo da Vinci' },
+    { display: 'Nikola Tesla', value: 'Nikola Tesla' },
+    { display: 'Ada Lovelace', value: 'Ada Lovelace' },
+    { display: 'Galileo Galilei', value: 'Galileo Galilei' },
+    { display: 'Thomas Edison', value: 'Thomas Edison' },
+    // Add more figures as needed
+  ];
   @ViewChild('messagesContainer') private messagesContainer!: ElementRef;
 
   constructor(private appService: AppService, private chatService: ChatService,private sanitizer: DomSanitizer) {}
@@ -286,7 +306,7 @@ export class LiveConversationComponent implements OnInit, OnDestroy {
 
   initializeConversation(): void {
     this.isProcessing = true;
-    const welcomeSub = this.appService.aimentorwelcome(this.userId).subscribe({
+    const welcomeSub = this.appService.aimentorwelcome(this.userId, this.selectedRole).subscribe({
       next: (response: any) => {
         this.chatId = response.chat_id;
         this.chatService.setChatId(this.chatId);

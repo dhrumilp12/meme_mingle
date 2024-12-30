@@ -360,10 +360,7 @@ class MemeMingleAIAgent(AIAgent):
                 "animation": animation,
                 "avatar_audio": avatar_audio,
                 "lip_sync_data": lip_sync_data
-            }
-            print("#######################")
-            print ("response", response)
-            print("#######################")    
+            }   
             return response
         except Exception as e:
             logging.error(f"Error during agent execution: {e}", exc_info=True)
