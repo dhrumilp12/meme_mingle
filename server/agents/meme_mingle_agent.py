@@ -1,9 +1,4 @@
-# -- Standard libraries --
-# -- 3rd Party libraries --
-# Azure
-# Langchain
-# MongoDB
-# -- Custom modules --
+
 
 """
 This module defines a class used to generate AI agents centered around Educational applications.
@@ -415,7 +410,6 @@ class MemeMingleAIAgent(AIAgent):
         wav_file_path = os.path.join(self.generated_audio_dir, wav_file_name)
         json_file_path = os.path.splitext(wav_file_path)[0] + ".json"
 
-        # Define Rhubarb path
         # Define Rhubarb path
         RHUBARB_PATH = os.getenv('RHUBARB_PATH')
         if not RHUBARB_PATH:
