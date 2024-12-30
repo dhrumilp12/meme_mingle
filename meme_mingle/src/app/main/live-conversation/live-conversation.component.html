@@ -47,16 +47,6 @@
           <!-- <span class="timestamp">{{ msg.timestamp | date: 'shortTime' }}</span> -->
         </div>
         <!-- Replay Button for Mentor Messages with Audio -->
-        <!-- <button
-        *ngIf="msg.audioUrl && msg.sender === 'Mentor'"
-        mat-icon-button
-        (click)="playAudio(msg.audioUrl)"
-        matTooltip="Replay Audio"
-        [@buttonClick]
-        class="circular-button"
-      >
-        <mat-icon>reply</mat-icon>
-      </button> -->
       <button
       *ngIf="msg.audioUrl && msg.sender === 'Mentor'"
       mat-icon-button
@@ -64,7 +54,7 @@
       matTooltip="Replay Audio"
       [@buttonClick]
     >
-      <mat-icon>replay</mat-icon>
+    <i class="bi bi-volume-up-fill"></i>
     </button>
     
       
@@ -81,8 +71,7 @@
       placeholder="Type your message here..."
       (keydown.enter)="sendTextInput()"
     ></textarea>
-    <!-- live-conversation.component.html -->
-<!-- live-conversation.component.html -->
+    
 <label class="file_upload_button">
   <input
     #fileInput
@@ -119,19 +108,6 @@
   </div>
 
   <!-- Status Indicators -->
-  <!-- <div class="status-indicators" [@fadeInOut]>
-    <mat-progress-bar
-      *ngIf="isProcessing"
-      mode="indeterminate"
-      color="accent"
-    ></mat-progress-bar>
-    <div *ngIf="isListening" class="status-message" [@statusAnimation]>
-      <mat-icon>mic</mat-icon> Listening...
-    </div>
-    <div *ngIf="isPlaying" class="status-message" [@statusAnimation]>
-      <mat-icon>volume_up</mat-icon> AI is speaking...
-    </div>
-  </div> -->
   <div class="status-indicators" [@fadeInOut]>
     <mat-progress-bar
       *ngIf="isProcessing"
@@ -146,6 +122,7 @@
     <div *ngIf="isPlaying" class="status-message speaking" [@statusAnimation]>
       <mat-icon>volume_up</mat-icon> AI is speaking...
     </div>
+    
   </div>
   <!-- Control Panel -->
   <div class="control-panel">
@@ -153,10 +130,10 @@
       mat-mini-fab
       color="warn"
       (click)="finalizeChat()"
-      matTooltip="End Conversation"
+      matTooltip="New Conversation"
       [@buttonClick]
     >
-      <mat-icon>stop</mat-icon>
+    <i class="bi bi-plus-square-fill" style="color: white;"></i>
     </button>
     <button
       mat-mini-fab

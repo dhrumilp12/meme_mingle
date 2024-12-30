@@ -1,17 +1,26 @@
+/* Variables */
+$sidebar-width: 280px; // Updated to match sidebar.component.scss
+$sidebar-margin: 15px;
+
 /* Wrapper for layout */
 .wrapper {
     display: flex;
     height: 100vh;
+    flex-direction: row;
+    background-color: #2a2a2a; // Dark background for contrast
 }
 
 /* Sidebar styles */
 .sidebar {
-    width: 264px;
-    min-width: 264px;
-    background-color: #333;
+    width: $sidebar-width;
+    min-width: $sidebar-width;
+    background-color: #333; // Consider aligning this with sidebar-wrapper's background
     transition: width 0.3s ease;
     z-index: 1000;
     overflow-y: auto;
+    position: fixed; // Ensure consistency with sidebar-wrapper
+    top: $sidebar-margin;
+    left: $sidebar-margin;
 }
 
 /* Content area */
@@ -31,6 +40,24 @@
 
 .main {
     flex: 1;
-    padding: 0px;
+    margin-left: calc($sidebar-width + 2 * $sidebar-margin); /* Updated calculation */
     overflow-y: auto;
+    transition: margin-left 0.35s ease-in-out;
+    
+    color: #ffffff; /* White text for contrast */
+}
+
+.wrapper.sidebar-collapsed .main {
+    margin-left: calc(60px + 2 * $sidebar-margin); /* Adjusted for collapsed sidebar */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 767.98px) {
+    .main {
+        margin-left: calc(60px + 2 * $sidebar-margin); /* When sidebar is collapsed on small screens */
+    }
+
+    .wrapper.sidebar-collapsed .main {
+        margin-left: $sidebar-margin; /* When sidebar is hidden */
+    }
 }

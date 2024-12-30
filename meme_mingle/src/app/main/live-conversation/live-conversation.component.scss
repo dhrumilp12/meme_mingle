@@ -1,641 +1,428 @@
-// Gradients
-$primary-gradient: linear-gradient(135deg, #00ff00, #00d1ff); // Neon green to neon cyan gradient
-$primary-gradient2: linear-gradient(135deg, #00d1ff, #00ff00); // Cyan to neon green gradient
-$hover-gradient: linear-gradient(135deg, #00ff00, #00ffff); // Neon green to cyan gradient
-$hover-gradient2: linear-gradient(135deg, #00ff00, #007f7f); // Neon green to teal gradient
-$active-gradient: linear-gradient(135deg, #00ffff, #00ff00); // Cyan and neon green gradient
-$active-gradient2: linear-gradient(135deg, #00ff00, #00ffff); // Neon green and cyan gradient
-
-// Gradient 1: Green to Blue
-$new-chat-gradient-1: linear-gradient(135deg, #00ff00, #18b9f8); // Neon green to blue
-
-// Gradient 2: Light Green to Light Blue
-$new-chat-gradient-2: linear-gradient(135deg, #7fff7f, #7fcfff); // Soft light green to light cyan
-
-// Gradient 3: Green to Light Blue
-$new-chat-gradient-3: linear-gradient(135deg, #00ff00, #add8e6); // Neon green to light blue
-
-// Gradient 4: Blue to Light Green
-$new-chat-gradient-4: linear-gradient(135deg, #40a9ff, #b3ffb3); // Blue to soft light green
-
-// Gradient 5: Dark Green to Dark Blue
-$new-chat-gradient-5: linear-gradient(135deg, #006400, #00008b); // Deep green to dark blue
-
-// Gradient 6: Soft Green to Soft Blue
-$new-chat-gradient-6: linear-gradient(135deg, #7fff7f, #87cefa); // Soft light green to soft sky blue
-
-// Gradient 7: Blue to Cyan
-$new-chat-gradient-7: linear-gradient(135deg, #41c9ff, #00ffff); // Blue to cyan
-
-// Gradient 8: Green to Cyan
-$new-chat-gradient-8: linear-gradient(135deg, #00ff00, #00ffff); // Bright green to cyan
-
-// Gradient 1: Bright Green to Dark Blue
-$mentor-gradient-1: linear-gradient(135deg, #00ff00, #20e0a0); // Bold and striking
-
-// Gradient 2: Bright Green to Cyan
-$mentor-gradient-2: linear-gradient(135deg, #00ff00, #00ffff); // Vibrant green to cyan
-
-// Gradient 3: Light Green to Light Blue
-$mentor-gradient-3: linear-gradient(135deg, #7fff7f, #87cefa); // Soft light green to soft blue
-
-// Gradient 4: Dark Green to Deep Teal
-$mentor-gradient-4: linear-gradient(135deg, #006400, #008080); // Dark green to deep teal
-
-// Gradient 5: Bright Green to Cyan
-$mentor-gradient-5: linear-gradient(135deg, #00ff00, #00ffff); // High-energy green to cyan
-
-// Gradient 6: Neon Green to Neon Blue
-
-// Gradient 7: Green to Light Cyan
-$mentor-gradient-7: linear-gradient(135deg, #00ff00, #e0ffff); // Strong green fading to light cyan
-
-// Gradient 8: Green to Midnight Cyan
-$mentor-gradient-8: linear-gradient(135deg, #32cd32, #00dbdb); // Intense lime green fading to deep cyan
-
-
-// Glow Effects
-$neon-glow: 0 4px 15px rgba(50, 205, 50, 0.5); // Neon green glow
-$glow-mixed: 0 0 30px rgba(0, 255, 255, 0.7), 0 0 50px rgba(0, 128, 128, 0.5); // Combined cyan and teal glow
-
-// Primary Colors
-$background-dark-blue: #0a0f28; // Neon dark blue for background
-$neon-purple: #1a103d; // Matching neon purple background
-$neon-pink: #ff007f; // Neon pink
-$neon-blue: #4c00ff; // Neon blue
-$neon-cyan: #00d1ff; // Neon cyan
-
-// Text Colors
-$text-white: #ffffff; // White text
-$text-cyan: #00d1ff; // Neon cyan text for contrast
-$text-pink: #ff007f; // Neon pink for links
-$text-muted: #888888; // Dimmed text for disabled state
-
-// Shadows
-$shadow-neon: 0 4px 15px rgba(127, 90, 240, 0.5); // Neon button shadow
-$shadow-hover: 0 6px 20px rgba(127, 90, 240, 0.6); // Hover state shadow
-$shadow-active: 0 0 15px rgba(0, 255, 128, 0.5), 0 0 25px rgba(0, 209, 255, 0.4); // Active button shadow
-body {
-  font-family: 'Poppins', sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: $background-dark-blue; // Neon dark blue background.
-  color: $text-white; // White text for readability.
-}
-.custom-overlay {
-  background-color: rgba(0, 0, 0, 0.8); // Semi-transparent dark background.
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  width: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1000;
-
-  .custom-overlay-content {
-    background: $background-dark-blue; // Neon dark blue background.
-    border-radius: 15px;
-    padding: 2.5rem;
-    box-shadow: $glow-mixed; // Combined blue and pink glow.
-    text-align: center;
-    border: 2px solid rgba(255, 255, 255, 0.2);
-
-    h2 {
-      font-size: 2rem;
-      font-weight: bold;
-      color: $text-white; // White text for heading.
-      text-shadow: 
-        0 0 10px rgba(0, 255, 221, 0.6), /* Neon pink inner glow */
-        0 0 20px rgba(0, 255, 149, 0.8); /* Neon pink outer glow */
-      margin-bottom: 1rem;
-    }
-
-    p {
-      font-size: 1.1rem;
-      color: $text-white; // White text for paragraph.
-      margin-bottom: 2rem;
-    }
-
-    .custom-start-conversation-button {
-      background: $primary-gradient; // Neon gradient for button.
-      color: $text-white; // White text.
-      font-weight: bold;
-      font-size: 1rem;
-      padding: 0.8rem 2rem;
-      border: none;
-      border-radius: 10px;
-      box-shadow: $shadow-neon; // Neon button shadow.
-      cursor: pointer;
-      transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
-
-      &:hover {
-        background: $hover-gradient2; // Hover gradient.
-        box-shadow: $shadow-hover; // Enhanced glow on hover.
-        transform: scale(1.1); // Slight scaling on hover.
-      }
-
-      &:active {
-        background: $active-gradient2; // Active gradient.
-        box-shadow: $shadow-active; // Active button shadow.
-        transform: scale(0.95); // Slight shrink on click.
-      }
-    }
-  }
-}
-
-
-
-//////////////////////////////////////////////////////
-
-.conversation-container {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  background-color: #f5f5f5;
-  color: #333;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  
-  &.dark-mode {
-    background-color: $background-dark-blue; // Use neon dark blue background.
-    color: $text-white; // White text for readability.
-  
-    .header {
-      background-color: $neon-purple; // Use neon purple for header background.
-    }
-  
-    .conversation-area {
-      background-color: darken($background-dark-blue, 5%); // Slightly darker version of the dark blue.
-    }
-  
-    .message-content {
-      background-color: lighten($neon-purple, 5%); // Slightly lighter neon purple.
-      box-shadow: $neon-glow; // Add subtle neon glow for the message content.
-    }
-  
-    .status-indicators {
-      background-color: $neon-purple; // Use neon purple to keep consistent.
-      box-shadow: $shadow-neon; // Add a glowing shadow for emphasis.
-    }
-  
-    .control-panel {
-      background-color: darken($neon-purple, 10%); // Darker neon purple for contrast.
-      box-shadow: $shadow-hover; // Add hover-like shadow for depth.
-    }
-  }
-
-  ///////////////////////////////////////////////2nd part//////////////////////////////////////////
-  
-  
-  .input-area {
-    display: flex;
-    align-items: center;
-    padding: 8px;
-    background-color: $background-dark-blue; // Neon dark blue background.
-  
-    textarea {
-      flex-grow: 1;
-      resize: none;
-      padding: 8px;
-      margin-right: 8px;
-      border: 1px solid $neon-cyan; // Neon cyan border.
-      border-radius: 12px;
-      background-color: lighten($background-dark-blue, 5%); // Slightly lighter dark blue for textarea background.
-      color: $text-white; // White text for contrast.
-  
-      &:focus {
-        outline: none;
-        border-color: $neon-blue; // Neon blue border on focus.
-        box-shadow: $neon-glow; // Neon glow effect.
-      }
-    }
-  
-    input[type='file'] {
-      margin-right: 8px;
-      color: $text-white; // White text for consistency.
-      background-color: lighten($background-dark-blue, 10%); // Slightly lighter background.
-      border: 1px solid $neon-pink; // Neon pink border for highlight.
-  
-      &:hover {
-        background-color: lighten($background-dark-blue, 15%); // Brighter background on hover.
-        border-color: $neon-cyan; // Cyan border on hover.
-      }
-    }
-  }
-  
-  .header {
-    display: flex;
-    align-items: center;
-    padding: 0 16px;
-    height: 64px;
-    background-color: $neon-purple; // Neon purple background.
-    color: $text-white; // White text.
-  
-    h1 {
-      flex-grow: 1;
-      font-size: 1.5em;
-      text-shadow: 0 0 10px rgba(255, 255, 255, 0.6); // Soft glow for header text.
-    }
-  
-    .theme-toggle {
-      background: none;
-      border: none;
-      color: inherit;
-      cursor: pointer;
-      transition: transform 0.2s ease, color 0.2s ease;
-  
-      &:hover {
-        transform: rotate(20deg);
-        color: $neon-cyan; // Cyan color on hover for emphasis.
-      }
-  
-      mat-icon {
-        font-size: 24px;
-        text-shadow: $glow-mixed; // Neon glow effect for icons.
-      }
-    }
-  }
-/////////////////////////////////////////////3rd part//////////////////////////////////////////  
-
-.overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(10, 15, 40, 0.75); // Neon dark blue with transparency.
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: $text-white; // White text.
-
-  .overlay-content {
-    text-align: center;
-    animation: slideDown 0.5s ease;
-
-    h2 {
-      margin-bottom: 16px;
-      color: $text-white; // White text for heading.
-    }
-
-    p {
-      margin-bottom: 24px;
-      color: $text-white; // White text for paragraph.
-    }
-
-    button {
-      animation: pulse 1.5s infinite;
-      background: $primary-gradient; // Neon pink to neon blue gradient.
-      color: $text-white; // White text for button.
-      border: none;
-      border-radius: 8px;
-      padding: 12px 24px;
-      cursor: pointer;
-      transition: background 0.3s ease, transform 0.3s ease;
-
-      &:hover {
-        background: $hover-gradient; // Neon pink to cyan gradient on hover.
-        transform: scale(1.05); // Slightly larger on hover.
-      }
-
-      &:active {
-        background: $active-gradient; // Cyan and magenta gradient on active.
-        transform: scale(0.95); // Slightly smaller on active.
-      }
-    }
-  }
-}
-
-
-  .conversation-area {
-    flex-grow: 1;
-    overflow-y: auto;
-    padding: 16px;
-    background-color: $neon-purple;
-
-      .message-wrapper {
-        display: flex;
-        margin-bottom: 16px;
-        opacity: 0;
-        transform: translateY(20px);
-        animation: fadeInUp 0.5s forwards;
-
-        &.User {
-          flex-direction: row-reverse;
-
-          .message {
-            flex-direction: row-reverse;
-
-            .avatar {
-              margin-left: 8px;
-              margin-right: 0;
-              box-shadow: $shadow-neon; // Neon glow around avatar.
-            }
-            //me
-            .message-content {
-              background: linear-gradient(135deg, #ff0000, #fcfdfd); // Replace with any gradient variable
-              align-items: flex-end;
-              text-align: right;
-              color: $text-white; // White text
-              text-shadow: 0 0 10px rgba(255, 255, 255, 0.6); // Subtle text glow
-              box-shadow: $neon-glow; // Subtle neon glow
-              
-
-              .timestamp {
-                right: auto;
-                left: 0;
-                color: lighten($text-white, 20%); // Lightened white for timestamp.
-              }
-            }
-          }
-        }
-
-        &.Mentor {
-          //AI
-          .message-content {
-            background: linear-gradient(135deg, #0000ff, #00ffff); // Replace with any gradient variable
-            // background: linear-gradient(135deg, #ff0000, #fcfdfd); // Replace with any gradient variable
-            align-items: flex-start;
-            text-align: left;
-            color: $text-white;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.6); // Subtle text glow
-            box-shadow: $neon-glow; // Subtle neon glow for depth and emphasis
-        
-            .timestamp {
-              left: auto;
-              right: 0;
-              color: lighten($text-white, 20%); // Slightly lighter white for timestamp
-            }
-          }
-        }
-        
-
-        .message {
-          display: flex;
-          max-width: 75%;
-
-          .avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            margin: 0 8px;
-            box-shadow: $glow-mixed; // Mixed neon glow around avatar.
-          }
-
-          .message-content {
-            // background-color: $neon-cyan; // Dark blue for neutral background.
-            padding: 12px;
-            border-radius: 12px;
-            position: relative;
-            transition: background-color 0.3s ease;
-            box-shadow: $shadow-hover; // Subtle neon glow for message box.
-
-            .text {
-              display: block;
-              color: $text-white; // White text.
-              text-shadow: 0 0 10px rgba(255, 255, 255, 0.6); // Glowing text effect.
-
-              // Style links
-              a {
-                color: $neon-blue; // Neon blue for links.
-                text-decoration: none;
-
-                &:hover {
-                  color: $neon-pink; // Neon pink on hover.
-                  text-decoration: underline;
-                }
-              }
-
-              // Style blockquotes
-              blockquote {
-                margin: 0 0 10px 0;
-                padding-left: 10px;
-                border-left: 3px solid $neon-cyan; // Neon cyan border.
-                color: lighten($text-white, 20%); // Slightly lighter white text.
-                font-style: italic;
-              }
-
-              // Style code blocks
-              pre {
-                background-color: lighten($background-dark-blue, 10%); // Slightly lighter dark blue.
-                padding: 10px;
-                overflow-x: auto;
-                border-radius: 4px;
-                margin: 0 0 10px 0;
-                color: $text-white; // White text.
-              }
-
-              code {
-                background-color: lighten($background-dark-blue, 10%); // Match pre background.
-                padding: 2px 4px;
-                font-family: monospace;
-                border-radius: 4px;
-                color: $text-white; // White text.
-              }
-
-              // Style paragraphs
-              p {
-                margin: 0 0 10px 0;
-                color: $text-white; // White text.
-              }
-
-              // Style horizontal rule
-              hr {
-                border: none;
-                border-top: 1px solid lighten($text-white, 20%); // Muted white for horizontal rule.
-                margin: 10px 0;
-              }
-            }
-
-            .timestamp {
-              font-size: 0.75em;
-              color: lighten($text-white, 20%); // Muted white for timestamp.
-              position: absolute;
-              bottom: -20px;
-            }
-          }
-        }
-      }
-
-  }
-  
-  .meme-image {
-    max-width: 100%;
-    border-radius: 8px;
-    margin-top: 8px;
-  }
-///voiceover background
-  .status-indicators {
-    display: flex;
-    align-items: center;
-    padding: 8px 16px;
-    //help me add neon color
-    background: $primary-gradient2; // Neon pink to neon blue gradient
-    box-shadow: $neon-glow; // Add a neon glow effect
-    color: $text-white; // White text for readability
-    transition: background 0.3s ease, box-shadow 0.3s ease;
-    
-    .status-message {
-      display: flex;
-      align-items: center;
-      font-size: 0.9em;
-      animation: pulse 2s infinite;
-
-      mat-icon {
-        margin-right: 8px;
-      }
-    }
-  }
-// final_icons
-  .control-panel {
-    display: flex;
-    justify-content: space-around;
-    padding: 8px 0;
-    background-color: $neon-purple; // Neon purple background.
-
-    button {
-      transition: transform 0.2s ease;
-
-      &:active {
-        transform: scale(0.9);
-      }
-
-      mat-icon {
-        font-size: 24px;
-      }
-    }
-  }
-}
-
-.file_upload {
-  display: none;
-}
-.file_upload_button {
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-right: 5px;
-  margin-left: 5px;
-}
-/* Add styling for the file name display */
-.file-name {
-  margin-left: 10px;
-  font-size: 14px;
-  color: #555;
-  margin-right: 20px;
-}
-
-button[mat-icon-button] {
-  border-radius: 50%; /* Ensures the button is perfectly round */
-  width: 36px; /* Smaller size */
-  height: 36px;
-  background-color: var(--primary-color, #3f51b5); /* Use Material primary color */
-  color: #fff; /* White text for contrast */
-  display: inline-flex; /* Inline flex for centering */
-  align-items: center; /* Vertically center the icon */
-  justify-content: center; /* Horizontally center the icon */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow for better appearance */
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  padding: 0; /* Ensure no extra padding */
-  margin-left: 15px;
-}
-
-button[mat-icon-button]:hover {
-  background-color: #2c3e50; /* Slightly darker color on hover */
-}
-
-button[mat-icon-button]:active {
-  transform: scale(0.95); /* Slightly smaller when pressed */
-}
-
-button[mat-icon-button] mat-icon {
-  font-size: 16px; /* Icon size for smaller button */
-  color: #fff; /* Icon color */
-  line-height: 1.5; /* Ensure proper vertical alignment */
-}
-
-
-
-
-
-
-/* Animations */
-@keyframes fadeInUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-20%);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-/* Fade-in with bounce effect */
-@keyframes fadeInBounce {
-  0% {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  50% {
-    opacity: 1;
-    transform: translateY(10px);
-  }
-  100% {
-    transform: translateY(0);
-  }
-}
-
-/* Glowing effect for the message */
-@keyframes glow {
-  0% {
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-  }
-  50% {
-    box-shadow: 0 0 20px rgba(0, 0, 255, 0.5);
-  }
-  100% {
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-  }
-}
-
-/* Continuous scaling effect */
-@keyframes subtlePulse {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-/* Applying the animations */
-.status-indicators {
-  animation: fadeInBounce 1.5s ease-out;
-}
-
-.status-message {
-  animation: glow 2s ease-in-out infinite, subtlePulse 3s infinite;
-}
+// live-conversation.component.scss
+
+/*******************************************
+ * Variables
+ *******************************************/
+ $primary-color: #ffb84d; 
+ $secondary-color: #2a2a2a; 
+ $accent-color: #cccccc; 
+ $background-light: #fff3db; 
+ $text-color: #ffffff; 
+ $text-muted: #cccccc; 
+ $border-radius: 15px; 
+ $box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); 
+ $border-color: #ffb84d; 
+ $highlight-color:  #ffb84d; 
+ 
+ /*******************************************
+  * Global Styles
+  *******************************************/
+ body {
+   font-family: 'Poppins', sans-serif;
+   margin: 5;
+   padding: 0;
+   background-color: $secondary-color;
+   color: $text-color;
+ }
+ 
+ /*******************************************
+  * Conversation Container
+  *******************************************/
+ .conversation-container {
+   display: flex;
+   flex-direction: column;
+   height: 98.4vh;
+   background-color: #1e1e1e; 
+   transition: background-color 0.3s ease, color 0.3s ease;
+   border: 2px solid $border-color; // Added border around the container
+   border-radius: $border-radius; // Rounded corners for the container
+   padding: 10px; // Added padding for inner spacing
+   box-shadow: $box-shadow; // Applied shadow for depth
+   margin: 10px; // Margin to separate from other components
+   box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5); // Inner shadow for depth
+ 
+ 
+   /* Overlay Styles */
+   .custom-overlay {
+     background-color: rgba(42, 42, 42, 0.85);
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     height: 100%;
+     width: 100%;
+     position: fixed;
+     top: 0;
+     left: 0;
+     z-index: 1000;
+ 
+     .custom-overlay-content {
+       background: #3a3a3a; // Slightly lighter than main background
+       border-radius: $border-radius;
+       padding: 2rem;
+       box-shadow: $box-shadow;
+       text-align: center;
+       border: 2px solid $highlight-color;
+ 
+       h2 {
+         font-size: 2rem;
+         font-weight: bold;
+         color: $text-color;
+         margin-bottom: 1rem;
+         
+       }
+ 
+       p {
+         font-size: 1.1rem;
+         color: lighten($text-color, 20%);
+         margin-bottom: 2rem;
+       }
+ 
+       .custom-start-conversation-button {
+         background: $primary-color;
+         color: $text-color;
+         font-weight: bold;
+         font-size: 1rem;
+         padding: 0.8rem 2rem;
+         border: none;
+         border-radius: $border-radius;
+         box-shadow: $box-shadow;
+         cursor: pointer;
+         transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+ 
+         &:hover {
+           background: darken($primary-color, 10%);
+           box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+           transform: scale(1.05);
+         }
+ 
+         &:active {
+           background: lighten($primary-color, 10%);
+           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+           transform: scale(0.95);
+         }
+       }
+     }
+   }
+ 
+   /* Conversation Area */
+   .conversation-area {
+     flex-grow: 1;
+     overflow-y: auto;
+     padding: 16px;
+
+     .message-wrapper {
+       display: flex;
+       margin-bottom: 16px;
+       opacity: 0;
+       transform: translateY(20px);
+       animation: fadeInUp 0.5s forwards;
+ 
+       &.User {
+         flex-direction: row-reverse;
+ 
+         .message {
+           flex-direction: row-reverse;
+ 
+           .avatar {
+             margin-left: 8px;
+             margin-right: 0;
+             box-shadow: 0 2px 8px rgba(255, 184, 77, 0.7);
+           }
+ 
+           .message-content {
+             background: $primary-color;
+             align-items: flex-end;
+             text-align: right;
+             color: $text-color;
+             box-shadow: 0 2px 10px rgba(255, 184, 77, 0.3);
+           }
+         }
+       }
+ 
+       &.Mentor {
+         .message-content {
+           background: #333333; // Neutral dark background for mentor messages
+           align-items: flex-start;
+           text-align: left;
+           color: $text-color;
+           box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+         }
+       }
+ 
+       .message {
+         display: flex;
+         max-width: 75%;
+ 
+         .avatar {
+           width: 40px;
+           height: 40px;
+           border-radius: 50%;
+           margin: 0 8px;
+           box-shadow: 0 2px 6px rgba(255, 184, 77, 0.5);
+         }
+ 
+         .message-content {
+           padding: 12px;
+           border-radius: $border-radius;
+           position: relative;
+           transition: background-color 0.3s ease;
+           box-shadow: $box-shadow;
+ 
+           .text {
+             color: $text-color;
+ 
+             a {
+               color: $accent-color;
+               text-decoration: none;
+ 
+               &:hover {
+                 color: lighten($accent-color, 10%);
+                 text-decoration: underline;
+               }
+             }
+ 
+             blockquote {
+               margin: 0 0 10px 0;
+               padding-left: 10px;
+               border-left: 3px solid lighten($accent-color, 20%);
+               color: lighten($text-color, 20%);
+               font-style: italic;
+             }
+ 
+             pre {
+               background-color: #2a2a2a; // Slightly lighter dark background
+               padding: 10px;
+               overflow-x: auto;
+               border-radius: 4px;
+               margin: 0 0 10px 0;
+               color: $text-color;
+             }
+ 
+             code {
+               background-color: #2a2a2a; // Match pre background
+               padding: 2px 4px;
+               font-family: monospace;
+               border-radius: 4px;
+               color: $text-color;
+             }
+ 
+             p {
+               margin: 0 0 10px 0;
+               color: $text-color;
+             }
+ 
+             hr {
+               border: none;
+               border-top: 1px solid lighten($text-color, 20%);
+               margin: 10px 0;
+             }
+           }
+ 
+           .timestamp {
+             font-size: 0.75em;
+             color: lighten($text-color, 20%);
+             position: absolute;
+             bottom: -20px;
+           }
+         }
+       }
+     }
+ 
+     .meme-image {
+       max-width: 100%;
+       border-radius: 8px;
+       margin-top: 8px;
+     }
+   }
+ 
+   /* Input Area */
+   .input-area {
+     display: flex;
+     align-items: center;
+     padding: 16px; // Increased padding for better spacing
+     background-color: #1a1a1a; // Dark input background
+     border-top: 1px solid $border-color; // Added top border
+     
+ 
+     textarea {
+       flex-grow: 1;
+       resize: none;
+       padding: 10px;
+       margin-right: 12px;
+       border: 1px solid #555555; // Dark border
+       border-radius: 8px;
+       background-color: #2a2a2a; // Dark textarea background
+       color: $text-color;
+       font-size: 1rem;
+ 
+       &:focus {
+         outline: none;
+         border-color: $accent-color;
+         box-shadow: 0 0 5px $accent-color;
+       }
+     }
+ 
+     .file_upload_button {
+       cursor: pointer;
+       transition: background-color 0.3s ease;
+       margin-right: 8px;
+       margin-left: 8px;
+ 
+       button {
+         background-color: $primary-color;
+         color: $text-color;
+         border: none;
+         border-radius: 50%;
+         width: 40px;
+         height: 40px;
+         display: inline-flex;
+         align-items: center;
+         justify-content: center;
+         box-shadow: $box-shadow;
+         transition: background-color 0.3s ease, transform 0.2s ease;
+ 
+         &:hover {
+           background-color: darken($primary-color, 10%);
+         }
+ 
+         &:active {
+           transform: scale(0.95);
+         }
+ 
+         mat-icon {
+           font-size: 20px;
+           color: $text-color;
+           line-height: 1.5;
+         }
+       }
+     }
+ 
+     .file-name {
+       margin-left: 10px;
+       font-size: 14px;
+       color: lighten($text-muted, 10%);
+       margin-right: 20px;
+     }
+ 
+     button.mat-mini-fab {
+       background-color: $primary-color;
+       color: $text-color;
+       border-radius: 50%;
+       width: 40px;
+       height: 40px;
+       display: inline-flex;
+       align-items: center;
+       justify-content: center;
+       box-shadow: $box-shadow;
+       transition: background-color 0.3s ease, transform 0.2s ease;
+       padding: 0;
+       margin-left: 15px;
+ 
+       mat-icon {
+         font-size: 20px;
+         color: $text-color;
+         line-height: 1.5;
+       }
+ 
+       &:hover {
+         background-color: darken($primary-color, 10%);
+       }
+ 
+       &:active {
+         transform: scale(0.95);
+       }
+     }
+   }
+ 
+   /* Status Indicators */
+   .status-indicators {
+     display: flex;
+     align-items: center;
+     padding: 8px 16px;
+     background: #333333; // Dark status background
+     box-shadow: $box-shadow;
+     color: $text-color;
+     transition: background 0.3s ease, box-shadow 0.3s ease;
+ 
+     .status-message {
+       display: flex;
+       align-items: center;
+       font-size: 0.9em;
+       animation: pulse 2s infinite;
+ 
+       &.listening {
+         color: $accent-color;
+       }
+ 
+       &.speaking {
+         color: lighten($accent-color, 10%);
+       }
+ 
+       mat-icon {
+         margin-right: 8px;
+       }
+     }
+   }
+ 
+   /* Control Panel */
+   .control-panel {
+     display: flex;
+     justify-content: space-around;
+     padding: 12px 0;
+     background-color: #1a1a1a; // Dark control panel background
+     box-shadow: $box-shadow;
+ 
+     button {
+       background-color: $primary-color;
+       color: $text-color;
+       border: none;
+       border-radius: 50%;
+       width: 48px;
+       height: 48px;
+       display: inline-flex;
+       align-items: center;
+       justify-content: center;
+       box-shadow: $box-shadow;
+       transition: background-color 0.3s ease, transform 0.2s ease;
+ 
+       mat-icon {
+         font-size: 24px;
+       }
+ 
+       &:hover {
+         background-color: darken($primary-color, 10%);
+       }
+ 
+       &:active {
+         transform: scale(0.95);
+       }
+     }
+   }
+ }
+ 
+ /*******************************************
+  * Animations
+  *******************************************/
+ @keyframes fadeInUp {
+   to {
+     opacity: 1;
+     transform: translateY(0);
+   }
+ }
+ 
+ @keyframes pulse {
+   0% {
+     transform: scale(1);
+     opacity: 1;
+   }
+   50% {
+     transform: scale(1.05);
+     opacity: 0.8;
+   }
+   100% {
+     transform: scale(1);
+     opacity: 1;
+   }
+ }
+ 
+ 

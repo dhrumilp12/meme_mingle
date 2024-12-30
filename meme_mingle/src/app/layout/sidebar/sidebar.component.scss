@@ -1,6 +1,15 @@
 /*******************************************
- * Reset & Basic Styles
+ * Variables
  *******************************************/
+ $sidebar-width: 280px;
+ $sidebar-margin: 5px;
+ $sidebar-border-radius: 15px;
+ $transition-duration: 0.35s;
+ $transition-ease: ease-in-out;
+ 
+ /*******************************************
+  * Reset & Basic Styles
+  *******************************************/
  *,
  *::before,
  *::after {
@@ -16,73 +25,117 @@
   * Sidebar Wrapper
   *******************************************/
  .sidebar-wrapper {
-   width: 280px;
-   min-width: 280px;
-   z-index: 1;
-   height: 100vh;
-   /* 
-     Gradient background: left (light) to right (dark).
-     Adjust color stops as desired.
-   */
-   background: linear-gradient(to right, #fff3db, #ffb84d);
-   box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
-    
+   width: $sidebar-width;
+   height: 98.4vh; // Adjust height to include margins
+   background: linear-gradient(to right, #fff3db, #ffb84d); // Gradient matching the design
+   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); // Enhanced shadow for depth
    display: flex;
    flex-direction: column;
+   justify-content: space-between; // Ensures top and bottom sections are spaced
    padding: 1rem;
-   transition: all 0.35s ease-in-out;
-
-   /* Collapsed state: shift to the left */
+   transition: all $transition-duration $transition-ease;
+   margin: $sidebar-margin; // Adds margin around the sidebar
+   border-radius: $sidebar-border-radius; // Adds rounded corners
+   position: fixed; // Fixes sidebar position
+   top: $sidebar-margin;
+   left: $sidebar-margin;
+   z-index: 1000;
+ 
    &.collapsed {
-     margin-left: -280px;
+    width: 80px; // Keep a minimal width
+    padding-right: 0%;
+    padding-left: 0%;
+    transform: none; // Don’t slide completely off-screen
+    .sidebar-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .logo-wrapper {
+        align-items: center;
+        .sidebar-logo-img {
+          width: 110px;
+          margin: 0;
+          padding-left: 0.5rem;
+        }
+      }
+      .collapse-btn {
+        margin-top: 1rem;
+        height: 50px;
+        width: 50px;
+      }
+    }
+    
+  
+    .menu-items,
+  .menu-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+
+    .menu-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.8rem;
+      background-color: white;
+      border: none;
+      border-radius: 50%; // Round buttons
+      box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+      transition: background-color $transition-duration ease, transform $transition-duration ease;
+      width: 50px; // Adjust width
+      height: 50px; // Adjust height
+
+      i {
+        font-size: 1.5rem; // Icon size
+        color: #333; // Icon color
+      }
+
+      span {
+        display: none; // Hide text in both states
+      }
+
+      &:hover {
+        background-color: #f7f7f7;
+        
+      }
+    }}
+  }
+ 
+   .top-section {
+     display: flex;
+     flex-direction: column;
+     gap: 1rem; // Space between header and top menu
+     overflow: hidden; // Ensures content doesn't overflow the border-radius
    }
  
-   /*******************************************
-    * Sidebar Header
-    *******************************************/
    .sidebar-header {
      display: flex;
      align-items: center;
-     justify-content: space-between; /* Ensures logo on left, button on right */
-     margin-bottom: 2rem;
+     justify-content: space-between;
  
      .logo-wrapper {
-       display: flex;
-       align-items: center;
-       gap: 0.5rem;
- 
        .sidebar-logo-img {
-         width: 100%;    /* Adjust as needed */
+         width: 150px;
          height: auto;
-         object-fit: contain;
-       }
- 
-       .logo-text {
-         font-family: "Poppins", sans-serif;
-         font-size: 1.2rem;
-         font-weight: 700;
-         color: #333;
+         border-radius: 10px; // Optional: Add slight rounding to the logo
        }
      }
  
      .collapse-btn {
        width: 40px;
        height: 40px;
+       font-size: 1.2rem;
+       background: #fff;
+       border: none;
+       border-radius: 50%;
+       color: #333;
+       box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
        display: flex;
        align-items: center;
        justify-content: center;
- 
-       /* Bigger & bolder font */
-       font-size: 1.5rem;
-       font-weight: 700;
- 
-       background: #fff;
-       border: none;
-       border-radius: 8px;
        cursor: pointer;
-       color: #333;
-       box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-       transition: background 0.2s ease;
+       transition: background $transition-duration $transition-ease;
  
        &:hover {
          background: #f0f0f0;
@@ -90,39 +143,77 @@
      }
    }
  
-   /*******************************************
-    * Menu Items
-    *******************************************/
    .menu-items {
      display: flex;
      flex-direction: column;
-     gap: 1.25rem;
+     gap: 1rem;
  
      .menu-btn {
        display: flex;
        align-items: center;
-       justify-content: center;
-       gap: 0.75rem;
- 
-       width: 100%;
-       padding: 0.8rem 1rem;
+       gap: 1rem;
+       padding: 0.8rem;
        background-color: #fff;
        border: none;
-       border-radius: 12px;
-       font-family: "Poppins", sans-serif;
+       border-radius: 8px;
        font-size: 1rem;
-       font-weight: 700;
+       font-weight: 600;
        color: #333;
-       box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+       box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1); // Enhanced shadow
+       transition: background-color 0.3s, transform 0.3s;
  
        i {
          font-size: 1.2rem;
-         font-weight: 900;
-         margin-right: 1rem;
        }
  
        &:hover {
          background-color: #f7f7f7;
+         
+       }
+     }
+   }
+ 
+   .menu-bottom {
+     display: flex;
+     flex-direction: column;
+     gap: 1rem;
+ 
+     .menu-btn {
+       display: flex;
+       align-items: center;
+       gap: 1rem;
+       padding: 0.8rem;
+       background-color: #fff;
+       border: none;
+       border-radius: 8px;
+       font-size: 1rem;
+       font-weight: 600;
+       color: #333;
+       box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1); // Enhanced shadow
+       transition: background-color 0.3s, transform 0.3s;
+ 
+       i {
+         font-size: 1.2rem;
+       }
+ 
+       &:hover {
+         background-color: #f7f7f7;
+         
+       }
+     }
+ 
+     /* Profile Section */
+     .profile-btn {
+       display: flex;
+       align-items: center;
+       gap: 1rem;
+ 
+       img.user-avatar {
+         width: 30px;
+         height: 30px;
+         border-radius: 50%;
+         object-fit: cover;
+         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
        }
      }
    }
@@ -133,14 +224,17 @@
   *******************************************/
  @media (max-width: 767.98px) {
    .sidebar-wrapper {
-     width: 100%;
-     min-width: 100%;
-     height: auto;
-     position: absolute;
+     width: $sidebar-width;
+     height: calc(100vh - 2 * $sidebar-margin);
+     position: fixed; // Ensure sidebar overlays content on small screens
+     top: $sidebar-margin;
+     left: 0;
      z-index: 999;
+     transition: all $transition-duration $transition-ease;
  
      &.collapsed {
-       margin-left: -100%;
+       transform: translateX(-100%);
+       transition: transform $transition-duration $transition-ease;
      }
    }
  }
