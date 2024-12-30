@@ -33,6 +33,7 @@ interface ConversationMessage {
   message: string;
   audioUrl?: string;
   imageUrl?: string;
+  file?: { name: string; type: string };
   timestamp: Date;
   htmlContent?: SafeHtml;
 }
@@ -330,7 +331,7 @@ export class LiveConversationComponent implements OnInit, OnDestroy {
     this.subscriptions.add(welcomeSub);
   }
 
-  addMessage(sender: 'User' | 'Mentor', message: string, audioUrl?: string,imageUrl?: string): void {
+  addMessage(sender: 'User' | 'Mentor', message: string, audioUrl?: string, imageUrl?: string, fileDetails?: { name: string; type: string }): void {
     // Convert markdown to HTML
     const rawHtml = marked(message);
     // Sanitize HTML to prevent XSS attacks
@@ -341,6 +342,7 @@ export class LiveConversationComponent implements OnInit, OnDestroy {
       message,
       audioUrl,
       imageUrl,
+      file: fileDetails,
       timestamp: new Date(),
       htmlContent: sanitizedHtml, // Use sanitized HTML
     });
@@ -413,14 +415,23 @@ export class LiveConversationComponent implements OnInit, OnDestroy {
     }
   }
 
+  removeSelectedFile(): void {
+    this.selectedFile = null; // Reset the selected file
+  }
+
   // New method to send text input and file
   sendTextInput(): void {
     if (this.userInputText.trim() === '' && !this.selectedFile) {
       return; // Do nothing if both fields are empty
     }
 
+    const messageContent = this.userInputText;
+    const fileDetails = this.selectedFile
+    ? { name: this.selectedFile.name, type: this.selectedFile.type }
+    : undefined;
+
     // Add user's message to the conversation
-    this.addMessage('User', this.userInputText);
+    this.addMessage('User', messageContent, undefined, undefined, fileDetails);
 
     // Stop any ongoing processes
     this.stopListening();

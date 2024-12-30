@@ -211,6 +211,38 @@
              color: $text-color;
              box-shadow: 0 2px 10px rgba(255, 184, 77, 0.3);
            }
+           .file-card {
+            display: flex;
+            align-items: center;
+            background: #ffe4c4;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-top: 10px;
+          
+            .file-icon {
+              font-size: 30px;
+              color: #f06292;
+              margin-right: 10px;
+            }
+          
+            .file-details {
+              display: flex;
+              flex-direction: column;
+          
+              .file-name {
+                font-weight: bold;
+                font-size: 14px;
+                color: #333;
+              }
+          
+              .file-type {
+                font-size: 12px;
+                color: #666;
+              }
+            }
+          }
+          
          }
        }
  
@@ -319,23 +351,7 @@
      border-top: 1px solid $border-color; // Added top border
      
  
-     textarea {
-       flex-grow: 1;
-       resize: none;
-       padding: 10px;
-       margin-right: 12px;
-       border: 1px solid #555555; // Dark border
-       border-radius: 8px;
-       background-color: #2a2a2a; // Dark textarea background
-       color: $text-color;
-       font-size: 1rem;
- 
-       &:focus {
-         outline: none;
-         border-color: $accent-color;
-         box-shadow: 0 0 5px $accent-color;
-       }
-     }
+     
  
      .file_upload_button {
        cursor: pointer;
@@ -372,12 +388,69 @@
        }
      }
  
-     .file-name {
-       margin-left: 10px;
-       font-size: 14px;
-       color: lighten($text-muted, 10%);
-       margin-right: 20px;
-     }
+     .textarea-container {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    
+      textarea {
+        flex-grow: 1;
+        resize: none;
+        padding: 10px;
+        margin-right: 12px;
+        border: 1px solid #555555; // Dark border
+        border-radius: 8px;
+        background-color: #2a2a2a; // Dark textarea background
+        color: $text-color;
+        font-size: 1rem;
+  
+        &:focus {
+          outline: none;
+          border-color: $accent-color;
+          box-shadow: 0 0 5px $accent-color;
+        }
+      }
+    
+      .file-preview-inside {
+        position: absolute;
+        top: 8px;
+        left: 16px;
+        right: 16px;
+        background: #333;
+        color: #fff;
+        padding: 8px;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        z-index: 2;
+    
+        .file-icon {
+          font-size: 20px;
+          color: #ffb84d;
+        }
+    
+        .file-name {
+          flex-grow: 1;
+          font-size: 0.9rem;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+    
+        .cancel-button {
+          font-size: 16px;
+          color: #ff6f61;
+    
+          &:hover {
+            color: #d84315;
+          }
+        }
+      }
+    }
+    
+    
+    
  
      button.mat-mini-fab {
        background-color: $primary-color;
