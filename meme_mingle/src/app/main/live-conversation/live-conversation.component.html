@@ -91,61 +91,58 @@
 
   <!-- New Input Area -->
   <div class="input-area">
-    <div class="textarea-container">
     <!-- File Preview Section -->
-<div *ngIf="selectedFile" class="file-preview">
-  <div class="file-details">
-    <mat-icon class="file-icon">insert_drive_file</mat-icon>
-    <span class="file-name">{{ selectedFile.name }}</span>
+    <div *ngIf="selectedFile" class="file-preview">
+      <mat-icon class="file-icon">insert_drive_file</mat-icon>
+      <span class="file-name">{{ selectedFile.name }}</span>
+      <button
+        mat-icon-button
+        class="cancel-button"
+        color="warn"
+        matTooltip="Remove File"
+        (click)="removeSelectedFile()"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  
+    <!-- Text Input and Buttons -->
+    <div class="input-container">
+      <textarea
+        [(ngModel)]="userInputText"
+        placeholder="Type your message here..."
+        (keydown.enter)="sendTextInput()"
+      ></textarea>
+      <label class="file_upload_button">
+        <input
+          #fileInput
+          class="file_upload"
+          type="file"
+          (change)="onFileSelected($event)"
+          aria-label="Upload image"
+          hidden
+        />
+        <button
+          mat-mini-fab
+          color="primary"
+          matTooltip="File upload"
+          [@buttonClick]
+          (click)="fileInput.click()"
+        >
+          <mat-icon>attach_file</mat-icon>
+        </button>
+      </label>
+      <button
+        mat-mini-fab
+        color="primary"
+        (click)="sendTextInput()"
+        [@buttonClick]
+      >
+        <mat-icon class="send-icon">send</mat-icon>
+      </button>
+    </div>
   </div>
-  <button
-    mat-icon-button
-    class="cancel-button"
-    color="warn"
-    matTooltip="Remove File"
-    (click)="removeSelectedFile()"
-  >
-    <mat-icon>close</mat-icon>
-  </button>
-</div>
-    <textarea
-      [(ngModel)]="userInputText"
-      placeholder="Type your message here..."
-      (keydown.enter)="sendTextInput()"
-    ></textarea>
-  </div>
-<label class="file_upload_button">
-  <input
-    #fileInput
-    class="file_upload"
-    type="file"
-    (change)="onFileSelected($event)"
-    aria-label="Upload image"
-    hidden
-  />
-  <button
-    mat-mini-fab
-    color="primary"
-    matTooltip="File upload"
-    [@buttonClick]
-    (click)="fileInput.click()"
-  >
-    <mat-icon>attach_file</mat-icon>    
-  </button>
-</label>
-
-
-
-    <button
-      mat-mini-fab
-      color= "primary"
-      (click)="sendTextInput()"
-      [@buttonClick]
-    >
-    <mat-icon class="send-icon">send</mat-icon>
-    </button>
-
-  </div>
+  
 
   <!-- Status Indicators -->
   <div class="status-indicators" [@fadeInOut]>
