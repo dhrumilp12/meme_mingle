@@ -45,6 +45,7 @@ interface IWindow extends Window {
 interface HistoricalFigure {
   display: string;
   value: string;
+  field: string;
 }
 
 @Component({
@@ -139,15 +140,15 @@ export class LiveConversationComponent implements OnInit, OnDestroy {
   userInputText: string = '';
   selectedFile: File | null = null;
   selectedRole: string = ''; // New property to hold the selected role
-  historicalFigures: HistoricalFigure[] = [ // Define historical figures
-    { display: 'Albert Einstein', value: 'Albert Einstein' },
-    { display: 'Isaac Newton', value: 'Isaac Newton' },
-    { display: 'Marie Curie', value: 'Marie Curie' },
-    { display: 'Leonardo da Vinci', value: 'Leonardo da Vinci' },
-    { display: 'Nikola Tesla', value: 'Nikola Tesla' },
-    { display: 'Ada Lovelace', value: 'Ada Lovelace' },
-    { display: 'Galileo Galilei', value: 'Galileo Galilei' },
-    { display: 'Thomas Edison', value: 'Thomas Edison' },
+  historicalFigures: HistoricalFigure[] = [
+    { display: 'Albert Einstein', value: 'Albert Einstein', field: 'Physics' },
+    { display: 'Isaac Newton', value: 'Isaac Newton', field: 'Mathematics' },
+    { display: 'Marie Curie', value: 'Marie Curie', field: 'Chemistry' },
+    { display: 'Leonardo da Vinci', value: 'Leonardo da Vinci', field: 'Art and Science' },
+    { display: 'Nikola Tesla', value: 'Nikola Tesla', field: 'Electrical Engineering' },
+    { display: 'Ada Lovelace', value: 'Ada Lovelace', field: 'Computer Science' },
+    { display: 'Galileo Galilei', value: 'Galileo Galilei', field: 'Astronomy' },
+    { display: 'Thomas Edison', value: 'Thomas Edison', field: 'Inventing' },
     // Add more figures as needed
   ];
   @ViewChild('messagesContainer') private messagesContainer!: ElementRef;

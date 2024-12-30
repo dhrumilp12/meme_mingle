@@ -18,7 +18,7 @@
         <mat-label>Select Your Mentor</mat-label>
         <mat-select [(value)]="selectedRole">
           <mat-option *ngFor="let figure of historicalFigures" [value]="figure.value">
-            {{ figure.display }}
+            {{ figure.display }} - {{ figure.field }}
           </mat-option>
         </mat-select>
       </mat-form-field>
