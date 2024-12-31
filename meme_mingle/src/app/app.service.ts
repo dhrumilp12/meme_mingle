@@ -95,6 +95,30 @@ export class AppService {
     return this.http.post(`${this.baseUrl}/ai_mentor/text-to-speech`, payload, { responseType: 'blob' });
   }
 
+  // Fetch quiz questions based on topic or file
+  getQuizQuestions(userId: string, topic?: string, file?: File, numQuestions: number = 5): Observable<any> {
+    const formData = new FormData();
+    if (topic) formData.append('topic', topic);
+    if (file) formData.append('file', file);
+    formData.append('num', numQuestions.toString());
+
+    return this.http.post(`${this.baseUrl}/ai/quiz/${userId}`, formData);
+  }
+
+  // Submit quiz answers
+  submitQuizAnswers(quizId: string, userId: string, answers: any[]): Observable<any> {
+    const payload = {
+      user_id: userId,
+      answers: answers,
+    };
+    return this.http.post(`${this.baseUrl}/ai/quiz/${quizId}/submit`, payload);
+  }
+
+  // Get total score
+  getTotalScore(userId: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/ai/user/${userId}/total_score`);
+  }
+
   // Optional: Method to check if user is authenticated
   isAuthenticated(): boolean {
     return !!localStorage.getItem('access_token');

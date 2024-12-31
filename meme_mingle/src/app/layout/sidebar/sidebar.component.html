@@ -30,10 +30,11 @@
         <span>New Chat</span>
       </button>
 
-      <!-- Production -->
-      <button class="menu-btn" title="Production" routerLink="/production">
-        <i class="bi bi-cart-fill"></i>
-        <span>Production</span>
+      <!-- Quiz-ai -->
+      <button class="menu-btn" title="Quiz AI" routerLink="/main/quiz-ai">
+        <i class="bi bi-list-check"></i>
+        <span>Quiz AI</span>
+        <span class="score-badge"  title="Total Score" *ngIf="totalScore !== null">{{ totalScore }}</span>
       </button>
     </div>
   </div>

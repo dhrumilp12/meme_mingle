@@ -17,6 +17,7 @@ export class SidebarComponent implements OnInit {
   toggleIcon: string = '<';
   userProfilePicture: string = '/assets/img/user_avtar.jpg'; // Default user avatar
   backendUrl = environment.baseUrl; // Backend URL for fetching user profile picture
+  totalScore: number = 0;
 
   constructor(
     private sidebarService: SidebarService,
@@ -32,6 +33,7 @@ export class SidebarComponent implements OnInit {
 
     // Fetch user profile picture
     this.fetchUserProfile();
+    this.fetchTotalScore();
   }
 
   // Toggles the sidebar visibility
@@ -59,6 +61,19 @@ export class SidebarComponent implements OnInit {
         this.userProfilePicture = '/assets/img/user_avtar.jpg';
       },
     });
+  }
+
+  fetchTotalScore(): void {
+    const userId = localStorage.getItem('user_id') || 'default_user';
+    
+      this.appService.getTotalScore(userId).subscribe({
+        next: (response: any) => {
+          this.totalScore = response.total_score;
+        },
+        error: (error: any) => {
+          console.error('Error fetching total score:', error);
+        },
+      });
   }
 
   // Signs the user out

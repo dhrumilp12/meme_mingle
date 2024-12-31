@@ -17,6 +17,11 @@ export const main_routes: Routes = [
         loadComponent: () =>
           import('./live-conversation/live-conversation.component').then((m) => m.LiveConversationComponent),
       },
+      {
+        path: 'quiz-ai',
+        loadComponent: () =>
+          import('./quiz-ai/quiz-ai.component').then((m) => m.QuizAiComponent),
+      }
       
       
     ],

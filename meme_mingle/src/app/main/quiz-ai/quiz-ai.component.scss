@@ -1,0 +1,136 @@
+/* quiz-ai.component.scss */
+
+$primary-color: #ffb84d;
+$secondary-color: #2a2a2a;
+$accent-color: #cccccc;
+$background-light: #fff3db;
+$text-color: #ffffff;
+$text-muted: #cccccc;
+$border-radius: 15px;
+$box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+$border-color: #ffb84d;
+$highlight-color: #ffb84d;
+
+.quiz-container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 10px;
+
+  h1 {
+    text-align: center;
+    color: $primary-color;
+    margin-bottom: 20px;
+  }
+
+  .quiz-generation-card,
+  .quiz-card,
+  .feedback-card,
+  .total-score-section mat-card {
+    background-color: $secondary-color;
+    color: $text-color;
+    border: 1px solid $border-color;
+    border-radius: $border-radius;
+    box-shadow: $box-shadow;
+    margin-bottom: 20px;
+  }
+
+  .form-group {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+
+    mat-form-field {
+      width: 100%;
+      color: $text-color;
+
+      .mat-label {
+        color: $text-color;
+      }
+
+      .mat-select-arrow {
+        color: $text-color;
+      }
+
+      input.mat-input-element {
+        color: $text-color;
+      }
+
+      textarea.mat-input-element {
+        color: $text-color;
+      }
+
+      .mat-radio-button {
+        color: $text-muted;
+
+        &.mat-accent .mat-radio-outer-circle,
+        &.mat-accent .mat-radio-inner-circle {
+          border-color: $highlight-color;
+          background-color: $highlight-color;
+        }
+
+        &:hover {
+          color: $primary-color;
+        }
+      }
+    }
+
+    label {
+      color: $text-color;
+      margin-bottom: 5px;
+    }
+
+    input[type='file'] {
+      color: $text-muted;
+    }
+  }
+
+  button {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+
+    &:hover {
+      background-color: darken($primary-color, 10%);
+    }
+
+    &:disabled {
+      background-color: lighten($primary-color, 20%);
+      cursor: not-allowed;
+    }
+  }
+
+  // Additional styling if needed for .quiz-section, .feedback-section, .total-score-section
+
+  .question-block {
+    margin-bottom: 20px;
+
+    p {
+      font-size: 16px;
+    }
+
+    .answer-field {
+      width: 100%;
+    }
+  }
+
+  .feedback-item {
+    background-color: lighten($secondary-color, 10%);
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+
+    p {
+      margin: 5px 0;
+    }
+  }
+
+  .total-score-section mat-card {
+    text-align: center;
+
+    p {
+      font-size: 24px;
+      font-weight: bold;
+      color: $highlight-color;
+    }
+  }
+}

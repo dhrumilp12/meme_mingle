@@ -13,7 +13,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatButtonModule } from '@angular/material/button';
-import { NavbarMainComponent } from '../../layout/navbar-main/navbar-main.component';
 import { FormsModule } from '@angular/forms';
 import { MarkdownModule } from 'ngx-markdown';
 import { HttpClientModule } from '@angular/common/http';
@@ -58,7 +57,6 @@ interface HistoricalFigure {
     MatIconModule,
     MatProgressBarModule,
     MatButtonModule,
-    NavbarMainComponent,
     FormsModule,
     HttpClientModule, 
     MarkdownModule, 
