@@ -8,7 +8,7 @@ from services.azure_mongodb import MongoDBClient
 from bson import ObjectId
 import datetime
 from services.azure_open_ai import get_azure_openai_llm
-
+from services.azure_form_recognizer import ALLOWED_MIME_TYPES
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -20,14 +20,35 @@ def get_questions(user_id):
     """
     Endpoint to get generated questions based on a topic.
     """
-    data = request.get_json()
-    topic = data.get('topic')
-    num_questions = data.get('num', 5)
+    body = request.form.to_dict()
+    if not body:
+        return jsonify({"error": "No data provided"}), 400
+    
+    topic = body.get('topic')
+    num_questions = int(body.get('num', 5))
 
-    if not topic:
-        return jsonify({"error": "Topic parameter is required."}), 400
+    # Handle the uploaded file
+    uploaded_file = request.files.get('file')
+    file_content = None
+    file_mime_type = None
 
-    result = generate_questions(user_id, topic, num_questions)
+    if uploaded_file:
+        file_content = uploaded_file.read()
+        file_mime_type = uploaded_file.mimetype
+
+        # Validate MIME type
+        if file_mime_type not in ALLOWED_MIME_TYPES:
+            return jsonify({'error': f'Unsupported file type: {file_mime_type}'}), 400
+
+        # Implement file size check
+        MAX_FILE_SIZE = 10 * 1024 * 1024  # 10 MB
+        if len(file_content) > MAX_FILE_SIZE:
+            return jsonify({'error': 'File size exceeds the maximum limit of 10 MB'}), 400
+
+    if not topic and not uploaded_file:
+        return jsonify({"error": "At least one of 'topic' or 'file' must be provided."}), 400
+
+    result = generate_questions(user_id, topic, file_content, file_mime_type, num_questions)
 
     if "error" in result:
         return jsonify({"error": result["error"]}), 500

@@ -5,8 +5,9 @@ from services.azure_mongodb import MongoDBClient
 from models.quiz import Quiz, Question
 from bson import ObjectId
 import datetime
+from services.azure_form_recognizer import extract_text_from_file
 
-def generate_questions(user_id, topic, num_questions=5):
+def generate_questions(user_id, topic=None, file_content=None, file_mime_type=None, num_questions=5):
     """
     Generates questions based on a given topic and stores them in the database.
 
@@ -21,14 +22,30 @@ def generate_questions(user_id, topic, num_questions=5):
     questions = []
     llm = get_azure_openai_llm()  # Get the Azure language model
 
+    # Prepare the base prompt
+    base_prompt = ""
+
+    if file_content:
+        # Extract text from the file using Azure Form Recognizer
+        extracted_text = extract_text_from_file(file_content, file_mime_type)
+        if not extracted_text:
+            return {"error": "Failed to extract text from the uploaded file."}
+        base_prompt += f"Use the following content to generate quiz questions:\n\n{extracted_text}\n\n"
+
+    if topic:
+        base_prompt += f"Generate {num_questions} questions about {topic}. "
+
+    if not topic and not file_content:
+        return {"error": "Either a topic or a file must be provided to generate questions."}
+
     # Example prompt structure for generating questions
     prompt = (
-        f"Generate {num_questions} questions about {topic} either along with four answer choices, or one short answer. "
-        f"Split each question-answer pair on a separate line. "
-        f"Split the question and the options each by the text [&&]. "
-        f"Also mention whether it's multiple choice (MC) or short answer (SA). "
-        f"Ex: MC[&&]Question?[&&]Answer1[&&]Answer2[&&]Answer3[&&]Answer4, new line, then question 2. "
-        f"For SA, ex: SA[%%]Question?[&&]Answer"
+        f"{base_prompt}"
+        f"Each question should be either multiple-choice (MC) with four answer choices or a short answer (SA). "
+        f"Format each question-answer pair on a separate line. "
+        f"Separate the question and options using [&&]. "
+        f"For MC, use the format: MC[&&]Question?[&&]Answer1[&&]Answer2[&&]Answer3[&&]Answer4. "
+        f"For SA, use the format: SA[%%]Question?[&&]Answer."
     )
 
     try:
@@ -68,7 +85,7 @@ def generate_questions(user_id, topic, num_questions=5):
         # Create a Quiz instance
         quiz = Quiz(
             user_id=user_id,
-            topic=topic,
+            topic=topic if topic else "File-Based Quiz",
             questions=questions,
             created_at=datetime.datetime.utcnow().isoformat()
         )
@@ -97,3 +114,4 @@ def generate_questions(user_id, topic, num_questions=5):
     except Exception as e:
         print(f"Failed to generate questions: {e}")
         return {"error": str(e)}
+
