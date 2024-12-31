@@ -53,7 +53,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 1000;
+  z-index: 999;
   overflow: auto; /* Handle overflow on smaller screens */
 
   .custom-overlay-content {

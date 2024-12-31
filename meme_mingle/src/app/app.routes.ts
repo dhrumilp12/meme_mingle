@@ -2,6 +2,8 @@ import { Routes } from '@angular/router';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { AboutusComponent } from './layout/aboutus/aboutus.component';
 import { FaqComponent } from './layout/faq/faq.component';
+import { AuthGuard } from './auth/auth.guard';
+import { MainGuard } from './main/main.guard';
 
 export const routes: Routes = [
      {
@@ -12,10 +14,12 @@ export const routes: Routes = [
       {
         path: 'auth',
         loadChildren: () => import('./auth/auth.routes').then((m) => m.routes),
+        canActivate: [AuthGuard],
   },
   {
     path: 'main',
     loadChildren: () => import('./main/main.routes').then((m) => m.main_routes),
+    canActivate: [MainGuard],
       },
   //     {
   //       path: 'user-profile',
