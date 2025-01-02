@@ -18,6 +18,11 @@ export const main_routes: Routes = [
           import('./live-conversation/live-conversation.component').then((m) => m.LiveConversationComponent),
       },
       {
+        path: 'avatar',
+        loadComponent: () =>
+          import('./avatar/avatar.component').then((m) => m.AvatarComponent),
+        },
+      {
         path: 'quiz-ai',
         loadComponent: () =>
           import('./quiz-ai/quiz-ai.component').then((m) => m.QuizAiComponent),
