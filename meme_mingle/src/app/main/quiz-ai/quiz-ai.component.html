@@ -1,9 +1,11 @@
-<!-- quiz-ai.component.html -->
-
 <div class="quiz-container">
-    <h1>AI-Powered Quiz</h1>
-  
-    <!-- Quiz Generation Section -->
+  <h1>AI-Powered Quiz</h1>
+
+  <!-- Quiz Generation Section -->
+  <div
+    *ngIf="currentStep === 'generate'"
+    [@slideLeft]
+  >
     <mat-card class="quiz-generation-card">
       <mat-card-title>Generate Your Quiz</mat-card-title>
       <mat-card-content>
@@ -16,86 +18,136 @@
               </mat-select>
             </mat-form-field>
           </div>
-  
+
           <div class="form-group">
             <label for="fileUpload">Or Upload a File:</label>
             <input type="file" id="fileUpload" (change)="onFileSelected($event)" />
           </div>
-  
+
           <div class="form-group">
             <mat-form-field appearance="fill">
               <mat-label>Number of Questions</mat-label>
               <input matInput type="number" formControlName="numQuestions" min="1" max="20" />
             </mat-form-field>
           </div>
-  
-          <button mat-raised-button color="primary" type="submit" [disabled]="quizForm.invalid || isGenerating">
-            {{ isGenerating ? 'Generating...' : 'Generate Quiz' }}
+
+          <button mat-raised-button color="primary" type="submit" [disabled]="quizForm.invalid || isProcessing">
+            <ng-container *ngIf="!isProcessing; else processingTemplate">
+              Generate Quiz
+            </ng-container>
+            <ng-template #processingTemplate>
+              <div class="processing-dots">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+              </div>
+            </ng-template>
           </button>
         </form>
       </mat-card-content>
     </mat-card>
-  
-    <!-- Quiz Display Section -->
-    <div *ngIf="quiz" class="quiz-section">
-      <mat-card class="quiz-card">
-        <mat-card-title>Quiz</mat-card-title>
-        <mat-card-content>
-            <form [formGroup]="answerForm" (ngSubmit)="submitAnswers()">
-                <div formArrayName="answers">
-                  <div *ngFor="let question of quiz.questions; let i = index" class="question-block">
-                    <p><strong>Question {{ i + 1 }}:</strong> {{ question.question }}</p>
-              
-                    <div *ngIf="question.question_type === 'MC'">
-                      <mat-radio-group [formControlName]="i">
-                        <mat-radio-button *ngFor="let option of question.options" [value]="option">
-                          {{ option }}
-                        </mat-radio-button>
-                      </mat-radio-group>
-                    </div>
-              
-                    <div *ngIf="question.question_type === 'SA'">
-                      <mat-form-field appearance="fill" class="answer-field">
-                        <mat-label>Your Answer</mat-label>
-                        <input matInput [formControlName]="i" />
-                      </mat-form-field>
-                    </div>
-                  </div>
-                </div>
-              
-                <button mat-raised-button color="accent" type="submit" [disabled]="isSubmitting">
-                  {{ isSubmitting ? 'Submitting...' : 'Submit Answers' }}
-                </button>
-              </form>
-        </mat-card-content>
-      </mat-card>
-    </div>
-  
-    <!-- Feedback Section -->
-    <div *ngIf="feedback" class="feedback-section">
-      <mat-card class="feedback-card">
-        <mat-card-title>Quiz Feedback</mat-card-title>
-        <mat-card-content>
-          <p>Your Score: {{ feedback.score }} / {{ feedback.total_possible_points }}</p>
-          <div *ngFor="let fb of feedback.feedback" class="feedback-item">
-            <p><strong>Question ID:</strong> {{ fb.question_id }}</p>
-            <p><strong>Your Answer:</strong> {{ fb.user_answer }}</p>
-            <p><strong>Correct Answer:</strong> {{ fb.correct_answer }}</p>
-            <p><strong>Feedback:</strong> {{ fb.feedback }}</p>
-          </div>
-          <p><strong>Total Score:</strong> {{ feedback.total_score }}</p>
-        </mat-card-content>
-      </mat-card>
-    </div>
-  
-    <!-- Total Score Section -->
-    <div class="total-score-section">
-      <mat-card>
-        <mat-card-title>Your Total Score</mat-card-title>
-        <mat-card-content>
-          <p>{{ totalScore }}</p>
-        </mat-card-content>
-      </mat-card>
-    </div>
   </div>
-  
+
+  <!-- Quiz Display Section -->
+  <div
+    *ngIf="currentStep === 'answer' && quiz"
+    [@slideLeft]
+    class="quiz-section"
+  >
+    <mat-card class="quiz-card">
+      <mat-card-title>Quiz</mat-card-title>
+      <!-- Back Button -->
+      <button
+      mat-icon-button
+      class="back-button"
+      (click)="goBackToGenerate()"
+      aria-label="Go back to quiz generation"
+    >
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+      <mat-card-content>
+        <form [formGroup]="answerForm" (ngSubmit)="submitAnswers()">
+          <div formArrayName="answers">
+            <div *ngFor="let question of quiz.questions; let i = index" class="question-block">
+              <p><strong>Question {{ i + 1 }}:</strong> {{ question.question }}</p>
+
+              <div *ngIf="question.question_type === 'MC'">
+                <mat-radio-group [formControlName]="i">
+                  <mat-radio-button *ngFor="let option of question.options" [value]="option">
+                    {{ option }}
+                  </mat-radio-button>
+                </mat-radio-group>
+              </div>
+
+              <div *ngIf="question.question_type === 'SA'">
+                <mat-form-field appearance="fill" class="answer-field">
+                  <mat-label>Your Answer</mat-label>
+                  <input matInput [formControlName]="i" />
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+
+          <button mat-raised-button color="accent" type="submit" [disabled]="isProcessing">
+            <ng-container *ngIf="!isProcessing; else processingTemplate">
+              Submit Answers
+            </ng-container>
+            <ng-template #processingTemplate>
+              <div class="processing-dots">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+              </div>
+            </ng-template>
+          </button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Feedback Section -->
+  <div
+    *ngIf="currentStep === 'feedback' && feedback"
+    [@slideLeft]
+    class="feedback-section"
+  >
+    <mat-card class="feedback-card">
+      <mat-card-title>Quiz Feedback</mat-card-title>
+      <mat-card-content>
+        <p>Your Score: {{ feedback.score }} / {{ feedback.total_possible_points }}</p>
+        <div *ngFor="let fb of feedback.feedback" class="feedback-item">
+          <p><strong>Question ID:</strong> {{ fb.question_id }}</p>
+          <p><strong>Your Answer:</strong> {{ fb.user_answer }}</p>
+          <p><strong>Correct Answer:</strong> {{ fb.correct_answer }}</p>
+          <p><strong>Feedback:</strong> {{ fb.feedback }}</p>
+        </div>
+        <p><strong>Total Score:</strong> {{ feedback.total_score }}</p>
+        <!-- Generate New Quiz Button -->
+        <div class="generate-new-quiz">
+          <button mat-raised-button color="primary" (click)="generateNewQuiz()" [disabled]="isProcessing">
+            <ng-container *ngIf="!isProcessing; else processingTemplate">
+              Generate New Quiz
+            </ng-container>
+            <ng-template #processingTemplate>
+              <div class="processing-dots">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+              </div>
+            </ng-template>
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Total Score Section -->
+  <div class="total-score-section">
+    <mat-card>
+      <mat-card-title>Your Total Score</mat-card-title>
+      <mat-card-content>
+        <p>{{ totalScore }}</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

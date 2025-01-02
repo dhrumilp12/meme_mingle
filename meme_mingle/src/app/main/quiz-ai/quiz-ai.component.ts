@@ -12,6 +12,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
+import { trigger, transition, style, animate } from '@angular/animations';
+import { MatIconModule } from '@angular/material/icon';
 
 interface Quiz {
   quiz_id: string;
@@ -55,20 +57,32 @@ interface FeedbackItem {
     MatRadioModule,
     MatButtonModule,
     MatSnackBarModule,
+    MatIconModule,
   ],
   templateUrl: './quiz-ai.component.html',
   styleUrls: ['./quiz-ai.component.scss'],
+  animations: [
+    trigger('slideLeft', [
+      transition(':enter', [
+        style({ transform: 'translateX(100%)', opacity: 0 }),
+        animate('300ms ease-out', style({ transform: 'translateX(0)', opacity: 1 })),
+      ]),
+      transition(':leave', [
+        animate('300ms ease-in', style({ transform: 'translateX(-100%)', opacity: 0 })),
+      ]),
+    ]),
+  ],
 })
 export class QuizAiComponent implements OnInit, OnDestroy {
   quizForm: FormGroup;
   answerForm: FormGroup;
   subscriptions: Subscription = new Subscription();
-  isGenerating: boolean = false;
-  isSubmitting: boolean = false;
   quiz: Quiz | null = null;
   feedback: Feedback | null = null;
   totalScore: number = 0;
   selectedFile: File | null = null;
+  isProcessing: boolean = false;
+  currentStep: 'generate' | 'answer' | 'feedback' = 'generate';
   topics: string[] = [
     'Mathematics',
     'Physics',
@@ -134,8 +148,7 @@ export class QuizAiComponent implements OnInit, OnDestroy {
       });
       return;
     }
-
-    this.isGenerating = true;
+    this.isProcessing = true;
     const userId = localStorage.getItem('user_id') || 'default_user';
     const topic = this.quizForm.value.topic;
     const numQuestions = this.quizForm.value.numQuestions;
@@ -148,12 +161,13 @@ export class QuizAiComponent implements OnInit, OnDestroy {
             questions: response.questions,
           };
           this.initializeAnswerForm();
-          this.isGenerating = false;
+          this.isProcessing = false;
           this.snackBar.open('Quiz generated successfully!', 'Close', { duration: 3000 });
+          this.currentStep = 'answer';
         },
         error: (error: any) => {
           console.error('Error generating quiz:', error);
-          this.isGenerating = false;
+          this.isProcessing = false;
           this.snackBar.open('Failed to generate quiz. Please try again.', 'Close', { duration: 3000 });
         },
       })
@@ -179,8 +193,7 @@ export class QuizAiComponent implements OnInit, OnDestroy {
       this.snackBar.open('No quiz to submit.', 'Close', { duration: 3000 });
       return;
     }
-
-    this.isSubmitting = true;
+    this.isProcessing = true;
     const userId = localStorage.getItem('user_id') || 'default_user';
     const answers = this.quiz.questions.map((question, index) => ({
       question_id: question.question_id,
@@ -198,13 +211,14 @@ export class QuizAiComponent implements OnInit, OnDestroy {
             total_score: response.total_score,
           };
           this.totalScore = response.total_score;
-          this.isSubmitting = false;
+          this.isProcessing = false;
           this.snackBar.open('Answers submitted successfully!', 'Close', { duration: 3000 });
           this.fetchTotalScore();
+          this.currentStep = 'feedback';
         },
         error: (error: any) => {
           console.error('Error submitting answers:', error);
-          this.isSubmitting = false;
+          this.isProcessing = false;
           this.snackBar.open('Failed to submit answers. Please try again.', 'Close', { duration: 3000 });
         },
       })
@@ -229,5 +243,38 @@ export class QuizAiComponent implements OnInit, OnDestroy {
   // Helper to get answers FormArray
   get answers(): FormArray {
     return this.answerForm.get('answers') as FormArray;
+  }
+
+  // Method to generate a new quiz
+  generateNewQuiz(): void {
+    // Reset the quiz-related properties
+    this.quiz = null;
+    this.feedback = null;
+    this.totalScore = 0;
+
+    // Reset the forms
+    this.quizForm.reset({
+      topic: '',
+      numQuestions: 5, // Set to your default value
+    });
+    this.answerForm = this.fb.group({
+      answers: this.fb.array([]),
+    });
+    this.selectedFile = null;
+
+    // Navigate back to the generate step
+    this.currentStep = 'generate';
+
+    // Optionally, display a snackbar notification
+    this.snackBar.open('Ready to generate a new quiz!', 'Close', {
+      duration: 3000,
+    });
+  }
+
+  goBackToGenerate() {
+    this.currentStep = 'generate';
+  }
+  removeFile(): void {
+    this.selectedFile = null;
   }
 }
