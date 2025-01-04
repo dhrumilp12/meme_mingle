@@ -6,6 +6,7 @@ from models.user_response import UserResponse, Answer
 from models.feedback import Feedback
 from services.azure_mongodb import MongoDBClient
 from bson import ObjectId
+from utils.similar_answer import is_similar
 import datetime
 from services.azure_open_ai import get_azure_openai_llm
 from services.azure_form_recognizer import ALLOWED_MIME_TYPES
@@ -26,6 +27,12 @@ def get_questions(user_id):
     
     topic = body.get('topic')
     num_questions = int(body.get('num', 5))
+    level = body.get('level', 'medium').lower()
+    print('level:', level)
+     # Validate level
+    valid_levels = ['easy', 'medium', 'hard']
+    if level not in valid_levels:
+        return jsonify({"error": f"Invalid level '{level}'. Valid options are: {', '.join(valid_levels)}."}), 400
 
     # Handle the uploaded file
     uploaded_file = request.files.get('file')
@@ -48,7 +55,7 @@ def get_questions(user_id):
     if not topic and not uploaded_file:
         return jsonify({"error": "At least one of 'topic' or 'file' must be provided."}), 400
 
-    result = generate_questions(user_id, topic, file_content, file_mime_type, num_questions)
+    result = generate_questions(user_id, topic, file_content, file_mime_type, num_questions, level)
 
     if "error" in result:
         return jsonify({"error": result["error"]}), 500
@@ -126,12 +133,25 @@ def submit_answers(quiz_id):
                             else:
                                 points_awarded = -5
                         elif question.get('question_type') == 'SA':
-                            # For SA, simple case-insensitive comparison
-                            if user_answer == correct_answer.lower():
-                                is_correct = True
-                                points_awarded = 10
-                            else:
-                                points_awarded = -5
+                            # New SA logic with similarity check
+                            # Handle numerical answers separately
+                            try:
+                                user_num = float(user_answer)
+                                correct_num = float(correct_answer)
+                                if user_num == correct_num:
+                                    is_correct = True
+                                    points_awarded = 10
+                                else:
+                                    is_correct = False
+                                    points_awarded = -5
+                            except ValueError:
+                                # Non-numeric answers: use similarity check
+                                if is_similar(user_answer, correct_answer):
+                                    is_correct = True
+                                    points_awarded = 10
+                                else:
+                                    is_correct = False
+                                    points_awarded = -5
 
                         # Calculate total points based on first submission
                         if is_first_submission:
@@ -144,12 +164,14 @@ def submit_answers(quiz_id):
                         if not is_correct:
                             # Prepare prompt for feedback generation
                             prompt = (
-                                f"Provide a constructive and educational feedback for the following incorrect answer to a Python quiz question.\n\n"
-                                f"Question: {question['question']}\n"
-                                f"User's Answer: {ans['user_answer']}\n"
-                                f"Correct Answer: {question['correct_answer']}\n"
-                                f"Feedback:"
-                            )
+                            f"You are an educational assistant helping users (5-15 year old) understand their mistakes in Python quizzes.\n\n"
+                            f"Question: {question['question']}\n"
+                            f"User's Answer: {ans['user_answer']}\n"
+                            f"Correct Answer: {question['correct_answer']}\n\n"
+                            f"Provide a constructive and detailed feedback that explains why the user's answer is incorrect and how to arrive at the correct answer. "
+                            f"Ensure the feedback is clear, educational, and encourages the user to understand the concept better.\n\n"
+                            f"Feedback:"
+                        )
 
                             try:
                                 feedback_response = llm(prompt)
@@ -172,7 +194,7 @@ def submit_answers(quiz_id):
                                 correct=True,
                                 correct_answer=question['correct_answer'],
                                 user_answer=ans['user_answer'],
-                                feedback="Correct answer!"
+                                feedback="Correct answer! Well done."
                             )
 
                         feedback_list.append(feedback_item)
@@ -243,3 +265,6 @@ def get_total_score(user_id):
     except Exception as e:
         logger.error(f"Failed to retrieve total score: {e}")
         return jsonify({"error": "Failed to retrieve total score."}), 500
+    
+
+

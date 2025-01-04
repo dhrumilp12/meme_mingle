@@ -7,7 +7,7 @@ from bson import ObjectId
 import datetime
 from services.azure_form_recognizer import extract_text_from_file
 
-def generate_questions(user_id, topic=None, file_content=None, file_mime_type=None, num_questions=5):
+def generate_questions(user_id, topic=None, file_content=None, file_mime_type=None, num_questions=5, level='medium'):
     """
     Generates questions based on a given topic and stores them in the database.
 
@@ -19,6 +19,11 @@ def generate_questions(user_id, topic=None, file_content=None, file_mime_type=No
     Returns:
         dict: A dictionary containing the quiz ID and the questions without correct answers.
     """
+    # Validate the level
+    valid_levels = ['easy', 'medium', 'hard']
+    if level.lower() not in valid_levels:
+        return {"error": f"Invalid level '{level}'. Valid options are: {', '.join(valid_levels)}."}
+    
     questions = []
     llm = get_azure_openai_llm()  # Get the Azure language model
 
@@ -33,7 +38,9 @@ def generate_questions(user_id, topic=None, file_content=None, file_mime_type=No
         base_prompt += f"Use the following content to generate quiz questions:\n\n{extracted_text}\n\n"
 
     if topic:
-        base_prompt += f"Generate {num_questions} questions about {topic}. "
+        base_prompt += f"Generate {num_questions} {level.lower()} level questions about {topic}. "
+    else:
+        base_prompt += f"Generate {num_questions} {level.lower()} level questions. "
 
     if not topic and not file_content:
         return {"error": "Either a topic or a file must be provided to generate questions."}
@@ -42,6 +49,7 @@ def generate_questions(user_id, topic=None, file_content=None, file_mime_type=No
     prompt = (
         f"{base_prompt}"
         f"Each question should be either multiple-choice (MC) with four answer choices or a short answer (SA). "
+        f"For MC questions, **exactly one** answer choice must be marked as correct by appending an asterisk (*) immediately after the answer text, without any spaces. "
         f"Format each question-answer pair on a separate line. "
         f"Separate the question and options using [&&]. "
         f"For MC, use the format: MC[&&]Question?[&&]Answer1[&&]Answer2[&&]Answer3[&&]Answer4. "
@@ -60,8 +68,20 @@ def generate_questions(user_id, topic=None, file_content=None, file_mime_type=No
             if line.startswith("MC[&&]"):  # Handle multiple-choice questions
                 parts = line[6:].split("[&&]")
                 question = parts[0].strip()
-                options = [opt.strip() for opt in parts[1:5]]  # Four options
-                correct_answer = options[0]  # Placeholder for correct answer (you can modify this logic)
+                options = []
+                correct_answer = None
+                for opt in parts[1:5]:  # Four options
+                    opt = opt.strip()
+                    if opt.endswith('*'):
+                        opt = opt[:-1].strip()  # Remove the asterisk
+                        correct_answer = opt
+                    options.append(opt)
+                
+                if not correct_answer:
+                    # Fallback if no correct answer is marked
+                    correct_answer = options[0]  # Or handle as an error
+                    
+                
                 question_id = str(ObjectId())
                 questions.append(Question(
                     question_id=question_id,
@@ -87,6 +107,7 @@ def generate_questions(user_id, topic=None, file_content=None, file_mime_type=No
             user_id=user_id,
             topic=topic if topic else "File-Based Quiz",
             questions=questions,
+            level=level.lower(),
             created_at=datetime.datetime.utcnow().isoformat()
         )
 

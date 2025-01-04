@@ -1,5 +1,3 @@
-// quiz-ai.component.ts
-
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AppService } from '../../app.service';
 import { FormBuilder, FormGroup, Validators, FormArray, ReactiveFormsModule } from '@angular/forms';
@@ -14,6 +12,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { marked } from 'marked';
+
 
 interface Quiz {
   quiz_id: string;
@@ -26,6 +29,7 @@ interface Question {
   question_type: 'MC' | 'SA';
   options?: string[]; // For MCQs
   correct_answer?: string;
+  sanitizedQuestion?: SafeHtml;
 }
 
 interface Feedback {
@@ -42,6 +46,7 @@ interface FeedbackItem {
   correct_answer: string;
   user_answer: string;
   feedback: string;
+  sanitizedFeedback?: SafeHtml;
 }
 
 @Component({
@@ -58,6 +63,8 @@ interface FeedbackItem {
     MatButtonModule,
     MatSnackBarModule,
     MatIconModule,
+    MatTooltipModule,
+    MatExpansionModule,
   ],
   templateUrl: './quiz-ai.component.html',
   styleUrls: ['./quiz-ai.component.scss'],
@@ -82,6 +89,7 @@ export class QuizAiComponent implements OnInit, OnDestroy {
   totalScore: number = 0;
   selectedFile: File | null = null;
   isProcessing: boolean = false;
+  currentTopic: string = '';
   currentStep: 'generate' | 'answer' | 'feedback' = 'generate';
   topics: string[] = [
     'Mathematics',
@@ -95,14 +103,22 @@ export class QuizAiComponent implements OnInit, OnDestroy {
     // Add more topics as needed
   ];
 
+  // Define quiz levels
+  levels: string[] = [
+    'Easy',
+    'Medium',
+    'Hard',
+  ];
   constructor(
     private fb: FormBuilder,
     private appService: AppService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private sanitizer: DomSanitizer 
   ) {
     // Initialize the quiz generation form
     this.quizForm = this.fb.group({
       topic: ['', Validators.required],
+      level: ['Medium', Validators.required],
       numQuestions: [5, [Validators.required, Validators.min(1), Validators.max(20)]],
     });
 
@@ -152,13 +168,18 @@ export class QuizAiComponent implements OnInit, OnDestroy {
     const userId = localStorage.getItem('user_id') || 'default_user';
     const topic = this.quizForm.value.topic;
     const numQuestions = this.quizForm.value.numQuestions;
+    const level = this.quizForm.value.level;
 
+    this.currentTopic = topic ? topic : '';
     this.subscriptions.add(
-      this.appService.getQuizQuestions(userId, topic, this.selectedFile ?? undefined, numQuestions).subscribe({
+      this.appService.getQuizQuestions(userId, topic, this.selectedFile ?? undefined, numQuestions, level).subscribe({
         next: (response: any) => {
           this.quiz = {
             quiz_id: response.quiz_id,
-            questions: response.questions,
+            questions: response.questions.map((q: any) => ({
+              ...q,
+              sanitizedQuestion: this.convertMarkdownToHtml(q.question)
+            })),
           };
           this.initializeAnswerForm();
           this.isProcessing = false;
@@ -207,9 +228,13 @@ export class QuizAiComponent implements OnInit, OnDestroy {
             response_id: response.response_id,
             score: response.score,
             total_possible_points: response.total_possible_points,
-            feedback: response.feedback,
+            feedback: response.feedback.map((fb: any) => ({
+              ...fb,
+              sanitizedFeedback: this.convertMarkdownToHtml(fb.feedback)
+            })),
             total_score: response.total_score,
           };
+          console.log('Feedback:', response);
           this.totalScore = response.total_score;
           this.isProcessing = false;
           this.snackBar.open('Answers submitted successfully!', 'Close', { duration: 3000 });
@@ -255,6 +280,7 @@ export class QuizAiComponent implements OnInit, OnDestroy {
     // Reset the forms
     this.quizForm.reset({
       topic: '',
+      level: 'Medium',
       numQuestions: 5, // Set to your default value
     });
     this.answerForm = this.fb.group({
@@ -262,6 +288,9 @@ export class QuizAiComponent implements OnInit, OnDestroy {
     });
     this.selectedFile = null;
 
+
+    // Reset currentTopic
+    this.currentTopic = '';
     // Navigate back to the generate step
     this.currentStep = 'generate';
 
@@ -276,5 +305,26 @@ export class QuizAiComponent implements OnInit, OnDestroy {
   }
   removeFile(): void {
     this.selectedFile = null;
+    // Optionally, reset the file input
+    const fileInput = document.getElementById('fileUpload') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = '';
+    }
   }
+
+  getQuestionNumber(questionId: string): number {
+    if (!this.quiz) return -1;
+    return this.quiz.questions.findIndex(q => q.question_id === questionId) + 1;
+  }
+  getQuestionText(questionId: string): string {
+    if (!this.quiz) return '';
+    const question = this.quiz.questions.find(q => q.question_id === questionId);
+    return question ? question.question : 'Question not found';
+  }
+
+  convertMarkdownToHtml(markdown: string): SafeHtml {
+    const rawHtml = marked(markdown);
+    return this.sanitizer.bypassSecurityTrustHtml(rawHtml);
+  }
+  
 }
