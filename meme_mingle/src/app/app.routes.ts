@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { UserProfileComponent } from './user-profile/user-profile.component';
+import { UserProfileComponent } from './main/user-profile/user-profile.component';
 import { AboutusComponent } from './layout/aboutus/aboutus.component';
 import { FaqComponent } from './layout/faq/faq.component';
 import { AuthGuard } from './auth/auth.guard';

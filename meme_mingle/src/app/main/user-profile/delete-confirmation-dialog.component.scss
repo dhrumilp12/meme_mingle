@@ -1,0 +1,54 @@
+/* delete-confirmation-dialog.component.scss */
+
+:host {
+    
+    /* Title Styling */
+    h2.mat-dialog-title {
+      color: #ffb84d;
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+  
+    /* Content Styling */
+    mat-dialog-content {
+      p {
+        font-size: 1rem;
+        color: #ccc;
+        margin-top: 0;
+        margin-bottom: 1rem;
+        line-height: 1.4;
+      }
+    }
+  
+    /* Action Buttons */
+    mat-dialog-actions {
+      display: flex;
+      justify-content: flex-end;
+      padding-top: 1rem;
+  
+      button {
+        border-radius: 2rem;
+        padding: 0.6rem 1.4rem;
+        margin-left: 0.5rem;
+        border: 1px solid #ffb84d;
+        background-color: #2a2a2a;
+        color: #fff;
+        transition: background-color 0.3s ease;
+  
+        &:hover {
+          background-color: #1a1a1a;
+        }
+      }
+  
+      /* The "Delete" button, using color="warn" */
+      button[color="warn"] {
+        border-color: #ff4d4d;
+        background-color: #ff4d4d;
+  
+        &:hover {
+          background-color: #ff1a1a;
+        }
+      }
+    }
+  }
+  

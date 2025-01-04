@@ -21,7 +21,12 @@ export const main_routes: Routes = [
         path: 'quiz-ai',
         loadComponent: () =>
           import('./quiz-ai/quiz-ai.component').then((m) => m.QuizAiComponent),
-      }
+      },
+      {
+        path: 'user-profile',
+        loadComponent: () =>
+          import('./user-profile/user-profile.component').then((m) => m.UserProfileComponent),
+      },
       
       
     ],

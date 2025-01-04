@@ -1,6 +1,6 @@
 /* Variables */
 $sidebar-width: 280px; // Updated to match sidebar.component.scss
-$sidebar-margin: 15px;
+$sidebar-margin: 10px;
 
 /* Wrapper for layout */
 .wrapper {
@@ -53,11 +53,17 @@ $sidebar-margin: 15px;
 
 /* Responsive Adjustments */
 @media (max-width: 767.98px) {
-    .main {
-        margin-left: calc(60px + 2 * $sidebar-margin); /* When sidebar is collapsed on small screens */
-    }
+  .wrapper {
+    flex-direction: column;
+    width: fit-content;
+  }
 
-    .wrapper.sidebar-collapsed .main {
-        margin-left: $sidebar-margin; /* When sidebar is hidden */
-    }
+  .main {
+    margin-left: 0;
+    margin-top: 0; /* Adjust based on sidebar visibility */
+  }
+
+  .wrapper.sidebar-collapsed .main {
+    margin-top: 0;
+  }
 }

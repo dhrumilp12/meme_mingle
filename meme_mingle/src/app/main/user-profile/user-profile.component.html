@@ -1,0 +1,145 @@
+<div class="profile-page">
+
+  <!-- Page Title -->
+  <h1 class="profile-title">My Profile</h1>
+  
+  <!-- Main Card Container -->
+  <form [formGroup]="profileForm" class="profile-card">
+
+    <!-- Avatar -->
+    <div class="avatar-container" (click)="triggerFileInput(fileInput)">
+      <input
+        type="file"
+        id="profilePicture"
+        #fileInput
+        (change)="onFileSelected($event)"
+        accept="image/*"
+        style="display: none"
+      />
+      <img
+        *ngIf="currentProfilePicture"
+        [src]="currentProfilePicture"
+        alt="Profile Picture"
+        class="avatar"
+      />
+    </div>
+
+    <div class="fields-container">
+
+      <!-- Name -->
+      <div class="field-row">
+        <label>Name:</label>
+        <!-- Use formControlName instead of [value] -->
+        <input 
+          type="text"
+          formControlName="name"
+          placeholder="Your Name"
+        />
+      </div>
+
+      <!-- Username -->
+      <div class="field-row">
+        <label>Username:</label>
+        <!-- Keep it disabled if you don’t want them changing it -->
+        <input 
+          type="text"
+          formControlName="username"
+          [disabled]="true"
+        />
+      </div>
+
+      <!-- Email -->
+      <div class="field-row">
+        <label>Email:</label>
+        <input 
+          type="email"
+          formControlName="email"
+          [disabled]="true"
+        />
+      </div>
+
+      <!-- Gender (Slider) -->
+      <div class="field-row gender-row">
+        <label>Gender:</label>
+        <div class="gender-slider">
+          <!-- Left arrow -->
+          <button type="button" class="nav-arrow" (click)="changeGender(-1)">
+            ‹
+          </button>
+
+          <!-- Current Gender -->
+          <span class="gender-value">
+            {{ genders[genderIndex] | titlecase }}
+          </span>
+
+          <!-- Right arrow -->
+          <button type="button" class="nav-arrow" (click)="changeGender(1)">
+            ›
+          </button>
+        </div>
+      </div>
+      
+      <!-- Place of Residence -->
+      <div class="field-row">
+        <label>Place of Residence:</label>
+        <input 
+          type="text"
+          formControlName="placeOfResidence"
+          placeholder="N/A"
+        />
+      </div>
+
+      <!-- Field of Study -->
+      <div class="field-row">
+        <label>Field of Study:</label>
+        <input 
+          type="text"
+          formControlName="fieldOfStudy"
+          placeholder="N/A"
+        />
+      </div>
+
+      <!-- Preferred Language -->
+      <div class="field-row">
+        <label>Language:</label>
+        <mat-form-field appearance="outline" >
+          <mat-label style="color: #ffb84d; ">Preferred Language</mat-label>
+          <mat-select formControlName="preferredLanguage" style="color: #ffffff; ">
+            <mat-option
+              *ngFor="let lang of supportedLanguages"
+              [value]="lang.code"
+              
+            >
+              {{ lang.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+    </div>
+
+    <!-- Actions / Buttons -->
+    <div class="button-group">
+      <button
+        class="edit-button"
+        type="button"
+        (click)="onSubmit()"
+        [disabled]="isSubmitting"
+      >
+        {{ isSubmitting ? 'Updating...' : 'Edit Profile' }}
+      </button>
+
+      <!-- Delete Account Button -->
+      <button
+      class="delete-button"
+      type="button"
+      (click)="openDeleteConfirmationDialog()"
+      [disabled]="isSubmitting"
+    >
+      {{ isSubmitting ? 'Processing...' : 'Delete Account' }}
+    </button>
+    </div>
+
+  </form> <!-- END profile-card -->
+
+</div> <!-- END profile-page -->

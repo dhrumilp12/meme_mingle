@@ -2,264 +2,261 @@
  * Variables
  *******************************************/
  $sidebar-width: 280px;
- $sidebar-margin: 5px;
- $sidebar-border-radius: 15px;
+ $sidebar-width-collapsed-desktop: 80px; 
  $transition-duration: 0.35s;
  $transition-ease: ease-in-out;
  
- /*******************************************
-  * Reset & Basic Styles
-  *******************************************/
- *,
- *::before,
- *::after {
-   box-sizing: border-box;
- }
- 
- a {
-   text-decoration: none;
-   cursor: pointer;
- }
+ /* For mobile screens */
+ $mobile-breakpoint: 768px;
+ $sidebar-width-mobile: 200px;    /* expanded width on small screens */
+ $sidebar-width-collapsed-mobile: 60px;
  
  /*******************************************
-  * Sidebar Wrapper
+  * Sidebar Wrapper (Base)
   *******************************************/
  .sidebar-wrapper {
    width: $sidebar-width;
-   height: 98.4vh; // Adjust height to include margins
-   background: linear-gradient(to right, #fff3db, #ffb84d); // Gradient matching the design
-   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); // Enhanced shadow for depth
+   height: 98.4vh; /* Adjust height to include margins if needed */
+   background: linear-gradient(to right, #fff3db, #ffb84d);
+   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
    display: flex;
    flex-direction: column;
-   justify-content: space-between; // Ensures top and bottom sections are spaced
+   justify-content: space-between;
    padding: 1rem;
    transition: all $transition-duration $transition-ease;
-   margin: $sidebar-margin; // Adds margin around the sidebar
-   border-radius: $sidebar-border-radius; // Adds rounded corners
-   position: fixed; // Fixes sidebar position
-   top: $sidebar-margin;
-   left: $sidebar-margin;
+   border-radius: 15px; 
+   position: fixed;
+   top: 10px;
+   left: 10px;
    z-index: 1000;
  
+   /*
+    * =============== DESKTOP COLLAPSED ===============
+    * When .collapsed is applied on desktop, 
+    * shrink from 280px to ~80px (icon-only).
+    */
    &.collapsed {
-     width: 80px; // Keep a minimal width
-     padding-right: 0%;
-     padding-left: 0%;
-     transform: none; // Don’t slide completely off-screen
+     width: $sidebar-width-collapsed-desktop; 
+     padding-right: 0;
+     padding-left: 0;
  
+     /* The header may rearrange in collapsed mode */
      .sidebar-header {
        display: flex;
        flex-direction: column;
        align-items: center;
  
        .logo-wrapper {
-         align-items: center;
- 
          .sidebar-logo-img {
            width: 110px;
            margin: 0;
            padding-left: 0.5rem;
          }
        }
- 
        .collapse-btn {
          margin-top: 1rem;
          height: 50px;
          width: 50px;
+         border: 2px solid #1e1e1e;
        }
      }
  
+     /* For top/bottom menus, center icons in a round button */
      .menu-items,
      .menu-bottom {
-       display: flex;
-       flex-direction: column;
-       gap: 1rem;
        align-items: center;
  
        .menu-btn {
-         display: flex;
-         align-items: center;
+         border-radius: 50%;
+         width: 50px;
+         height: 50px;
          justify-content: center;
-         padding: 0.8rem;
-         background-color: white;
-         border: none;
-         border-radius: 50%; // Round buttons
-         box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
-         transition: background-color $transition-duration ease, transform $transition-duration ease;
-         width: 50px; // Adjust width
-         height: 50px; // Adjust height
+         border: 2px solid #1e1e1e;
  
-         i {
-           font-size: 1.5rem; // Icon size
-           color: #333; // Icon color
-         }
- 
+         /* Hide text labels */
          span {
-           display: none; // Hide text in both states
+           display: none;
          }
+       }
+     }
+   }
+ }
  
-         &:hover {
-           background-color: #f7f7f7;
-         
-      }
-    }}
+ /*******************************************
+  * Header & Collapse Button
+  *******************************************/
+ .sidebar-header {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   margin-bottom: 1rem;
+ 
+   .logo-wrapper {
+     .sidebar-logo-img {
+       width: 150px;
+       height: auto;
+       border-radius: 10px;
+     }
    }
  
-   .top-section {
-     display: flex;
-     flex-direction: column;
-     gap: 1rem; // Space between header and top menu
-     overflow: hidden; // Ensures content doesn't overflow the border-radius
-   }
- 
-   .sidebar-header {
+   .collapse-btn {
+     width: 40px;
+     height: 40px;
+     font-size: 1.2rem;
+     background: #fff;
+     border: none;
+     border-radius: 50%;
+     color: #333;
+     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
      display: flex;
      align-items: center;
-     justify-content: space-between;
- 
-     .logo-wrapper {
-       .sidebar-logo-img {
-         width: 150px;
-         height: auto;
-         border-radius: 10px; // Optional: Add slight rounding to the logo
-       }
+     justify-content: center;
+     cursor: pointer;
+     transition: background $transition-duration $transition-ease;
+     border: 2px solid #1e1e1e;
+     
+     &:hover {
+       background: #f0f0f0;
      }
+   }
+ }
  
-     .collapse-btn {
-       width: 40px;
-       height: 40px;
+ /*******************************************
+  * Top Menu Items
+  *******************************************/
+ .menu-items {
+   display: flex;
+   flex-direction: column;
+   gap: 1rem;
+   
+   .menu-btn {
+     display: flex;
+     align-items: center;
+     gap: 1rem;
+     padding: 0.8rem;
+     background-color: #fff;
+     border: none;
+     border-radius: 8px;
+     font-size: 1rem;
+     font-weight: 600;
+     color: #333;
+     box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+     position: relative;
+     transition: background-color 0.3s, transform 0.3s;
+     border: 2px solid #1e1e1e;
+ 
+     i {
        font-size: 1.2rem;
-       background: #fff;
-       border: none;
-       border-radius: 50%;
-       color: #333;
-       box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-       display: flex;
-       align-items: center;
-       justify-content: center;
-       cursor: pointer;
-       transition: background $transition-duration $transition-ease;
+     }
+ 
+     &:hover {
+       background-color: #f7f7f7;
+     }
+ 
+     .score-badge {
+       position: absolute;
+       top: 8px;
+       right: 8px;
+       background-color: #2a2a2a;
+       color: #fff;
+       border-radius: 12px;
+       padding: 2px 6px;
+       font-size: 0.75rem;
+       font-weight: bold;
+       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+       transition: background-color 0.3s ease, transform 0.3s ease;
  
        &:hover {
-         background: #f0f0f0;
+         background-color: #2a2a2a;
+         transform: scale(1.1);
        }
      }
    }
+ }
  
-   .menu-items {
+ /*******************************************
+  * Bottom Menu Items
+  *******************************************/
+ .menu-bottom {
+   display: flex;
+   flex-direction: column;
+   gap: 1rem;
+ 
+   .menu-btn {
      display: flex;
-     flex-direction: column;
+     align-items: center;
      gap: 1rem;
- 
-     .menu-btn {
-       display: flex;
-       align-items: center;
-       gap: 1rem;
-       padding: 0.8rem;
-       background-color: #fff;
-       border: none;
-       border-radius: 8px;
-       font-size: 1rem;
-       font-weight: 600;
-       color: #333;
-       box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1); // Enhanced shadow
-       transition: background-color 0.3s, transform 0.3s;
-       position: relative;
+     padding: 0.8rem;
+     background-color: #fff;
+     border: none;
+     border-radius: 8px;
+     font-size: 1rem;
+     font-weight: 600;
+     color: #333;
+     box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+     transition: background-color 0.3s, transform 0.3s;
+     border: 2px solid #1e1e1e;
 
-       i {
-         font-size: 1.2rem;
-       }
- 
-       &:hover {
-         background-color: #f7f7f7;
-       }
-       .score-badge {
-         position: absolute;
-         top: 8px;
-         right: 8px;
-         background-color: #2a2a2a; // A vibrant color for visibility
-         color: #fff;
-         border-radius: 12px;
-         padding: 2px 6px;
-         font-size: 0.75rem;
-         font-weight: bold;
-         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-         transition: background-color 0.3s ease, transform 0.3s ease;
- 
-         &:hover {
-           background-color: #2a2a2a;
-           transform: scale(1.1);
-         }
- 
-         &.new-score {
-           animation: pop 0.3s ease-out;
-         }
-       }
+     &:hover {
+       background-color: #f7f7f7;
      }
    }
  
-   .menu-bottom {
-     display: flex;
-     flex-direction: column;
-     gap: 1rem;
+   .profile-btn {
+     img.user-avatar {
+       width: 30px;
+       height: 30px;
+       border-radius: 50%;
+       object-fit: cover;
+       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+       
+     }
+   }
+ }
  
-     .menu-btn {
-       display: flex;
-       align-items: center;
-       gap: 1rem;
-       padding: 0.8rem;
-       background-color: #fff;
-       border: none;
-       border-radius: 8px;
-       font-size: 1rem;
-       font-weight: 600;
-       color: #333;
-       box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1); // Enhanced shadow
-       transition: background-color 0.3s, transform 0.3s;
+ /*******************************************
+  * MOBILE STYLES
+  *******************************************/
+ @media (max-width: #{$mobile-breakpoint}) {
+   /*
+    * We'll limit the “expanded” state to 200px, 
+    * and collapsed to 60px
+    * (actual pinned layout is in main scss).
+    */
+   .sidebar-wrapper {
+     width: $sidebar-width-mobile;  /* ~200px in expanded mode */
+     
  
-       i {
-         font-size: 1.2rem;
+     /* If you want the header to arrange differently, do so here. */
+     .sidebar-header {
+       justify-content: space-between; /* keep logo on left, toggle on right */
+ 
+       .logo-wrapper {
+         .sidebar-logo-img {
+           width: 120px; /* smaller logo on mobile */
+         }
        }
+     }
  
-       &:hover {
-         background-color: #f7f7f7;
+     &.collapsed {
+       width: $sidebar-width-collapsed-mobile; /* 60px on mobile */
+       
+       /* Possibly hide menu items if collapsed */
+       .menu-items,
+       .menu-bottom {
+         align-items: center;
          
-       }
-     }
- 
-     /* Profile Section */
-     .profile-btn {
-       display: flex;
-       align-items: center;
-       gap: 1rem;
- 
-       img.user-avatar {
-         width: 30px;
-         height: 30px;
-         border-radius: 50%;
-         object-fit: cover;
-         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-       }
-     }
-     }
-   }
- 
-   /*******************************************
-    * Responsive Adjustments (Optional)
-    *******************************************/
-   @media (max-width: 767.98px) {
-     .sidebar-wrapper {
-       width: $sidebar-width;
-       height: calc(100vh - 2 * $sidebar-margin);
-       position: fixed; // Ensure sidebar overlays content on small screens
-       top: $sidebar-margin;
-       left: 0;
-       z-index: 999;
-       transition: all $transition-duration $transition-ease;
- 
-       &.collapsed {
-         transform: translateX(-100%);
-         transition: transform $transition-duration $transition-ease;
+         .menu-btn {
+           /* same round icon logic as desktop collapsed */
+           border-radius: 50%;
+           width: 50px;
+           height: 50px;
+           span {
+             display: none;
+           }
+         }
        }
      }
    }
+ }
+ 
