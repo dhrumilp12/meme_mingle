@@ -1,40 +1,68 @@
 <div class="mememingle-headernav">
-  <!-- Left Section: Logo and Dashboard -->
+  <!-- LEFT SECTION -->
   <div class="left-section">
-    <a routerLink="/home" class="mememingle-logo">
-      <img src="../../assets/img/feature-image.png" alt="Logo" />
-    </a>
-    <span routerLink="/home" class="mememingle-text12">Dashboard</span>
+    <!-- Sidebar Toggle (only if sidebar is closed) -->
+    <button
+      class="btn"
+      id="sidebar-toggle"
+      (click)="toggleSidebar()"
+      type="button"
+      *ngIf="!sidebarVisible"
+      title="Open Sidebar"
+    >
+    <i class="bi bi-layout-text-sidebar-reverse"></i>
+    </button>
+
+    <!-- Icon Buttons (appear only if sidebar is closed) -->
+    <div class="top-icons" *ngIf="!sidebarVisible">
+      <!-- New Chat Icon -->
+      <button class="icon-btn" routerLink="/new-chat" title="New Chat">
+        <i class="bi bi-plus-square-fill"></i>
+      </button>
+
+      <!-- Production Icon -->
+      <button class="icon-btn" routerLink="/production" title="Production">
+        <i class="bi bi-cart-fill"></i>
+      </button>
+    </div>
+
+    <!-- Menu Icon for Center Links (visible on small screens) -->
+    <div
+      class="menu-icon"
+      (click)="toggleMenu()"
+      [class.active]="menuOpen"
+    >
+      <span class="material-icons">menu</span>
+    </div>
   </div>
 
-   <!-- Center Links -->
-   <div class="mememingle-links">
-    <span routerLink="/about" class="mememingle-text10">About</span>
-    <span routerLink="/contact" class="mememingle-text11">Contact Us</span>
-    <span routerLink="/FAQ" class="mememingle-text12">FAQ</span>
+  <!-- CENTER SECTION: About, Contact, FAQ -->
+  <div class="center-section">
+    <div class="mememingle-links">
+      <span routerLink="/about" class="mememingle-text10">About</span>
+      <span routerLink="/contact" class="mememingle-text11">Contact Us</span>
+      <span routerLink="/FAQ" class="mememingle-text12">FAQ</span>
+    </div>
+
+    <!-- Dropdown Menu for Center Links (mobile) -->
+    <div class="center-dropdown-menu" [class.show]="menuOpen">
+      <a routerLink="/about">
+        <span class="material-icons">info</span>
+        About
+      </a>
+      <a routerLink="/contact">
+        <span class="material-icons">contact_mail</span>
+        Contact
+      </a>
+      <a routerLink="/FAQ">
+        <span class="material-icons">help</span>
+        FAQ
+      </a>
+    </div>
   </div>
 
-  <!-- Menu Icon for Center Links (visible on small screens) -->
-  <div class="menu-icon" (click)="toggleMenu()" [class.active]="menuOpen">
-    <span class="material-icons">menu</span>
-  </div>
-  <!-- Dropdown Menu for Center Links -->
-  <div class="center-dropdown-menu" [class.show]="menuOpen">
-    <a routerLink="/about">
-      <span class="material-icons">info</span>
-      About
-    </a>
-    <a routerLink="/contact">
-      <span class="material-icons">contact_mail</span>
-      Contact
-    </a>
-    <a routerLink="/FAQ">
-      <span class="material-icons">help</span>
-      FAQ
-    </a>
-  </div>
-  <!-- Right Section: User Avatar Dropdown -->
-  <div class="user-avatar-dropdown">
+  <!-- RIGHT SECTION: User Avatar -->
+  <div class="right-section user-avatar-dropdown">
     <img
       [src]="userProfilePicture"
       alt="User Avatar"
@@ -42,7 +70,13 @@
       (click)="toggleDropdown()"
       (error)="userProfilePicture = '/assets/img/user_avtar.jpg'"
     />
-    <div class="dropdown-menu" [class.show]="dropdownOpen">
+
+    <!-- Conditionally move dropdown if sidebar is open -->
+    <div
+      class="dropdown-menu"
+      [class.show]="dropdownOpen"
+      [class.sidebar-open]="sidebarVisible"
+    >
       <a routerLink="/user-profile">
         <span class="material-icons">person</span>
         User Profile

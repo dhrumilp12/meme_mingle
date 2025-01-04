@@ -1,1 +1,8 @@
-<router-outlet></router-outlet>
+<div class="wrapper" [class.sidebar-collapsed]="!sidebarVisible">
+    <app-sidebar></app-sidebar>
+ <span class="main">
+    <!-- <app-page></app-page> -->
+    <router-outlet></router-outlet>
+    <!-- <app-footer></app-footer> -->
+</span>
+</div>
