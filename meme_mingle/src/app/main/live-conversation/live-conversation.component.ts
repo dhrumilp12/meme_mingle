@@ -141,6 +141,8 @@ export class LiveConversationComponent implements OnInit, OnDestroy {
   selectedFile: File | null = null;
   selectedRole: string = ''; 
   selectedRoleImageUrl: string = 'assets/img/banner.png';
+  preferredLanguage: string = 'en';
+  translatedTexts: { [key: string]: string } = {};
   historicalFigures: HistoricalFigure[] = [
     { imageUrl:'assets/roles/Ada_Lovelace.png', display: 'Ada Lovelace', value: 'Ada Lovelace', field: 'Computer Science' },
     { imageUrl:'assets/roles/Albert_Einstein.jpg', display: 'Albert Einstein', value: 'Albert Einstein', field: 'Physics' },
@@ -162,7 +164,11 @@ export class LiveConversationComponent implements OnInit, OnDestroy {
     this.fetchUserProfile();
     this.userId = localStorage.getItem('user_id') || 'default_user';
     this.chatId = this.chatService.getChatId() || this.chatService.generateChatId();
+    this.preferredLanguage = localStorage.getItem('preferredLanguage') || 'en';
 
+    if (this.preferredLanguage !== 'en') {
+      this.translateContent(this.preferredLanguage);
+    }
 
     const windowObj = window as unknown as IWindow;
     const SpeechRecognition =
@@ -200,6 +206,74 @@ export class LiveConversationComponent implements OnInit, OnDestroy {
         this.startListening();
       }
     };
+  }
+
+  // Translate content to the target language
+  private translateContent(targetLanguage: string) {
+    const elementsToTranslate = document.querySelectorAll('[data-translate]');
+    const textsToTranslate = Array.from(elementsToTranslate).map(
+      (el) => el.textContent?.trim() || ''
+    );
+
+    // Include additional texts that are not in data-translate attributes
+    const additionalTexts = [
+    'Welcome to AI Chat',
+    'Choose a historical figure to inspire your conversation.',
+    'Select Your Mentor',
+    'Start Conversation',
+    'Ada Lovelace', 
+    'Albert Einstein',
+    'Aryabhatta',
+    'Galileo Galilei', 
+    'Isaac Newton', 
+    'Leonardo da Vinci', 
+    'Marie Curie', 
+    'Nikola Tesla', 
+    'Thomas Edison', 
+    'Astronomy',
+    'Art and Science',
+    'Electrical Engineering',
+    'Inventing',
+    'mathematician',
+    'Type your message here...',
+    'Pause Listening',
+    'Resume Listening',
+    'File upload',
+    'New Conversation',
+    'Unmute',
+    'Mute',
+    'Replay Audio',
+    'Mathematics',
+    'Physics',
+    'Chemistry',
+    'Computer Science',
+    'AI is speaking...',
+    'AI is listening...',
+  ];
+    const allTextsToTranslate = [...textsToTranslate, ...additionalTexts];
+
+    this.appService
+      .translateTexts(allTextsToTranslate, targetLanguage)
+      .subscribe((response) => {
+        const translations = response.translations;
+
+        // Translate texts from data-translate elements
+        elementsToTranslate.forEach((element, index) => {
+          const originalText = textsToTranslate[index];
+          this.translatedTexts[originalText] = translations[index];
+
+          // Update directly if it's a regular DOM element
+          if (!(element.tagName.startsWith('MAT-'))) {
+            element.textContent = translations[index];
+          }
+        });
+
+        // Handle additional texts
+        additionalTexts.forEach((text, index) => {
+          const translatedText = translations[textsToTranslate.length + index];
+          this.translatedTexts[text] = translatedText;
+        });
+      });
   }
 
   finalizeChat(): void {
@@ -460,6 +534,7 @@ export class LiveConversationComponent implements OnInit, OnDestroy {
           if (audioUrl) {
             this.playAudio(audioUrl);
           }
+          console.log('response:', response);
           this.turnId += 1;
           this.isProcessing = false;
         },

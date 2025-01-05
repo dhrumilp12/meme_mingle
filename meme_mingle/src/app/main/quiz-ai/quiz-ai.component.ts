@@ -90,6 +90,8 @@ export class QuizAiComponent implements OnInit, OnDestroy {
   selectedFile: File | null = null;
   isProcessing: boolean = false;
   currentTopic: string = '';
+  preferredLanguage: string = 'en';
+  translatedTexts: { [key: string]: string } = {};
   currentStep: 'generate' | 'answer' | 'feedback' = 'generate';
   topics: string[] = [
     'Mathematics',
@@ -130,12 +132,84 @@ export class QuizAiComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.fetchTotalScore();
+    this.preferredLanguage = localStorage.getItem('preferredLanguage') || 'en';
+
+    if (this.preferredLanguage !== 'en') {
+      this.translateContent(this.preferredLanguage);
+    }
   }
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
 
+  // Translate content to the target language
+  private translateContent(targetLanguage: string) {
+    const elementsToTranslate = document.querySelectorAll('[data-translate]');
+    const textsToTranslate = Array.from(elementsToTranslate).map(
+      (el) => el.textContent?.trim() || ''
+    );
+
+    // Include additional texts that are not in data-translate attributes
+    const additionalTexts = [
+    'Generate Your Quiz',
+    'Select Topic',
+    'Select Level',
+    'Upload File',
+    'Remove selected file',
+    'Number of Questions',
+    'Generate Quiz',
+    'Please select a topic or upload a file to generate a quiz.',
+    'Quiz generated successfully!',
+    'Failed to generate quiz. Please try again.',
+    'Your Answer',
+    'Submit Answers',
+    'Please answer all questions before submitting.',
+    'No quiz to submit.',
+    'Quiz Feedback',
+    'Your Score',
+    'Total Score',
+    'Your Total Score',
+    'Generate New Quiz',
+    'Ready to generate a new quiz!',
+    'Go back to quiz generation',
+    'Mathematics',
+    'Physics',
+    'Chemistry',
+    'Computer Science',
+    'History',
+    'Geography',
+    'Biology',
+    'Literature',
+    'Easy',
+    'Medium',
+    'Hard',
+    'Quiz'];
+    const allTextsToTranslate = [...textsToTranslate, ...additionalTexts];
+
+    this.appService
+      .translateTexts(allTextsToTranslate, targetLanguage)
+      .subscribe((response) => {
+        const translations = response.translations;
+
+        // Translate texts from data-translate elements
+        elementsToTranslate.forEach((element, index) => {
+          const originalText = textsToTranslate[index];
+          this.translatedTexts[originalText] = translations[index];
+
+          // Update directly if it's a regular DOM element
+          if (!(element.tagName.startsWith('MAT-'))) {
+            element.textContent = translations[index];
+          }
+        });
+
+        // Handle additional texts
+        additionalTexts.forEach((text, index) => {
+          const translatedText = translations[textsToTranslate.length + index];
+          this.translatedTexts[text] = translatedText;
+        });
+      });
+  }
   // Handle file selection
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;

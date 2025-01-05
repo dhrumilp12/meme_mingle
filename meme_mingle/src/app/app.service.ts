@@ -95,6 +95,14 @@ export class AppService {
     return this.http.post(`${this.baseUrl}/ai_mentor/text-to-speech`, payload, { responseType: 'blob' });
   }
 
+  // for translating texts
+  translateTexts(texts: string[], targetLanguage: string) {
+    return this.http.post<any>(`${this.baseUrl}/translate`, {
+      texts,
+      target_language: targetLanguage,
+    });
+  }
+
   // Fetch quiz questions based on topic or file
   getQuizQuestions(userId: string, topic?: string, file?: File, numQuestions: number = 5, level?: string): Observable<any> {
     const formData = new FormData();

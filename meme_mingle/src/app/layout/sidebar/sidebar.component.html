@@ -16,7 +16,7 @@
         class="collapse-btn"
         aria-label="Toggle Sidebar"
         (click)="toggleSidebar()"
-        title="Toggle Sidebar"
+        title="{{ translatedTexts['Toggle Sidebar'] || 'Toggle Sidebar' }}"
       >
         {{ toggleIcon }}
       </button>
@@ -25,15 +25,15 @@
     <!-- Top Menu Items -->
     <div class="menu-items">
       <!-- New Chat -->
-      <button class="menu-btn" title="New Chat" routerLink="/main/live-conversion">
+      <button class="menu-btn" title="{{ translatedTexts['New Chat'] || 'New Chat' }}" routerLink="/main/live-conversion">
         <i class="bi bi-plus-square-fill"></i>
-        <span>New Chat</span>
+        <span data-translate>New Chat</span>
       </button>
 
       <!-- Quiz-ai -->
-      <button class="menu-btn" title="Quiz AI" routerLink="/main/quiz-ai">
+      <button class="menu-btn" title="{{ translatedTexts['Quiz AI'] || 'Quiz AI' }}" routerLink="/main/quiz-ai">
         <i class="bi bi-list-check"></i>
-        <span>Quiz AI</span>
+        <span data-translate>Quiz AI</span>
         <span class="score-badge"  title="Total Score" *ngIf="totalScore !== null">{{ totalScore }}</span>
       </button>
     </div>
@@ -42,20 +42,20 @@
   <!-- Bottom Menu Items -->
   <div class="menu-bottom">
     <!-- Profile with Picture -->
-    <button class="menu-btn profile-btn" title="Profile" routerLink="/main/user-profile">
+    <button class="menu-btn profile-btn" title="{{ translatedTexts['Profile'] || 'Profile' }}" routerLink="/main/user-profile">
       <img
         [src]="userProfilePicture"
         alt="User Avatar"
         class="user-avatar"
         (error)="userProfilePicture = '/assets/img/user_avatar.jpg'"
       />
-      <span>Profile</span>
+      <span data-translate>Profile</span>
     </button>
 
     <!-- Log Out -->
-    <button class="menu-btn" (click)="signOut()">
-      <i class="material-icons" title="Logout">logout</i>
-      <span>Log Out</span>
+    <button class="menu-btn" (click)="signOut()" title="{{ translatedTexts['Log Out'] || 'Log Out' }}">
+      <i class="material-icons" >logout</i>
+      <span data-translate>Log Out</span>
     </button>
   </div>
 </aside>

@@ -33,6 +33,8 @@ from .ai_agent import AIAgent
 from services.azure_mongodb import MongoDBClient
 from services.azure_form_recognizer import extract_text_from_file
 from services.text_to_speech_service import text_to_speech
+from models.user import User
+from services.db.user import get_user_profile_by_user_id
 # Constants
 from utils.consts import SYSTEM_MESSAGE
 from pydub import AudioSegment
@@ -587,9 +589,17 @@ class MemeMingleAIAgent(AIAgent):
             })
 
             introduction = """
-        This is your first session with the patient. Be polite and introduce yourself in a friendly and inviting manner.
-        In this session, do your best to understand what the user hopes to achieve through your service, and derive a therapy style fitting to their needs.
-        """
+This is your first session with the student. Be polite and introduce yourself in a friendly and inviting manner.
+
+In this session, do your best to understand what the user hopes to achieve through your service. Ask questions to uncover the user's academic goals, subjects of interest, and preferred learning methods (visual, auditory, kinesthetic) to derive an educational approach that fits their needs.
+
+**Language Assurance:**
+- Confirm the user's preferred language at the beginning of the session.
+- Inform the user that you will respond **only** in their preferred language. If the preferred language is Gujarati (`"gu"`), ensure all communications are in Gujarati.
+- If you encounter limitations in the preferred language, notify the user and offer to continue in English.
+
+Explain that you are here to provide personalized tutoring, mentorship, and career guidance to support their educational journey. Ensure the student feels welcomed, understood, and excited to embark on their learning experience with your assistance.
+"""
 
             full_system_message = ''.join([system_message.content, introduction])
             system_message.content = full_system_message
@@ -696,7 +706,18 @@ class MemeMingleAIAgent(AIAgent):
             tuple: (audio_url, filename)
         """
         try:
-            audio_data = text_to_speech(text)
+            # Fetch the user object
+            user = User.find_by_id(user_id)
+            
+            if not user:
+                print(f"User with ID {user_id} not found.")
+                return None
+
+            # Get the preferred language, default to 'en' if not set
+            preferred_language = user.preferredLanguage or 'en'
+            audio_data = text_to_speech(text, preferred_language=preferred_language)
+            if not audio_data:
+                raise ValueError("Text-to-speech conversion returned no audio data.")
             # Define a unique filename
             filename = f"{user_id}_{chat_id}_{turn_id}.wav"
             file_path = os.path.join(self.generated_audio_dir, filename)
@@ -749,40 +770,53 @@ You are given a list of possible facial expressions and animations. Based on the
 - Facial expressions: {', '.join(facial_expressions_list)}
 - Animations: {', '.join(animations_list)}
 
-Only respond with valid choices. If you are unsure, default to:
-  facial_expression = "default"
-  animation = "Idle"
-
-Return your answer in JSON format with two keys: "facial_expression" and "animation".
-
-AI Response to analyze:
-"{ai_response}"
-"""
+Rules:
+    1. Only respond with valid JSON. Example:
+       {{
+           "facial_expression": "smile",
+           "animation": "Laughing"
+       }}
+    2. Do not include any extra text or explanation outside the JSON object.
+    3. Ensure strict JSON formatting without any deviations.
+    4. If the sentiment or tone is unclear, choose:
+       {{
+           "facial_expression": "default",
+           "animation": "Idle"
+       }}
+    
+    AI Response:
+    "{ai_response}"
+    """
 
         try:
             # Invoke the LLM with the prompt
             response = self.llm.invoke(prompt)
+            logging.info(f"Raw LLM response: {response.content}")
 
-            # Attempt to parse the LLM response as JSON
-            parsed = {}
-            try:
-                parsed = json.loads(response.content)
-            except json.JSONDecodeError:
-                # If the LLM doesn't return valid JSON, fallback to defaults
-                logging.warning("LLM returned non-JSON response. Reverting to defaults.")
-                parsed = {
-                    "facial_expression": "default",
-                    "animation": "Idle"
-                }
+            # Strip code fences if present
+            content = response.content.strip()
+            if content.startswith("```") and content.endswith("```"):
+                content = '\n'.join(content.split('\n')[1:-1])
 
-            # Extract the fields or use defaults if absent
+            # Parse the LLM response as JSON
+            for attempt in range(3):  # Retry up to 3 times
+                try:
+                    parsed = json.loads(content)
+                    break
+                except json.JSONDecodeError:
+                    logging.warning(f"LLM returned non-JSON response on attempt {attempt + 1}: {content}")
+                    if attempt == 2:  # Max retries reached
+                        parsed = {"facial_expression": "default", "animation": "Idle"}
+
+            # Extract fields and validate them
             facial_expression = parsed.get("facial_expression", "default")
             animation = parsed.get("animation", "Idle")
 
-            # Validate the results
             if facial_expression not in facial_expressions_list:
+                logging.warning(f"Invalid facial expression: {facial_expression}. Defaulting to 'default'.")
                 facial_expression = "default"
             if animation not in animations_list:
+                logging.warning(f"Invalid animation: {animation}. Defaulting to 'Idle'.")
                 animation = "Idle"
 
             return {

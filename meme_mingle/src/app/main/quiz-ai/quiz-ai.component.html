@@ -1,6 +1,6 @@
 
 <div class="quiz-container">
-  <h1>AI-Powered Quiz</h1>
+  <h1 data-translate>AI-Powered Quiz</h1>
 
   <!-- Quiz Generation Section -->
   <div
@@ -8,7 +8,7 @@
     [@slideLeft]
   >
     <mat-card class="quiz-generation-card">
-      <mat-card-title style="align-self: center; padding: 2rem;">Generate Your Quiz</mat-card-title>
+      <mat-card-title style="align-self: center; padding: 2rem;">{{ translatedTexts['Generate Your Quiz'] || 'Generate Your Quiz' }}</mat-card-title>
       <mat-card-content>
         <form [formGroup]="quizForm" (ngSubmit)="generateQuiz()">
           <!-- Flex Container for Topic and Level Selection -->
@@ -16,9 +16,9 @@
             <!-- Select Topic -->
             <div class="flex-item">
               <mat-form-field appearance="fill">
-                <mat-label>Select Topic</mat-label>
+                <mat-label >{{ translatedTexts['Select Topic'] || 'Select Topic' }}</mat-label>
                 <mat-select formControlName="topic">
-                  <mat-option *ngFor="let topic of topics" [value]="topic">{{ topic }}</mat-option>
+                  <mat-option *ngFor="let topic of topics" [value]="topic">{{ translatedTexts[topic] || topic }}</mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
@@ -26,9 +26,9 @@
             <!-- Select Level -->
             <div class="flex-item">
               <mat-form-field appearance="fill" class="full-width">
-                <mat-label>Select Level</mat-label>
+                <mat-label data-translate>{{ translatedTexts['Select Level'] || 'Select Level' }}</mat-label>
                 <mat-select formControlName="level">
-                  <mat-option *ngFor="let level of levels" [value]="level">{{ level | titlecase }}</mat-option>
+                  <mat-option *ngFor="let level of levels" [value]="level">{{ translatedTexts[level] || level | titlecase }}</mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
@@ -38,7 +38,7 @@
           <div class="form-group file-upload-group">
             <label for="fileUpload" class="file-upload-label">
               <button mat-raised-button color="accent" type="button" (click)="fileInput.click()" aria-label="Upload File">
-                <mat-icon>upload</mat-icon> Upload File
+                <mat-icon>upload</mat-icon> {{ translatedTexts['Upload File'] || 'Upload File' }}
               </button>
             </label>
             <input
@@ -60,14 +60,14 @@
           </div>
           <div class="form-group">
             <mat-form-field appearance="fill">
-              <mat-label>Number of Questions</mat-label>
+              <mat-label>{{ translatedTexts['Number of Questions'] || 'Number of Questions' }}</mat-label>
               <input matInput type="number" formControlName="numQuestions" min="1" max="20" />
             </mat-form-field>
           </div>
 
           <button mat-raised-button color="primary" type="submit" [disabled]="quizForm.invalid || isProcessing">
             <ng-container *ngIf="!isProcessing; else processingTemplate">
-              Generate Quiz
+              {{ translatedTexts['Generate Quiz'] || 'Generate Quiz' }}
             </ng-container>
             <ng-template #processingTemplate>
               <div class="processing-dots">
@@ -98,7 +98,9 @@ class="quiz-section"
     >
       <mat-icon>arrow_back</mat-icon>
     </button>
-    <span class="quiz-title-text">{{ currentTopic ? currentTopic + ' Quiz' : 'Quiz' }}</span>
+    <span class="quiz-title-text">{{ currentTopic
+      ? (translatedTexts[currentTopic] || currentTopic) + ' ' + (translatedTexts['Quiz'] || 'Quiz')
+      : (translatedTexts['Quiz'] || 'Quiz') }}</span>
   </mat-card-header>
   
 
@@ -122,14 +124,14 @@ class="quiz-section"
                 class="option-button"
                 
               >
-                {{ option }}
+              {{ translatedTexts[option] || option }}
               </mat-radio-button>
             </mat-radio-group>
           </div>
 
           <div *ngIf="question.question_type === 'SA'" class="sa-group">
             <mat-form-field appearance="outline" class="answer-field">
-              <mat-label>Your Answer</mat-label>
+              <mat-label>{{ translatedTexts['Your Answer'] || 'Your Answer' }}</mat-label>
               <input matInput [formControlName]="i" />
             </mat-form-field>
           </div>
@@ -145,7 +147,7 @@ class="quiz-section"
           class="submit-button"
         >
           <ng-container *ngIf="!isProcessing; else processingTemplate">
-            Submit Answers
+            {{ translatedTexts['Submit Answers'] || 'Submit Answers' }}
           </ng-container>
           <ng-template #processingTemplate>
             <div class="processing-dots">
@@ -170,7 +172,7 @@ class="quiz-section"
   <mat-card class="feedback-card">
     <mat-card-title class="feedback-title">
       <mat-icon class="feedback-icon">feedback</mat-icon>
-      Quiz Feedback
+      {{ translatedTexts['Quiz Feedback'] || 'Quiz Feedback' }}
     </mat-card-title>
     <mat-card-content>
       <!-- Score Section -->
@@ -178,8 +180,8 @@ class="quiz-section"
         <div class="score-box">
           <mat-icon class="score-icon" color="primary">emoji_events</mat-icon>
           <div>
-            <p class="score-text">Your Score</p>
-            <h2>{{ feedback.score }} / {{ feedback.total_possible_points }}</h2>
+            <p class="score-text" data-translate>Your Score</p>
+            <h2 data-translate>{{ feedback.score }} / {{ feedback.total_possible_points }}</h2>
           </div>
         </div>
         <div class="total-score-box">
@@ -208,9 +210,9 @@ class="quiz-section"
               </mat-panel-description>
             </mat-expansion-panel-header>
             <div class="feedback-details">
-              <p><strong>Your Answer:</strong> {{ fb.user_answer }}</p>
-              <p><strong>Correct Answer:</strong> {{ fb.correct_answer }}</p>
-              <p><strong>Feedback:</strong> <span [innerHTML]="fb.sanitizedFeedback"></span></p>
+              <p><strong>{{ translatedTexts['Your Answer'] || 'Your Answer' }}:</strong> {{ fb.user_answer }}</p>
+              <p><strong>{{ translatedTexts['Correct Answer'] || 'Correct Answer' }}:</strong> {{ fb.correct_answer }}</p>
+              <p><strong>{{ translatedTexts['Feedback'] || 'Feedback' }}:</strong> <span [innerHTML]="fb.sanitizedFeedback"></span></p>
             </div>
           </mat-expansion-panel>
         </mat-accordion>
@@ -226,7 +228,7 @@ class="quiz-section"
     aria-label="Generate a new quiz"
   >
     <ng-container *ngIf="!isProcessing; else processingTemplate">
-      <mat-icon>refresh</mat-icon> Generate New Quiz
+      <mat-icon>refresh</mat-icon> {{ translatedTexts['Generate New Quiz'] || 'Generate New Quiz' }}
     </ng-container>
     <ng-template #processingTemplate>
       <div class="processing-dots" aria-label="Processing">
@@ -246,7 +248,7 @@ class="quiz-section"
   <!-- Total Score Section -->
   <div class="total-score-section">
     <mat-card>
-      <mat-card-title>Your Total Score</mat-card-title>
+      <mat-card-title>{{ translatedTexts['Your Total Score'] || 'Your Total Score'}}</mat-card-title>
       <mat-card-content>
         <p>{{ totalScore }}</p>
       </mat-card-content>

@@ -1,7 +1,7 @@
 <div class="profile-page">
 
   <!-- Page Title -->
-  <h1 class="profile-title">My Profile</h1>
+  <h1 class="profile-title" data-translate>My Profile</h1>
   
   <!-- Main Card Container -->
   <form [formGroup]="profileForm" class="profile-card">
@@ -28,7 +28,7 @@
 
       <!-- Name -->
       <div class="field-row">
-        <label>Name:</label>
+        <label data-translate>Name:</label>
         <!-- Use formControlName instead of [value] -->
         <input 
           type="text"
@@ -39,7 +39,7 @@
 
       <!-- Username -->
       <div class="field-row">
-        <label>Username:</label>
+        <label data-translate>Username:</label>
         <!-- Keep it disabled if you don’t want them changing it -->
         <input 
           type="text"
@@ -50,7 +50,7 @@
 
       <!-- Email -->
       <div class="field-row">
-        <label>Email:</label>
+        <label data-translate>Email:</label>
         <input 
           type="email"
           formControlName="email"
@@ -60,7 +60,7 @@
 
       <!-- Gender (Slider) -->
       <div class="field-row gender-row">
-        <label>Gender:</label>
+        <label data-translate>Gender:</label>
         <div class="gender-slider">
           <!-- Left arrow -->
           <button type="button" class="nav-arrow" (click)="changeGender(-1)">
@@ -69,7 +69,7 @@
 
           <!-- Current Gender -->
           <span class="gender-value">
-            {{ genders[genderIndex] | titlecase }}
+            {{ translatedTexts[genders[genderIndex]] || genders[genderIndex] | titlecase }}
           </span>
 
           <!-- Right arrow -->
@@ -81,7 +81,7 @@
       
       <!-- Place of Residence -->
       <div class="field-row">
-        <label>Place of Residence:</label>
+        <label data-translate>Place of Residence:</label>
         <input 
           type="text"
           formControlName="placeOfResidence"
@@ -91,7 +91,7 @@
 
       <!-- Field of Study -->
       <div class="field-row">
-        <label>Field of Study:</label>
+        <label data-translate>Field of Study:</label>
         <input 
           type="text"
           formControlName="fieldOfStudy"
@@ -101,16 +101,15 @@
 
       <!-- Preferred Language -->
       <div class="field-row">
-        <label>Language:</label>
+        <label data-translate>Language:</label>
         <mat-form-field appearance="outline" >
-          <mat-label style="color: #ffb84d; ">Preferred Language</mat-label>
+          <mat-label style="color: #ffb84d;" >{{ translatedTexts['Preferred Language'] ||'Preferred Language' }}</mat-label>
           <mat-select formControlName="preferredLanguage" style="color: #ffffff; ">
             <mat-option
               *ngFor="let lang of supportedLanguages"
               [value]="lang.code"
-              
             >
-              {{ lang.label }}
+              {{ translatedTexts[lang.label] ||lang.label }}
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -126,7 +125,7 @@
         (click)="onSubmit()"
         [disabled]="isSubmitting"
       >
-        {{ isSubmitting ? 'Updating...' : 'Edit Profile' }}
+      {{ isSubmitting ? (translatedTexts['Updating...'] || 'Updating...') : (translatedTexts['Edit Profile'] || 'Edit Profile') }}
       </button>
 
       <!-- Delete Account Button -->
@@ -136,7 +135,7 @@
       (click)="openDeleteConfirmationDialog()"
       [disabled]="isSubmitting"
     >
-      {{ isSubmitting ? 'Processing...' : 'Delete Account' }}
+    {{ isSubmitting ? (translatedTexts['Processing...'] || 'Processing...') : (translatedTexts['Delete Account'] || 'Delete Account') }}
     </button>
     </div>
 

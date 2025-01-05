@@ -18,11 +18,12 @@ export class SidebarComponent implements OnInit {
   userProfilePicture: string = '/assets/img/user_avtar.jpg'; // Default user avatar
   backendUrl = environment.baseUrl; // Backend URL for fetching user profile picture
   totalScore: number = 0;
-
+  preferredLanguage: string = 'en';
+  translatedTexts: { [key: string]: string } = {};
   constructor(
     private sidebarService: SidebarService,
     private appService: AppService,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -30,13 +31,52 @@ export class SidebarComponent implements OnInit {
     this.sidebarService.getSidebarState().subscribe((visible: boolean) => {
       this.sidebarVisible = visible;
     });
+    this.preferredLanguage = localStorage.getItem('preferredLanguage') || 'en';
 
+    if (this.preferredLanguage !== 'en') {
+      this.translateContent(this.preferredLanguage);
+    }
     // Fetch user profile picture
     this.fetchUserProfile();
     this.fetchTotalScore();
   }
 
-  // Toggles the sidebar visibility
+  // Translate content to the target language
+  private translateContent(targetLanguage: string) {
+    const elementsToTranslate = document.querySelectorAll('[data-translate]');
+    const textsToTranslate = Array.from(elementsToTranslate).map(
+      (el) => el.textContent?.trim() || ''
+    );
+
+    // Include additional texts that are not in data-translate attributes
+    const additionalTexts = [
+      'Toggle Sidebar',
+    ];
+    const allTextsToTranslate = [...textsToTranslate, ...additionalTexts];
+
+    this.appService
+      .translateTexts(allTextsToTranslate, targetLanguage)
+      .subscribe((response) => {
+        const translations = response.translations;
+
+        // Translate texts from data-translate elements
+        elementsToTranslate.forEach((element, index) => {
+          const originalText = textsToTranslate[index];
+          this.translatedTexts[originalText] = translations[index];
+
+          // Update directly if it's a regular DOM element
+          if (!(element.tagName.startsWith('MAT-'))) {
+            element.textContent = translations[index];
+          }
+        });
+
+        // Handle additional texts
+        additionalTexts.forEach((text, index) => {
+          const translatedText = translations[textsToTranslate.length + index];
+          this.translatedTexts[text] = translatedText;
+        });
+      });
+  }
  // Toggles the sidebar visibility
  toggleSidebar(): void {
   this.sidebarVisible = !this.sidebarVisible;

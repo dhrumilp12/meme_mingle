@@ -48,7 +48,9 @@ export class UserProfileComponent implements OnInit {
   selectedFile: File | null = null;
   selectedImageUrl: any = null;
   currentProfilePicture: any = '';
-
+ 
+  preferredLanguage: string = 'en';
+  translatedTexts: { [key: string]: string } = {};
   /** Supported languages for the mat-select */
   supportedLanguages = supportedLanguages;
 
@@ -61,7 +63,7 @@ export class UserProfileComponent implements OnInit {
     private appService: AppService,
     private router: Router,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
   ) {}
 
   ngOnInit(): void {
@@ -97,8 +99,74 @@ export class UserProfileComponent implements OnInit {
     });
 
     this.fetchUserProfile();
+
+    this.preferredLanguage = localStorage.getItem('preferredLanguage') || 'en';
+
+    if (this.preferredLanguage !== 'en') {
+      this.translateContent(this.preferredLanguage);
+    }
+
   }
 
+  // Translate content to the target language
+  private translateContent(targetLanguage: string) {
+    const elementsToTranslate = document.querySelectorAll('[data-translate]');
+    const textsToTranslate = Array.from(elementsToTranslate).map(
+      (el) => el.textContent?.trim() || ''
+    );
+
+    // Include additional texts that are not in data-translate attributes
+    const additionalTexts = [
+      'male',
+      'female',
+      'other',
+      'English',
+      'Spanish',
+      'French',
+      'German',
+      'Chinese',
+      'Japanese',
+      'Korean',
+      'Russian',
+      'Arabic',
+      'Hindi',
+      'Portuguese',
+      'Italian',
+      'Gujarati',
+      'Bengali',
+      'Preferred Language',
+      'Telugu',
+      'Processing...',
+      'Edit Profile',
+      'Delete Account',
+      'Updating...'
+    ];
+    const allTextsToTranslate = [...textsToTranslate, ...additionalTexts];
+
+    this.appService
+      .translateTexts(allTextsToTranslate, targetLanguage)
+      .subscribe((response) => {
+        const translations = response.translations;
+
+        // Translate texts from data-translate elements
+        elementsToTranslate.forEach((element, index) => {
+          const originalText = textsToTranslate[index];
+          this.translatedTexts[originalText] = translations[index];
+
+          // Update directly if it's a regular DOM element
+          if (!(element.tagName.startsWith('MAT-'))) {
+            element.textContent = translations[index];
+          }
+        });
+
+        // Handle additional texts
+        additionalTexts.forEach((text, index) => {
+          const translatedText = translations[textsToTranslate.length + index];
+          this.translatedTexts[text] = translatedText;
+        });
+      });
+  }
+  
   /**
    * Custom validator to ensure username is alphanumeric
    */
@@ -227,6 +295,15 @@ export class UserProfileComponent implements OnInit {
           duration: 3000,
           horizontalPosition: 'center'
         });
+
+        // Update preferred language
+      const newPreferredLanguage = this.profileForm.get('preferredLanguage')?.value;
+      if (newPreferredLanguage && newPreferredLanguage !== this.preferredLanguage) {
+        this.preferredLanguage = newPreferredLanguage;
+        localStorage.setItem('preferredLanguage', newPreferredLanguage);
+        this.translateContent(newPreferredLanguage);
+      }
+
         this.isSubmitting = false;
       },
       error: (error) => {
