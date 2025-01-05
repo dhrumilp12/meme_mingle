@@ -10,6 +10,10 @@ from utils.similar_answer import is_similar
 import datetime
 from services.azure_open_ai import get_azure_openai_llm
 from services.azure_form_recognizer import ALLOWED_MIME_TYPES
+import json
+from services.db.user import get_user_profile_by_user_id
+from utils.consts import language_mapping
+
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -55,7 +59,23 @@ def get_questions(user_id):
     if not topic and not uploaded_file:
         return jsonify({"error": "At least one of 'topic' or 'file' must be provided."}), 400
 
-    result = generate_questions(user_id, topic, file_content, file_mime_type, num_questions, level)
+    # Fetch user's preferred language
+    user_profile_json = get_user_profile_by_user_id(user_id)
+    if not user_profile_json:
+        return jsonify({"error": "User profile not found."}), 404
+    
+    user_profile = json.loads(user_profile_json)
+    preferred_language = user_profile.get('preferredLanguage', 'en')  # Default to English
+
+    result = generate_questions(
+        user_id, 
+        topic, 
+        file_content, 
+        file_mime_type, 
+        num_questions, 
+        level,
+        language=preferred_language
+    )
 
     if "error" in result:
         return jsonify({"error": result["error"]}), 500
@@ -101,6 +121,14 @@ def submit_answers(quiz_id):
     feedback_list = []
     llm = get_azure_openai_llm()  # Initialize LLM for generating feedback
 
+    # Fetch user's preferred language
+    user_profile_json = get_user_profile_by_user_id(user_id)
+    if not user_profile_json:
+        return jsonify({"error": "User profile not found."}), 404
+    
+    user_profile = json.loads(user_profile_json)
+    preferred_language = user_profile.get('preferredLanguage', 'en')
+    language_name = language_mapping.get(preferred_language, 'English')  # Default to English if code not found
     # Start a session for transaction
     with db_client.start_session() as session:
         try:
@@ -164,14 +192,14 @@ def submit_answers(quiz_id):
                         if not is_correct:
                             # Prepare prompt for feedback generation
                             prompt = (
-                            f"You are an educational assistant helping users (5-15 year old) understand their mistakes in Python quizzes.\n\n"
-                            f"Question: {question['question']}\n"
-                            f"User's Answer: {ans['user_answer']}\n"
-                            f"Correct Answer: {question['correct_answer']}\n\n"
-                            f"Provide a constructive and detailed feedback that explains why the user's answer is incorrect and how to arrive at the correct answer. "
-                            f"Ensure the feedback is clear, educational, and encourages the user to understand the concept better.\n\n"
-                            f"Feedback:"
-                        )
+                                f"You are an educational assistant helping users (5-15 years old) understand their mistakes in quizzes.\n\n"
+                                f"Question: {question['question']} ({language_name})\n"
+                                f"User's Answer: {ans['user_answer']} ({language_name})\n"
+                                f"Correct Answer: {question['correct_answer']} ({language_name})\n\n"
+                                f"Provide constructive and detailed feedback in {language_name} that explains why the user's answer is incorrect and how to arrive at the correct answer. "
+                                f"Ensure the feedback is clear, educational, and encourages the user to understand the concept better.\n\n"
+                                f"Feedback:"
+                            )
 
                             try:
                                 feedback_response = llm(prompt)

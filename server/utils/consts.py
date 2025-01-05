@@ -76,3 +76,23 @@ AGENT_FACTS = [
         "fact": "Your role is to provide Quality Education to students."
     }
 ]
+
+"""Language mapping for language codes to language names."""
+language_mapping = {
+        'en': 'English',
+        'te': 'Telugu',
+        'es': 'Spanish',
+        'fr': 'French',
+        'de': 'German',
+        'zh': 'Chinese',
+        'ja': 'Japanese',
+        'ko': 'Korean',
+        'ru': 'Russian',
+        'ar': 'Arabic',
+        'hi': 'Hindi',
+        'pt': 'Portuguese',
+        'it': 'Italian',
+        'gu': 'Gujarati',
+        'bn': 'Bengali',
+        'de': 'German',
+    }

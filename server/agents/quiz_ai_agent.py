@@ -6,8 +6,8 @@ from models.quiz import Quiz, Question
 from bson import ObjectId
 import datetime
 from services.azure_form_recognizer import extract_text_from_file
-
-def generate_questions(user_id, topic=None, file_content=None, file_mime_type=None, num_questions=5, level='medium'):
+from utils.consts import language_mapping
+def generate_questions(user_id, topic=None, file_content=None, file_mime_type=None, num_questions=5, level='medium', language='en'):
     """
     Generates questions based on a given topic and stores them in the database.
 
@@ -15,10 +15,14 @@ def generate_questions(user_id, topic=None, file_content=None, file_mime_type=No
         user_id (str): The ID of the user requesting the quiz.
         topic (str): The topic for which to generate questions.
         num_questions (int): The number of questions to generate.
-
+        level (str): Difficulty level of the questions.
+        language (str): Language code (e.g., 'en' for English, 'gu' for Gujarati).
+    
     Returns:
         dict: A dictionary containing the quiz ID and the questions without correct answers.
     """
+    
+    language_name = language_mapping.get(language, 'English')  # Default to English if code not found
     # Validate the level
     valid_levels = ['easy', 'medium', 'hard']
     if level.lower() not in valid_levels:
@@ -38,9 +42,9 @@ def generate_questions(user_id, topic=None, file_content=None, file_mime_type=No
         base_prompt += f"Use the following content to generate quiz questions:\n\n{extracted_text}\n\n"
 
     if topic:
-        base_prompt += f"Generate {num_questions} {level.lower()} level questions about {topic}. "
+        base_prompt += f"Generate {num_questions} {level.lower()} level questions about {topic} in {language_name}. "
     else:
-        base_prompt += f"Generate {num_questions} {level.lower()} level questions. "
+        base_prompt += f"Generate {num_questions} {level.lower()} level questions in {language_name}. "
 
     if not topic and not file_content:
         return {"error": "Either a topic or a file must be provided to generate questions."}

@@ -16,7 +16,6 @@ from email_validator import validate_email, EmailNotValidError
 from secrets import token_urlsafe
 from flask_mail import Message
 from utils.reset_tokens import generate_reset_token, verify_reset_token
-from utils.translate_decorator import translate_response
 from werkzeug.utils import secure_filename
 """Step 2: Configurations"""
 load_dotenv()
@@ -42,7 +41,6 @@ def allowed_file(filename):
 
 #Route for user registration
 @auth_routes.post('/user/signup')
-@translate_response
 def signup():
     try:
         logging.info("Starting user registration process")
@@ -107,7 +105,7 @@ def signup():
 
 #Route for user login
 @auth_routes.post('/user/login')
-@translate_response
+
 def login():
     try:
         # Get the identifier and password from the request
@@ -154,7 +152,7 @@ def login():
 
 #Route for user logout
 @auth_routes.post('/user/logout')
-@translate_response
+
 @jwt_required()
 def logout():
     # JWT Revocation or Blacklisting could be implemented here if needed
@@ -168,7 +166,6 @@ def logout():
 
 # Route to start Google OAuth
 @auth_routes.route('/auth/google')
-@translate_response
 def google_login():
     redirect_uri = url_for('auth.google_callback', _external=True)
     nonce = token_urlsafe(16)  # Generate a secure random nonce
@@ -178,7 +175,6 @@ def google_login():
 
 # Route to handle Google OAuth callback
 @auth_routes.route('/auth/google/callback')
-@translate_response
 def google_callback():
     try:
         token = oauth.google.authorize_access_token()
@@ -250,7 +246,6 @@ def google_callback():
 
 # Route to request password reset
 @auth_routes.post('/user/request_reset')
-@translate_response
 def request_password_reset():
     try:
         data = request.get_json()
@@ -294,7 +289,6 @@ def request_password_reset():
 
 # Route to reset password
 @auth_routes.post('/user/reset_password/<token>')
-@translate_response
 def reset_password(token):
     new_password = request.json.get('password')
     user = verify_reset_token(token)
@@ -308,11 +302,3 @@ def reset_password(token):
 
 
 
-@auth_routes.get('/user/greet')
-@jwt_required()
-@translate_response
-def greet_user():
-    """
-    A protected route that returns a greeting message.
-    """
-    return {"message": "Hello, welcome to our application!"}, 200
