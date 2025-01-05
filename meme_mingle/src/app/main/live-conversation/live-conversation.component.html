@@ -16,8 +16,14 @@
       <!-- Dropdown for Selecting Historical Figure -->
       <mat-form-field appearance="fill" class="role-select">
         <mat-label>Select Your Mentor</mat-label>
-        <mat-select [(value)]="selectedRole">
+        <mat-select [(value)]="selectedRole" (selectionChange)="updateSelectedRoleImage($event)">
           <mat-option *ngFor="let figure of historicalFigures" [value]="figure.value">
+            <img [src]="figure.imageUrl" alt="{{ figure.display }}'s portrait" class="figure-image" style="flex-shrink: 0; 
+            width: 32px;
+            height: 32px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-right: 8px;" />
             {{ figure.display }} - {{ figure.field }}
           </mat-option>
         </mat-select>
@@ -48,7 +54,7 @@
       >
       <div class="message">
         <img
-          [src]="msg.sender === 'User' ? userProfilePicture : 'assets/img/banner.png'"
+          [src]="msg.sender === 'User' ? userProfilePicture : selectedRoleImageUrl"
           alt="{{ msg.sender }} Avatar"
           class="avatar"
         />

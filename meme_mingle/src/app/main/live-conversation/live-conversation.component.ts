@@ -46,6 +46,7 @@ interface HistoricalFigure {
   display: string;
   value: string;
   field: string;
+  imageUrl?: string; // Add the imageUrl property
 }
 
 @Component({
@@ -138,17 +139,18 @@ export class LiveConversationComponent implements OnInit, OnDestroy {
   userProfilePicture: string = '';
   userInputText: string = '';
   selectedFile: File | null = null;
-  selectedRole: string = ''; // New property to hold the selected role
+  selectedRole: string = ''; 
+  selectedRoleImageUrl: string = 'assets/img/banner.png';
   historicalFigures: HistoricalFigure[] = [
-    { display: 'Ada Lovelace', value: 'Ada Lovelace', field: 'Computer Science' },
-    { display: 'Albert Einstein', value: 'Albert Einstein', field: 'Physics' },
-    { display: 'Aryabhata', value: 'Aryabhata', field: 'mathematician' },
-    { display: 'Galileo Galilei', value: 'Galileo Galilei', field: 'Astronomy' },
-    { display: 'Isaac Newton', value: 'Isaac Newton', field: 'Mathematics' },
-    { display: 'Leonardo da Vinci', value: 'Leonardo da Vinci', field: 'Art and Science' },
-    { display: 'Marie Curie', value: 'Marie Curie', field: 'Chemistry' },
-    { display: 'Nikola Tesla', value: 'Nikola Tesla', field: 'Electrical Engineering' },
-    { display: 'Thomas Edison', value: 'Thomas Edison', field: 'Inventing' },
+    { imageUrl:'assets/roles/Ada_Lovelace.png', display: 'Ada Lovelace', value: 'Ada Lovelace', field: 'Computer Science' },
+    { imageUrl:'assets/roles/Albert_Einstein.jpg', display: 'Albert Einstein', value: 'Albert Einstein', field: 'Physics' },
+    { imageUrl:'assets/roles/Aryabhatta.jpg', display: 'Aryabhatta', value: 'Aryabhatta', field: 'mathematician' },
+    { imageUrl:'assets/roles/Galileo_Galilei.jpg',display: 'Galileo Galilei', value: 'Galileo Galilei', field: 'Astronomy' },
+    { imageUrl:'assets/roles/Isaac_Newton.png', display: 'Isaac Newton', value: 'Isaac Newton', field: 'Mathematics' },
+    { imageUrl:'assets/roles/Leonardo_da_Vinci.jpg',display: 'Leonardo da Vinci', value: 'Leonardo da Vinci', field: 'Art and Science' },
+    { imageUrl:'assets/roles/Marie_Curie.jpg',display: 'Marie Curie', value: 'Marie Curie', field: 'Chemistry' },
+    { imageUrl:'assets/roles/Nikola_Tesla.jpg',display: 'Nikola Tesla', value: 'Nikola Tesla', field: 'Electrical Engineering' },
+    { imageUrl:'assets/roles/Thomas_Edison.jpg',display: 'Thomas Edison', value: 'Thomas Edison', field: 'Inventing' },
     // Add more figures as needed
   ];
   @ViewChild('messagesContainer') private messagesContainer!: ElementRef;
@@ -469,4 +471,11 @@ export class LiveConversationComponent implements OnInit, OnDestroy {
       });
     this.subscriptions.add(chatSub);
   }
+
+
+  updateSelectedRoleImage(event: any): void {
+    const selectedFigure = this.historicalFigures.find(figure => figure.value === event.value);
+    this.selectedRoleImageUrl = selectedFigure?.imageUrl || 'assets/img/banner.png';
+  }
+  
 }
