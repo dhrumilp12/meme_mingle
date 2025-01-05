@@ -11,9 +11,34 @@ import io
 import re
 import emoji
 
+
 load_dotenv()
 
 """Step 2: Define the text-to-speech service"""
+def get_voice_name(preferred_language):
+    """
+    Returns the appropriate voice name based on the preferred language.
+    """
+    voice_mapping = {
+        "en": "en-US-JennyNeural",        # English
+        "es": "es-ES-ElviraNeural",      # Spanish
+        "fr": "fr-FR-DeniseNeural",      # French
+        "de": "de-DE-KatjaNeural",       # German
+        "zh": "zh-CN-XiaoxiaoNeural",    # Chinese
+        "ja": "ja-JP-NanamiNeural",      # Japanese
+        "ko": "ko-KR-SunHiNeural",       # Korean
+        "ru": "ru-RU-SvetlanaNeural",    # Russian
+        "ar": "ar-SA-ZariyahNeural",     # Arabic
+        "hi": "hi-IN-SwaraNeural",       # Hindi
+        "pt": "pt-BR-FranciscaNeural",   # Portuguese
+        "it": "it-IT-ElsaNeural",        # Italian
+        "gu": "gu-IN-DhwaniNeural",      # Gujarati
+        "bn": "bn-IN-TanishaaNeural",    # Bengali
+        "te": "te-IN-ShrutiNeural",      # Telugu
+        # Add more languages and their corresponding voices here
+    }
+    return voice_mapping.get(preferred_language, "en-US-JennyNeural")
+
 def clean_text(text):
     """
     Cleans the input text by removing markdown, symbols, and sanitizing links.
@@ -38,7 +63,7 @@ def clean_text(text):
 
     return text.strip()
 
-def text_to_speech(text_input, voice_name="en-US-JennyNeural", style=None):
+def text_to_speech(text_input, preferred_language="en", style=None):
     """
     Converts cleaned text to speech using Azure Speech SDK with specified voice and style.
 
@@ -62,6 +87,9 @@ def text_to_speech(text_input, voice_name="en-US-JennyNeural", style=None):
             return None
         
         speech_config = speechsdk.SpeechConfig(subscription=speech_key, region=service_region)
+
+        # Select voice based on preferred language
+        voice_name = get_voice_name(preferred_language)
 
         # Construct SSML for enhanced speech synthesis
         if style:

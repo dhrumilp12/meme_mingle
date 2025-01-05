@@ -8,14 +8,14 @@
   <!-- Initial Overlay -->
   <div *ngIf="showOverlay" class="custom-overlay" [@overlayAnimation]>
     <div class="custom-overlay-content">
-      <h2>Welcome to AI Chat</h2>
-      <p>Choose a historical figure to inspire your conversation.</p>
+      <h2>{{ translatedTexts['Welcome to AI Chat'] || 'Welcome to AI Chat' }}</h2>
+      <p >{{ translatedTexts['Choose a historical figure to inspire your conversation.'] || 'Choose a historical figure to inspire your conversation.' }}</p>
       
       <!-- Container for Dropdown and Button -->
      <div class="selection-container">
       <!-- Dropdown for Selecting Historical Figure -->
       <mat-form-field appearance="fill" class="role-select">
-        <mat-label>Select Your Mentor</mat-label>
+        <mat-label>{{ translatedTexts['Select Your Mentor'] || 'Select Your Mentor' }}</mat-label>
         <mat-select [(value)]="selectedRole" (selectionChange)="updateSelectedRoleImage($event)">
           <mat-option *ngFor="let figure of historicalFigures" [value]="figure.value">
             <img [src]="figure.imageUrl" alt="{{ figure.display }}'s portrait" class="figure-image" style="flex-shrink: 0; 
@@ -24,7 +24,7 @@
             object-fit: cover;
             border-radius: 50%;
             margin-right: 8px;" />
-            {{ figure.display }} - {{ figure.field }}
+            {{ translatedTexts[figure.display] || figure.display }} - {{ translatedTexts[figure.field] || figure.field }}
           </mat-option>
         </mat-select>
       </mat-form-field>
@@ -36,7 +36,7 @@
         class="custom-start-conversation-button"
         [disabled]="!selectedRole" 
       >
-        Start Conversation
+      {{ translatedTexts['Start Conversation'] || 'Start Conversation' }}
       </button>
      </div>
     </div>
@@ -82,7 +82,7 @@
       *ngIf="msg.audioUrl && msg.sender === 'Mentor'"
       mat-icon-button
       (click)="playAudio(msg.audioUrl)"
-      matTooltip="Replay Audio"
+      matTooltip="{{ translatedTexts['Replay Audio'] || 'Replay Audio' }}"
       [@buttonClick]
     >
     <i class="bi bi-volume-up-fill"></i>
@@ -116,7 +116,7 @@
     <div class="input-container">
       <textarea
         [(ngModel)]="userInputText"
-        placeholder="Type your message here..."
+        placeholder="{{ translatedTexts['Type your message here...'] || 'Type your message here...' }}"
         (keydown.enter)="sendTextInput()"
       ></textarea>
       <label class="file_upload_button">
@@ -131,7 +131,7 @@
         <button
           mat-mini-fab
           color="primary"
-          matTooltip="File upload"
+          matTooltip="{{ translatedTexts['File upload'] || 'File upload' }}"
           [@buttonClick]
           (click)="fileInput.click()"
         >
@@ -159,11 +159,11 @@
     ></mat-progress-bar>
     
     <div *ngIf="isListening" class="status-message listening" [@statusAnimation]>
-      <mat-icon>mic</mat-icon> Listening...
+      <mat-icon>mic</mat-icon> {{ translatedTexts['AI is listening...'] || 'AI is listening...' }}
     </div>
     
     <div *ngIf="isPlaying" class="status-message speaking" [@statusAnimation]>
-      <mat-icon>volume_up</mat-icon> AI is speaking...
+      <mat-icon>volume_up</mat-icon> {{ translatedTexts['AI is speaking...'] || 'AI is speaking...' }}
     </div>
     
   </div>
@@ -173,7 +173,7 @@
       mat-mini-fab
       color="warn"
       (click)="finalizeChat()"
-      matTooltip="New Conversation"
+      matTooltip="{{ translatedTexts['New Conversation'] || 'New Conversation' }}"
       [@buttonClick]
     >
     <i class="bi bi-plus-square-fill" style="color: white;"></i>
@@ -182,9 +182,7 @@
       mat-mini-fab
       color="primary"
       (click)="toggleListening()"
-      matTooltip="{{
-        isListening ? 'Pause Listening' : 'Resume Listening'
-      }}"
+      [matTooltip]="isListening ? (translatedTexts['Pause Listening'] || 'Pause Listening') : (translatedTexts['Resume Listening'] || 'Resume Listening')"
       [@buttonClick]
     >
       <mat-icon>{{ isListening ? 'mic' : 'mic_off' }}</mat-icon>
@@ -192,7 +190,7 @@
     <button
       mat-mini-fab
       (click)="toggleMute()"
-      matTooltip="{{ isMuted ? 'Unmute' : 'Mute' }}"
+      [matTooltip]="isMuted ? (translatedTexts['Unmute'] || 'Unmute') : (translatedTexts['Mute'] || 'Mute')"
       [@buttonClick]
     >
       <mat-icon>{{ isMuted ? 'volume_off' : 'volume_up' }}</mat-icon>
