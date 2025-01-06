@@ -20,7 +20,7 @@ export const main_routes: Routes = [
       {
         path: 'avatar',
         loadComponent: () =>
-          import('./avatar/avatar.component').then((m) => m.AvatarComponent),
+          import('./chat-ui/chat-ui.component').then((m) => m.ChatUIComponent),
         },
       {
         path: 'quiz-ai',
