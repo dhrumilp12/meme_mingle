@@ -48,7 +48,7 @@ $sidebar-margin: 10px;
 }
 
 .wrapper.sidebar-collapsed .main {
-    margin-left: calc(60px + 2 * $sidebar-margin); /* Adjusted for collapsed sidebar */
+    margin-left: calc(60px + 4 * $sidebar-margin); /* Adjusted for collapsed sidebar */
 }
 
 /* Responsive Adjustments */
@@ -65,5 +65,6 @@ $sidebar-margin: 10px;
 
   .wrapper.sidebar-collapsed .main {
     margin-top: 0;
+    margin-left: calc(60px + 2 * $sidebar-margin);
   }
 }
