@@ -75,10 +75,15 @@
          border: 2px solid #1e1e1e;
          background-color: #ffc966; /* Adjusted for better visibility in collapsed state */
  
-         /* Hide text labels */
-         span {
-           display: none;
-         }
+         /* Ensure text spans are hidden, not the icons */
+         span:not([role="img"]) {
+          display: none; /* Hide only text spans */
+        }
+
+        /* Ensure icons remain visible */
+        span[role="img"] {
+          display: inline; /* Keep icons visible */
+        }
 
          &:hover {
            background-color: #ffb333; /* More vibrant hover color */
@@ -265,9 +270,15 @@
            height: 50px;
            background-color: #ffc966; /* Adjusted for better visibility in collapsed state */
            border: 2px solid #333; /* Darker border */
-           span {
-             display: none;
-           }
+           /* Ensure text spans are hidden, not the icons */
+            span:not([role="img"]) {
+              display: none; /* Hide only text spans */
+            }
+
+            /* Ensure icons remain visible */
+            span[role="img"] {
+              display: inline; /* Keep icons visible */
+            }
 
            &:hover {
              background-color: #ffb333; /* More vibrant hover color */
