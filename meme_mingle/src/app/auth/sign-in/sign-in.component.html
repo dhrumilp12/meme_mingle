@@ -1,12 +1,15 @@
+<!-- Logo at Top-Left -->
+<img src="../../assets/img/logo.png" alt="Logo" class="logo" />
+
 <div class="signin-container">
   <!-- Left 50%: Banner Image -->
   <div class="signin-left">
-    <img src="../../assets/img/banner.png" alt="Banner Image" class="banner-image" />
+    <!-- <img src="../../assets/img/banner.png" alt="Banner Image" class="banner-image" /> -->
   </div>
 
   <!-- Right 50%: Sign-in Form -->
   <div class="signin-right">
-    <div class="card shadow-lg custom-card headermt-3">
+    <div class="card custom-card">
       <div class="card-body ms-3 me-3">
         <!-- Toggle Buttons -->
         <h5 class="switch_sign title fw-bold fs-3">
@@ -31,10 +34,10 @@
         <!-- Sign-In Form -->
         <div *ngIf="isSignInActive">
 
-          <form class = "signin-form" [formGroup]="signInForm" (ngSubmit)="onSubmit()">
+          <form class="signin-form" [formGroup]="signInForm" (ngSubmit)="onSubmit()">
             <!-- Identifier Field -->
-            <div class="mb-3">
-              <label for="identifier" class="fw-bold">Email or Username</label>
+            <div class="mb-3 input-group custom-input-group">
+              <span class="input-group-text"><i class="bi bi-person"></i></span>
               <input
                 type="text"
                 class="form-control custom-input"
@@ -54,14 +57,14 @@
  
 
             <!-- Password Field -->
-            <div class="mb-3">
-              <label for="password" class="fw-bold">Password</label>
+            <div class="mb-3 input-group custom-input-group">
+              <span class="input-group-text"><i class="bi bi-lock"></i></span>
               <input
                 [type]="showPassword ? 'text' : 'password'"
                 class="form-control custom-input"
                 id="password"
                 formControlName="password"
-                placeholder="Password"
+                placeholder="Enter your password"
                 [ngClass]="{
                   'is-invalid':
                     (signInForm.get('password')!.touched && signInForm.get('password')!.invalid) ||
@@ -87,7 +90,7 @@
 
 
             <!-- Submit Button -->
-            <div class="login d-flex flex-column gap-4 justify-content-center ">
+            <div class="login d-flex flex-column gap-3 justify-content-center">
               <button
                 type="submit"
                 class="btn"
@@ -133,4 +136,8 @@
       </div>
     </div>
   </div>
+
+  <!-- Wave Design at Bottom-Left -->
+   <div class="children"></div>
+  <div class="wave"></div>
 </div>
