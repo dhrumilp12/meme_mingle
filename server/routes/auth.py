@@ -167,7 +167,8 @@ def logout():
 # Route to start Google OAuth
 @auth_routes.route('/auth/google')
 def google_login():
-    redirect_uri = url_for('auth.google_callback', _external=True)
+    scheme = "https" if request.is_secure else "http"
+    redirect_uri = url_for('auth.google_callback', _external=True, _scheme=scheme)
     nonce = token_urlsafe(16)  # Generate a secure random nonce
     session['oauth_nonce'] = nonce  # Store the nonce in the session
     logging.info(f"Redirect URI: {redirect_uri}")

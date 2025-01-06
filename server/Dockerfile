@@ -18,23 +18,24 @@ RUN pipx install poetry
 
 COPY poetry.lock pyproject.toml ./
 
-RUN poetry install $(test "$FLASK_ENV" = dev && echo "--only=main") --no-interaction --no-ansi
+RUN poetry install --no-root
 
 COPY . ./
 
 # Remove non-Linux Rhubarb binaries (if applicable)
 RUN rm -rf models/rhubarb/Rhubarb-Lip-Sync-1.13.0-macOS && \
-    rm -rf models/rhubarb/Rhubarb-Lip-Sync-1.13.0-Windows
+    rm -rf rhubarb/Rhubarb-Lip-Sync-1.13.0-Windows
 
 # Rename .env.production
 RUN mv .env.production .env
 
 # Download and install Rhubarb Lip-Sync for Linux
-RUN wget https://github.com/DanielSWolf/rhubarb-lip-sync/releases/download/1.13.0/Rhubarb-Lip-Sync-1.13.0-linux.zip -O rhubarb.zip && \
+RUN wget https://github.com/DanielSWolf/rhubarb-lip-sync/releases/download/v1.13.0/Rhubarb-Lip-Sync-1.13.0-Linux.zip -O rhubarb.zip && \
     unzip rhubarb.zip -d /opt/rhubarb && \
-    chmod +x /opt/rhubarb/rhubarb && \
-    ln -s /opt/rhubarb/rhubarb /usr/local/bin/rhubarb && \
+    chmod +x /opt/rhubarb/Rhubarb-Lip-Sync-1.13.0-Linux/rhubarb && \
+    ln -s /opt/rhubarb/Rhubarb-Lip-Sync-1.13.0-Linux/rhubarb /usr/local/bin/rhubarb && \
     rm rhubarb.zip
+
 
 # Set RHUBARB_PATH to the Linux Rhubarb executable
 ENV RHUBARB_PATH=/usr/local/bin/rhubarb

@@ -26,6 +26,8 @@ def run_app():
 
     app.config.from_object(Config)
     app.config['JWT_SECRET_KEY'] = os.getenv("JWT_SECRET_KEY")
+    app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
+    
     jwt = JWTManager(app)
     mail.init_app(app)
 
