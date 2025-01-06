@@ -497,6 +497,75 @@
   /* Optional: Add animations or additional styling */
   /* animation: fadeIn 2s ease-in-out forwards; */
 }
+/* Responsive Adjustments */
+@media (max-width: 540px) {
+  .children {
+    display: none; 
+    
+  }
+  .wave{
+    display: none;
+  }
+
+  .signin-container {
+    flex-direction: column; /* Stack sections vertically */
+    align-items: center;
+  }
+
+  .signin-left {
+    display: none; /* Hide the feature section on small screens */
+  }
+
+  .signin-right {
+    width: 100%; 
+    height: fit-content;/* Full width for the auth card */
+    padding: 10px;
+  }
+
+  .custom-card {
+    max-width: 90%;
+    margin: 0 auto; /* Center the auth card */
+  }
+}
+
+/* Responsive Design: Adjusting for Smaller Screens */
+@media (max-width: 768px) {
+  /* Hide the left section on smaller screens */
+  .signin-left {
+    display: none;
+  }
+
+  /* Adjust container to center content */
+  .signin-container {
+    flex-direction: column; /* Stack elements vertically */
+    padding: 20px;
+  }
+
+  /* Adjust children image for smaller screens */
+  .children {
+    width: 100%; /* Ensure it doesn't overflow horizontally */
+    height: 200px; /* Reduce height significantly */
+  }
+
+  .wave{
+    height: 200px;
+  }
+
+  /* Adjust the sign-in card size */
+  .signin-right .custom-card {
+    width: 100%; /* Take full width of the screen */
+    max-width: 360px; /* Adjust the maximum width for smaller devices */
+    margin: 0 auto; /* Center the card */
+  }
+
+  /* Adjust logo size and position */
+  .logo {
+    width: 100px; /* Smaller size for logo */
+    left: 10px; /* Adjust position */
+    top: 10px; /* Adjust position */
+    transform: none; /* Remove scaling */
+  }
+}
 
 /* Update all label elements to use white */
 .signin-form label {
