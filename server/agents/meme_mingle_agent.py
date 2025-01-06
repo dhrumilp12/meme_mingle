@@ -1,9 +1,4 @@
 
-
-"""
-This module defines a class used to generate AI agents centered around Educational applications.
-"""
-
 """Step 1: Import necessary modules"""
 # -- Standard libraries --
 from datetime import datetime
