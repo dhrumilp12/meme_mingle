@@ -63,7 +63,7 @@ def clean_text(text):
 
     return text.strip()
 
-def text_to_speech(text_input, preferred_language="en", style=None):
+def text_to_speech(text_input, preferred_language="en", style="calm"):
     """
     Converts cleaned text to speech using Azure Speech SDK with specified voice and style.
 
