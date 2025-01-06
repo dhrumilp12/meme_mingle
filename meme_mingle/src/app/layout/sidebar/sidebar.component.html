@@ -26,19 +26,19 @@
     <div class="menu-items">
       <!-- New Chat -->
       <button class="menu-btn" title="{{ translatedTexts['New Chat'] || 'New Chat' }}" routerLink="/main/live-conversion">
-        <i class="bi bi-plus-square-fill"></i>
-        <span data-translate>New Chat</span>
+        <i class="bi bi-magic"></i> <!-- Updated to magic wand icon -->
+        <span data-translate> Chat Wizard</span>
       </button>
       <!-- AI Avatar -->
       <button class="menu-btn" title="{{ translatedTexts['AI Avatar'] || 'AI Avatar' }}" routerLink="/main/avatar">
-        <i class="bi bi-person-circle"></i>
-        <span data-translate>AI Avatar</span>
+        <span role="img" aria-label="girl">👧</span>
+        <span data-translate>Buddy</span>
       </button>
 
-      <!-- Quiz-ai -->
+      <!-- Quiz AI -->
       <button class="menu-btn" title="{{ translatedTexts['Quiz AI'] || 'Quiz AI' }}" routerLink="/main/quiz-ai">
-        <i class="bi bi-list-check"></i>
-        <span data-translate>Quiz AI</span>
+        <span role="img" aria-label="question">❓</span> <!-- Updated to question mark emoji -->
+        <span data-translate>Quizify</span>
         <span class="score-badge"  title="Total Score" *ngIf="totalScore !== null">{{ totalScore }}</span>
       </button>
     </div>

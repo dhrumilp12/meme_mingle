@@ -1,10 +1,8 @@
-
-
 /*******************************************
  * Variables
  *******************************************/
  $primary-color: #ffb84d; 
- $secondary-color: #2a2a2a; 
+ $secondary-color: #cccccc; 
  $accent-color: #cccccc; 
  $background-light: #fff3db; 
  $text-color: #ffffff; 
@@ -32,7 +30,7 @@
    display: flex;
    flex-direction: column;
    height: 98.4vh;
-   background-color: #1e1e1e; 
+  //  background-color: #1e1e1e; 
    transition: background-color 0.3s ease, color 0.3s ease;
    border: 2px solid $border-color; // Added border around the container
    border-radius: $border-radius; // Rounded corners for the container
@@ -255,7 +253,7 @@
  
        &.Mentor {
          .message-content {
-           background: #333333; // Neutral dark background for mentor messages
+           background: #FFBD59; // Neutral dark background for mentor messages
            align-items: flex-start;
            text-align: left;
            color: $text-color;
@@ -355,7 +353,7 @@
     flex-direction: column;
     gap: 8px;
     padding: 16px;
-    background-color: #1a1a1a; // Dark input background
+    background-color: #cccccc; // Dark input background
     border-top: 1px solid $border-color;
   
     .file-preview {
@@ -411,8 +409,8 @@
         padding: 12px;
         border: 1px solid #555555; // Dark border
         border-radius: 8px;
-        background-color: #2a2a2a; // Dark textarea background
-        color: $text-color;
+        background-color: #ffffff; // Dark textarea background
+        color: black;
         font-size: 1rem;
   
         &:focus {
@@ -423,7 +421,7 @@
       }
   
       .file_upload_button button {
-        background-color: $primary-color;
+        // background-color: $primary-color; // Same color as other buttons
         color: $text-color;
         border-radius: 50%;
         width: 40px;
@@ -555,6 +553,51 @@
      }
    }
  }
+
+/* Common Container */
+.common-container {
+  background-color: rgba(255, 189, 89, 0.9); // Glossy feel with reduced opacity
+
+  .input-area {
+    background-color: rgba(255, 189, 89, 0.9); // Same glossy background
+    // ...existing code...
+
+    button {
+      background-color: #3f51b5; // Bootstrap primary button color
+      // ...existing code...
+    }
+  }
+
+  .status-indicators {
+    background-color: #ffffff; // White background
+    // ...existing code...
+
+    button {
+      background-color: #3f51b5; // Bootstrap primary button color
+      // ...existing code...
+    }
+  }
+
+  .control-panel {
+    background-color: rgba(255, 189, 89, 0.9); // Same glossy background
+    // ...existing code...
+
+    button {
+      background-color: #3f51b5; // Bootstrap primary button color
+      // ...existing code...
+    }
+  }
+
+  button {
+    background-color: #3f51b5; // Bootstrap primary button color
+    // ...existing code...
+  }
+
+  .file_upload_button button {
+    background-color: #3f51b5; // Same color as other buttons
+    // ...existing code...
+  }
+}
  
  /*******************************************
   * Animations
@@ -581,6 +624,5 @@
    }
  }
 
- 
- 
- 
+
+

@@ -1,4 +1,3 @@
-
 <div class="quiz-container">
   <h1 data-translate>AI-Powered Quiz</h1>
 
@@ -27,7 +26,7 @@
             <div class="flex-item">
               <mat-form-field appearance="fill" class="full-width">
                 <mat-label data-translate>{{ translatedTexts['Select Level'] || 'Select Level' }}</mat-label>
-                <mat-select formControlName="level">
+                <mat-select formControlName="level" class="white-background">
                   <mat-option *ngFor="let level of levels" [value]="level">{{ translatedTexts[level] || level | titlecase }}</mat-option>
                 </mat-select>
               </mat-form-field>

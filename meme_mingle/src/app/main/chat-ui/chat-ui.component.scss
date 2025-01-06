@@ -1,10 +1,8 @@
-
-
 /*******************************************
  * Variables
  *******************************************/
  $primary-color: #ffb84d; 
- $secondary-color: #2a2a2a; 
+ $secondary-color: #ffffff; 
  $accent-color: #cccccc; 
  $background-light: #fff3db; 
  $text-color: #ffffff; 
@@ -29,22 +27,28 @@
   * Conversation Container
   *******************************************/
  .conversation-container {
-   display: flex;
-   flex-direction: column;
-   height: 98.4vh;
-   background-color: #1e1e1e; 
-   transition: background-color 0.3s ease, color 0.3s ease;
-   border: 2px solid $border-color; // Added border around the container
-   border-radius: $border-radius; // Rounded corners for the container
-   padding: 10px; // Added padding for inner spacing
-   box-shadow: $box-shadow; // Applied shadow for depth
-   margin: 10px; // Margin to separate from other components
-   box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5); // Inner shadow for depth
- 
+  display: flex;
+  flex-direction: column;
+  height: 98.4vh;
+  overflow: hidden; // Ensure no overflow
+  transition: background-color 0.3s ease, color 0.3s ease;
+  border: 2px solid $border-color; // Added border around the container
+  border-radius: $border-radius; // Rounded corners for the container
+  // padding: 10px; // Added padding for inner spacing
+  box-shadow: $box-shadow; // Applied shadow for depth
+  margin: 10px; // Margin to separate from other components
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5); // Inner shadow for depth
+  position: relative;
+
+  @media (max-width: 768px) {
+    height: 90vh; // Adjust height for smaller screens
+    margin: 5px; // Adjust margin for smaller screens
+  }
+
  
    /* Overlay Styles */
 .custom-overlay {
-  background-color: rgba(42, 42, 42, 0.85);
+  // background-color: rgba(42, 42, 42, 0.85);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -57,12 +61,12 @@
   overflow: auto; /* Handle overflow on smaller screens */
 
   .custom-overlay-content {
-    background: #3a3a3a; // Slightly lighter than main background
+    // background: #3a3a3a; // Slightly lighter than main background
     border-radius: $border-radius;
     padding: 2rem;
     box-shadow: $box-shadow;
     text-align: center;
-    border: 2px solid $highlight-color;
+    // border: 2px solid $highlight-color;
     max-width: 500px; // Increased for better content spacing
     width: 90%;
     color: $text-color;
@@ -183,7 +187,13 @@
    .avatar-container{
      flex-grow: 1;
      overflow-y: auto;
-     padding: 16px;
+     padding: 1px;
+     z-index: 5;
+
+     @media (max-width: 768px) {
+      padding: 0.5px; // Adjust padding for smaller screens
+    }
+     
 
      .message-wrapper {
        display: flex;
@@ -191,6 +201,10 @@
        opacity: 0;
        transform: translateY(20px);
        animation: fadeInUp 0.5s forwards;
+
+       @media (max-width: 768px) {
+        margin-bottom: 8px; // Adjust margin for smaller screens
+      }
  
        &.User {
          flex-direction: row-reverse;
@@ -248,7 +262,7 @@
  
        &.Mentor {
          .message-content {
-           background: #333333; // Neutral dark background for mentor messages
+           background: #FFBD59; // Set background color for mentor messages
            align-items: flex-start;
            text-align: left;
            color: $text-color;
@@ -274,6 +288,10 @@
            position: relative;
            transition: background-color 0.3s ease;
            box-shadow: $box-shadow;
+
+           @media (max-width: 768px) {
+            padding: 6px; // Adjust padding for smaller screens
+          }
  
            .text {
              color: $text-color;
@@ -297,7 +315,7 @@
              }
  
              pre {
-               background-color: #2a2a2a; // Slightly lighter dark background
+              //  background-color: #2a2a2a; // Slightly lighter dark background
                padding: 10px;
                overflow-x: auto;
                border-radius: 4px;
@@ -306,7 +324,7 @@
              }
  
              code {
-               background-color: #2a2a2a; // Match pre background
+              //  background-color: #2a2a2a; // Match pre background
                padding: 2px 4px;
                font-family: monospace;
                border-radius: 4px;
@@ -339,6 +357,10 @@
        max-width: 100%;
        border-radius: 8px;
        margin-top: 8px;
+
+       @media (max-width: 768px) {
+        margin-top: 4px; // Adjust margin for smaller screens
+      }
      }
    }
 
@@ -354,8 +376,8 @@
     flex-direction: column;
     gap: 8px;
     padding: 16px;
-    background-color: #1a1a1a; // Dark input background
-    border-top: 1px solid $border-color;
+    // background-color: #1a1a1a; // Dark input background
+    // border-top: 1px solid $border-color;
   
     .file-preview {
       display: flex;
@@ -408,10 +430,10 @@
         flex-grow: 1;
         resize: none;
         padding: 12px;
-        border: 1px solid #555555; // Dark border
+        // border: 1px solid #555555; // Dark border
         border-radius: 8px;
-        background-color: #2a2a2a; // Dark textarea background
-        color: $text-color;
+        // background-color: #2a2a2a; // Dark textarea background
+        color: black;
         font-size: 1rem;
   
         &:focus {
@@ -494,7 +516,7 @@
      display: flex;
      align-items: center;
      padding: 8px 16px;
-     background: #333333; // Dark status background
+    //  background: #333333; // Dark status background
      box-shadow: $box-shadow;
      color: $text-color;
      transition: background 0.3s ease, box-shadow 0.3s ease;
@@ -524,7 +546,7 @@
      display: flex;
      justify-content: space-around;
      padding: 12px 0;
-     background-color: #1a1a1a; // Dark control panel background
+    //  background-color: #1a1a1a; // Dark control panel background
      box-shadow: $box-shadow;
  
      button {
@@ -554,30 +576,207 @@
      }
    }
  }
- 
- /*******************************************
-  * Animations
-  *******************************************/
- @keyframes fadeInUp {
-   to {
-     opacity: 1;
-     transform: translateY(0);
-   }
- }
- 
- @keyframes pulse {
-   0% {
-     transform: scale(1);
-     opacity: 1;
-   }
-   50% {
-     transform: scale(1.05);
-     opacity: 0.8;
-   }
-   100% {
-     transform: scale(1);
-     opacity: 1;
-   }
- }
- 
- 
+
+ .common-container {
+  background-image:linear-gradient(45deg, #FFBD59 0%, #ffffff 50%, #FFBD59 100%); // Adjusted gradient for brightness
+
+  padding: 16px; // Common padding
+  // border-top: 1px solid $border-color; // Common border
+  box-shadow: $box-shadow; // Common box shadow
+
+  @media (max-width: 768px) {
+    padding: 8px; // Adjust padding for smaller screens
+  }
+
+  .input-area {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .file-preview {
+      display: flex;
+      align-items: center;
+      padding: 8px;
+      background: lighten($secondary-color, 5%);
+      border-radius: $border-radius;
+      box-shadow: $box-shadow;
+      gap: 10px;
+      max-width: fit-content;
+
+      .file-icon {
+        font-size: 24px;
+        color: $primary-color;
+      }
+
+      .file-name {
+        flex-grow: 1;
+        font-size: 14px;
+        font-weight: 600;
+        color: lighten($text-color, 10%);
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+
+      .cancel-button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: transparent;
+        border: none;
+        font-size: 16px;
+        color: $text-muted;
+        cursor: pointer;
+        transition: color 0.2s;
+
+        &:hover {
+          color: darken($text-muted, 20%);
+        }
+      }
+    }
+
+    .input-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      textarea {
+        flex-grow: 1;
+        resize: none;
+        padding: 12px;
+        // border: 1px solid #555555; // Dark border
+        border-radius: 8px;
+        // background-color: #2a2a2a; // Dark textarea background
+        color: $text-color;
+        font-size: 1rem;
+
+        &:focus {
+          outline: none;
+          border-color: $accent-color;
+          box-shadow: 0 0 5px $accent-color;
+        }
+      }
+
+      .file_upload_button button {
+        background-color: $primary-color;
+        color: $text-color;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: $box-shadow;
+
+        &:hover {
+          background-color: darken($primary-color, 10%);
+        }
+      }
+
+      button.mat-mini-fab {
+        background-color: $primary-color;
+        color: $text-color;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: $box-shadow;
+
+        &:hover {
+          background-color: darken($primary-color, 10%);
+        }
+      }
+    }
+  }
+
+  .status-indicators {
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    background: white; // Dark status background
+    box-shadow: $box-shadow;
+    color: $text-color;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+
+    .status-message {
+      display: flex;
+      align-items: center;
+      font-size: 0.9em;
+      animation: pulse 2s infinite;
+
+      &.listening {
+        color: $accent-color;
+      }
+
+      &.speaking {
+        color: lighten($accent-color, 10%);
+      }
+
+      mat-icon {
+        margin-right: 8px;
+      }
+    }
+  }
+
+  .control-panel {
+    display: flex;
+    justify-content: space-around;
+    padding: 12px 0;
+    // background-color: #1a1a1a; // Dark control panel background
+    box-shadow: $box-shadow;
+
+    button {
+      background-color: $primary-color;
+      color: $text-color;
+      border: none;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: $box-shadow;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+
+      mat-icon {
+        font-size: 24px;
+      }
+
+      &:hover {
+        background-color: darken($primary-color, 10%);
+      }
+
+      &:active {
+        transform: scale(0.95);
+      }
+    }
+  }
+}
+
+/*******************************************
+ * Animations
+ *******************************************/
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
