@@ -41,21 +41,16 @@
 
   <!-- Conversation Area -->
   <div class="avatar-container">
-<!-- Before -->
-<!-- After -->
-<app-avatar3d
-  [currentMessage]="latestMentorMessage?.message ?? null"
-  [audioUrl]="latestMentorMessage?.audioUrl ?? null"
-  [avatarAudio]="latestMentorMessage?.avatarAudio ?? null"
-  [animation]="latestMentorMessage?.animation ?? null"
-  [facialExpression]="latestMentorMessage?.facialExpression ?? null"
-  [lipSyncData]="latestMentorMessage?.lipSyncData ?? null"
-  (avatarEvent)="handleAvatarEvent($event)"
->
-</app-avatar3d>
-
-
-
+    <app-avatar3d
+      [currentMessage]="latestMentorMessage?.message ?? null"
+      [audioUrl]="latestMentorMessage?.audioUrl ?? null"
+      [avatarAudio]="latestMentorMessage?.avatarAudio ?? null"
+      [animation]="latestMentorMessage?.animation ?? 'Idle'"
+      [facialExpression]="latestMentorMessage?.facialExpression ?? 'default'"
+      [lipSyncData]="latestMentorMessage?.lipSyncData ?? null"
+      (avatarEvent)="handleAvatarEvent($event)"
+    >
+    </app-avatar3d>
   </div>
   
   <!-- New Input Area -->
