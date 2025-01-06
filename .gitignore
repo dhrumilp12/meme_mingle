@@ -1,4 +1,2 @@
-.env
-.nvmrc
-.DS_Store
-.node_modules
+config.bat
+node_modules

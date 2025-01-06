@@ -1,9 +1,4 @@
 
-
-"""
-This module defines a class used to generate AI agents centered around Educational applications.
-"""
-
 """Step 1: Import necessary modules"""
 # -- Standard libraries --
 from datetime import datetime
@@ -749,40 +744,53 @@ You are given a list of possible facial expressions and animations. Based on the
 - Facial expressions: {', '.join(facial_expressions_list)}
 - Animations: {', '.join(animations_list)}
 
-Only respond with valid choices. If you are unsure, default to:
-  facial_expression = "default"
-  animation = "Idle"
-
-Return your answer in JSON format with two keys: "facial_expression" and "animation".
-
-AI Response to analyze:
-"{ai_response}"
-"""
+Rules:
+    1. Only respond with valid JSON. Example:
+       {{
+           "facial_expression": "smile",
+           "animation": "Laughing"
+       }}
+    2. Do not include any extra text or explanation outside the JSON object.
+    3. Ensure strict JSON formatting without any deviations.
+    4. If the sentiment or tone is unclear, choose:
+       {{
+           "facial_expression": "default",
+           "animation": "Idle"
+       }}
+    
+    AI Response:
+    "{ai_response}"
+    """
 
         try:
             # Invoke the LLM with the prompt
             response = self.llm.invoke(prompt)
+            logging.info(f"Raw LLM response: {response.content}")
 
-            # Attempt to parse the LLM response as JSON
-            parsed = {}
-            try:
-                parsed = json.loads(response.content)
-            except json.JSONDecodeError:
-                # If the LLM doesn't return valid JSON, fallback to defaults
-                logging.warning("LLM returned non-JSON response. Reverting to defaults.")
-                parsed = {
-                    "facial_expression": "default",
-                    "animation": "Idle"
-                }
+            # Strip code fences if present
+            content = response.content.strip()
+            if content.startswith("```") and content.endswith("```"):
+                content = '\n'.join(content.split('\n')[1:-1])
 
-            # Extract the fields or use defaults if absent
+            # Parse the LLM response as JSON
+            for attempt in range(3):  # Retry up to 3 times
+                try:
+                    parsed = json.loads(content)
+                    break
+                except json.JSONDecodeError:
+                    logging.warning(f"LLM returned non-JSON response on attempt {attempt + 1}: {content}")
+                    if attempt == 2:  # Max retries reached
+                        parsed = {"facial_expression": "default", "animation": "Idle"}
+
+            # Extract fields and validate them
             facial_expression = parsed.get("facial_expression", "default")
             animation = parsed.get("animation", "Idle")
 
-            # Validate the results
             if facial_expression not in facial_expressions_list:
+                logging.warning(f"Invalid facial expression: {facial_expression}. Defaulting to 'default'.")
                 facial_expression = "default"
             if animation not in animations_list:
+                logging.warning(f"Invalid animation: {animation}. Defaulting to 'Idle'.")
                 animation = "Idle"
 
             return {
