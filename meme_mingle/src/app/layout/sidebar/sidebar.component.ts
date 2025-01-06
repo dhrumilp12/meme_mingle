@@ -51,6 +51,11 @@ export class SidebarComponent implements OnInit {
     // Include additional texts that are not in data-translate attributes
     const additionalTexts = [
       'Toggle Sidebar',
+      'New Chat',
+      'AI Avatar',
+      'Quiz AI',
+      'Profile',
+      'Logout',
     ];
     const allTextsToTranslate = [...textsToTranslate, ...additionalTexts];
 
