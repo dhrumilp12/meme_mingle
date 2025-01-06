@@ -2,9 +2,11 @@ FROM python:3.12-slim AS builder
 
 WORKDIR /app
 
-# Update linux packages
+# Update linux packages and install dependencies
 RUN apt-get update && \
-    apt-get install --no-install-suggests --no-install-recommends -y pipx ffmpeg
+    apt-get install --no-install-suggests --no-install-recommends -y pipx ffmpeg wget unzip && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 ENV PATH="/root/.local/bin:${PATH}"
 
@@ -20,8 +22,22 @@ RUN poetry install $(test "$FLASK_ENV" = dev && echo "--only=main") --no-interac
 
 COPY . ./
 
+# Remove non-Linux Rhubarb binaries (if applicable)
+RUN rm -rf models/rhubarb/Rhubarb-Lip-Sync-1.13.0-macOS && \
+    rm -rf models/rhubarb/Rhubarb-Lip-Sync-1.13.0-Windows
+
 # Rename .env.production
 RUN mv .env.production .env
+
+# Download and install Rhubarb Lip-Sync for Linux
+RUN wget https://github.com/DanielSWolf/rhubarb-lip-sync/releases/download/1.13.0/Rhubarb-Lip-Sync-1.13.0-linux.zip -O rhubarb.zip && \
+    unzip rhubarb.zip -d /opt/rhubarb && \
+    chmod +x /opt/rhubarb/rhubarb && \
+    ln -s /opt/rhubarb/rhubarb /usr/local/bin/rhubarb && \
+    rm rhubarb.zip
+
+# Set RHUBARB_PATH to the Linux Rhubarb executable
+ENV RHUBARB_PATH=/usr/local/bin/rhubarb
 
 # Execute Flask
 CMD ["poetry", "run", "gunicorn", "-b", "0.0.0.0:8000", "app:app"]
