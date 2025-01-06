@@ -1,14 +1,14 @@
 $primary-color: #ffb84d;
-$secondary-color: #2a2a2a;
+$secondary-color: #ffb84d;
 $accent-color: #cccccc;
-$background-light: #fff3db;
+$background-light: #cccccc;
 $text-color: #ffffff;
 $text-muted: #cccccc;
 $border-radius: 15px;
 $box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 $border-color: #ffb84d;
 $highlight-color: #ffb84d;
-$question-bg: #2a2a2a;
+$question-bg: #ffb84d;
 $transition-speed: 0.3s;
 $option-hover: lighten($highlight-color, 10%);
 $submit-btn-height: 50px;
@@ -315,6 +315,10 @@ $submit-btn-height: 50px;
         border-radius: 10px;
         margin-bottom: 20px;
         transition: background-color $transition-speed ease;
+         .input{
+          background-color: white;
+          color: black;
+         }
   
   
         .question-header {
@@ -359,15 +363,20 @@ $submit-btn-height: 50px;
         .sa-group {
           .answer-field {
             width: 100%;
-  
+            
             mat-form-field {
               width: 100%;
               .mat-input-element {
+
                 color: $text-color;
               }
               .mat-label {
                 color: $text-muted;
               }
+            }
+            mat-mdc-form-field {
+              background-color: #ffffff;
+              color:black;
             }
           }
         }
@@ -518,21 +527,24 @@ $submit-btn-height: 50px;
     mat-form-field {
       width: 100%;
       color: $text-color;
+      background-color: #ffffff; // Set background to white
 
       .mat-label {
         color: $text-color;
       }
 
       .mat-select-arrow {
-        color: $text-color;
+        color: $secondary-color; // Adjust select arrow color
       }
 
-      input.mat-input-element {
-        color: $text-color;
+      .mat-input-element {
+        color: $secondary-color; // Ensure text is readable
       }
 
+      input.mat-input-element,
       textarea.mat-input-element {
-        color: $text-color;
+        background-color: #ffffff; // Set input and textarea backgrounds to white
+        color: $secondary-color; // Ensure text is readable
       }
 
       .mat-radio-button {

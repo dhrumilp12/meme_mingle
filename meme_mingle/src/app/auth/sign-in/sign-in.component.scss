@@ -88,6 +88,12 @@
   transform: scale(1.1); /* Slight scale for hover effect */
 }
 
+.OR{
+  color:#000000;
+}
+
+
+
 /* Media Queries */
 @media (max-width: 768px) {
   .signin-container {
@@ -406,7 +412,7 @@
 
 /* Update placeholder text color */
 ::placeholder {
-  color: #ffffff; /* White placeholders */
+  color: gray; /* Changed from white to black */
   opacity: 1; /* Ensure visibility */
 }
 

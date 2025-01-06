@@ -4,6 +4,7 @@ import {
   OnDestroy,
   ViewChild,
   ElementRef,
+  NO_ERRORS_SCHEMA,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -86,6 +87,7 @@ interface HistoricalFigure {
     MatSelectModule,
     Avatar3DComponent,
   ],
+  schemas: [NO_ERRORS_SCHEMA],
   templateUrl: './chat-ui.component.html',
   styleUrls: ['./chat-ui.component.scss'],
   animations: [
@@ -426,36 +428,42 @@ export class ChatUIComponent implements OnInit, OnDestroy {
     if (sender === 'User') {
       this.latestMessage = message;
     }
-    // Convert markdown to HTML
-    const rawHtml = marked(message);
 
-    // Sanitize
-    const sanitizedHtml = this.sanitizer.bypassSecurityTrustHtml(rawHtml as string);
+    if (message) { // Ensure message is not undefined or null
+      // Convert markdown to HTML
+      const rawHtml = marked(message);
 
-    console.log(`Message from ${sender}:`, {
-      text: message,
-      audioUrl,
-      imageUrl,
-      fileDetails,
-      animation,
-      facialExpression,
-      lipSyncData,
-      avatarAudio
-    });
+      // Sanitize
+      const sanitizedHtml = this.sanitizer.bypassSecurityTrustHtml(rawHtml as string);
 
-    this.conversation.push({
-      sender,
-      message,
-      audioUrl,
-      avatarAudio,
-      imageUrl,
-      animation,
-      facialExpression,
-      lipSyncData,
-      file: fileDetails,
-      timestamp: new Date(),
-      htmlContent: sanitizedHtml,
-    });
+      console.log(`Message from ${sender}:`, {
+        text: message,
+        audioUrl,
+        imageUrl,
+        fileDetails,
+        animation,
+        facialExpression,
+        lipSyncData,
+        avatarAudio
+      });
+
+      this.conversation.push({
+        sender,
+        message,
+        audioUrl,
+        avatarAudio,
+        imageUrl,
+        animation,
+        facialExpression,
+        lipSyncData,
+        file: fileDetails,
+        timestamp: new Date(),
+        htmlContent: sanitizedHtml,
+      });
+    } else {
+      console.warn('addMessage called with undefined or null message.');
+    }
+
     this.scrollToBottom();
   }
 
@@ -584,13 +592,14 @@ export class ChatUIComponent implements OnInit, OnDestroy {
     });
   }
 
-get latestMentorMessage() {
+get latestMentorMessage(): ConversationMessage | null {
   // Return the newest 'Mentor' message from your conversation array
   return this.conversation
     .filter(msg => msg.sender === 'Mentor')
     .slice(-1)[0];
 }
 
+// Removed duplicate property declaration
 
 
   // -------------------------

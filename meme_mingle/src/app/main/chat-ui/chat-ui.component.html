@@ -45,14 +45,14 @@
       [currentMessage]="latestMentorMessage?.message ?? null"
       [audioUrl]="latestMentorMessage?.audioUrl ?? null"
       [avatarAudio]="latestMentorMessage?.avatarAudio ?? null"
-      [animation]="latestMentorMessage?.animation ?? 'Idle'"
+      [animation]="latestMentorMessage?.animation ?? null"
       [facialExpression]="latestMentorMessage?.facialExpression ?? 'default'"
       [lipSyncData]="latestMentorMessage?.lipSyncData ?? null"
       (avatarEvent)="handleAvatarEvent($event)"
     >
     </app-avatar3d>
   </div>
-  
+  <div class = "common-container ">
   <!-- New Input Area -->
   <div class="input-area">
     <!-- File Preview Section -->
@@ -155,4 +155,5 @@
       <mat-icon>{{ isMuted ? 'volume_off' : 'volume_up' }}</mat-icon>
     </button> -->
   </div>
+</div>
 </div>
