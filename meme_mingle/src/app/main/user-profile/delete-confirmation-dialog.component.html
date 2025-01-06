@@ -1,0 +1,12 @@
+<!-- delete-confirmation-dialog.component.html -->
+<div style="background-color: #1e1e1e;
+  transition: background-color 0.3s ease, color 0.3s ease;">
+<h2 mat-dialog-title style="color: #ffb84d;">Confirm Deletion</h2>
+<mat-dialog-content>
+  <p>Are you sure you want to delete your profile? This action cannot be undone.</p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-button color="warn" (click)="onConfirm()">Delete</button>
+</mat-dialog-actions>
+</div>

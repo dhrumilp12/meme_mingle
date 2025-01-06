@@ -1,0 +1,87 @@
+<aside id="sidebar" class="sidebar-wrapper" [class.collapsed]="!sidebarVisible">
+  <!-- Top Section: Header and Top Menu Items -->
+  <div class="top-section">
+    <!-- Header Section with Logo and Collapse Button -->
+    <div class="sidebar-header d-flex align-items-center justify-content-between">
+      <div class="logo-wrapper">
+        <img
+          src="assets/img/logo.png"
+          alt="Study Buddy Logo"
+          class="sidebar-logo-img"
+        />
+      </div>
+      <!-- Collapse Button -->
+      <button
+        type="button"
+        class="collapse-btn"
+        aria-label="Toggle Sidebar"
+        (click)="toggleSidebar()"
+        title="{{ translatedTexts['Toggle Sidebar'] || 'Toggle Sidebar' }}"
+      >
+        {{ toggleIcon }}
+      </button>
+    </div>
+
+    <!-- Top Menu Items -->
+    <div class="menu-items">
+      <!-- New Chat -->
+      <button class="menu-btn" title="{{ translatedTexts['New Chat'] || 'New Chat' }}" routerLink="/main/live-conversion">
+        <i class="bi bi-plus-square-fill"></i>
+        <span data-translate>New Chat</span>
+      </button>
+      <!-- AI Avatar -->
+      <button class="menu-btn" title="{{ translatedTexts['AI Avatar'] || 'AI Avatar' }}" routerLink="/main/avatar">
+        <i class="bi bi-person-circle"></i>
+        <span data-translate>AI Avatar</span>
+      </button>
+
+      <!-- Quiz-ai -->
+      <button class="menu-btn" title="{{ translatedTexts['Quiz AI'] || 'Quiz AI' }}" routerLink="/main/quiz-ai">
+        <i class="bi bi-list-check"></i>
+        <span data-translate>Quiz AI</span>
+        <span class="score-badge"  title="Total Score" *ngIf="totalScore !== null">{{ totalScore }}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Bottom Menu Items -->
+  <div class="menu-bottom">
+    <!-- Profile with Picture -->
+    <button class="menu-btn profile-btn" title="{{ translatedTexts['Profile'] || 'Profile' }}" routerLink="/main/user-profile">
+      <img
+        [src]="userProfilePicture"
+        alt="User Avatar"
+        class="user-avatar"
+        (error)="userProfilePicture = '/assets/img/user_avatar.jpg'"
+      />
+      <span data-translate>Profile</span>
+    </button>
+
+    <!-- Log Out -->
+    <button class="menu-btn" (click)="signOut()" title="{{ translatedTexts['Log Out'] || 'Log Out' }}">
+      <i class="material-icons" >logout</i>
+      <span data-translate>Log Out</span>
+    </button>
+  </div>
+</aside>
+
+
+
+
+   <!-- Center Links -->
+    <!--
+    <div class="menu-section">
+      <button class="menu-btn" routerLink="/about">
+      <i class="material-icons">info</i>
+      <span>About</span>
+      </button>
+      <button class="menu-btn" routerLink="/contact">
+      <i class="material-icons">contact_mail</i>
+      <span>Contact Us</span>
+      </button>
+      <button class="menu-btn" routerLink="/FAQ">
+      <i class="material-icons">help</i>
+      <span>FAQ</span>
+      </button>
+    </div>
+    -->

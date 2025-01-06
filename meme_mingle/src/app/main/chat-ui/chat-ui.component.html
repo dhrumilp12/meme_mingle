@@ -1,0 +1,158 @@
+<!-- chat-ui.component.html -->
+
+<!-- Optional Navbar -->
+<!-- <app-navbar-main></app-navbar-main> -->
+
+<div class="conversation-container" [@fadeInOut]>
+
+  <!-- Initial Overlay -->
+  <div *ngIf="showOverlay" class="custom-overlay" [@overlayAnimation]>
+    <div class="custom-overlay-content">
+      <h2>Welcome to AI Chat</h2>
+      <p>Choose a historical figure to inspire your conversation.</p>
+
+      <!-- Container for Dropdown and Button -->
+      <div class="selection-container">
+        <!-- Dropdown for Selecting Historical Figure -->
+        <mat-form-field appearance="fill" class="role-select">
+          <mat-label>Select Your Mentor</mat-label>
+          <mat-select [(value)]="selectedRole">
+            <mat-option
+              *ngFor="let figure of historicalFigures"
+              [value]="figure.value"
+            >
+              {{ figure.display }} - {{ figure.field }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <button
+          mat-raised-button
+          (click)="unlockAudio()"
+          [@buttonClick]
+          class="custom-start-conversation-button"
+          [disabled]="!selectedRole"
+        >
+          Start Conversation
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Conversation Area -->
+  <div class="avatar-container">
+    <app-avatar3d
+      [currentMessage]="latestMentorMessage?.message ?? null"
+      [audioUrl]="latestMentorMessage?.audioUrl ?? null"
+      [avatarAudio]="latestMentorMessage?.avatarAudio ?? null"
+      [animation]="latestMentorMessage?.animation ?? 'Idle'"
+      [facialExpression]="latestMentorMessage?.facialExpression ?? 'default'"
+      [lipSyncData]="latestMentorMessage?.lipSyncData ?? null"
+      (avatarEvent)="handleAvatarEvent($event)"
+    >
+    </app-avatar3d>
+  </div>
+  
+  <!-- New Input Area -->
+  <div class="input-area">
+    <!-- File Preview Section -->
+    <div *ngIf="selectedFile" class="file-preview">
+      <mat-icon class="file-icon">insert_drive_file</mat-icon>
+      <span class="file-name">{{ selectedFile.name }}</span>
+      <button
+        mat-icon-button
+        class="cancel-button"
+        color="warn"
+        matTooltip="Remove File"
+        (click)="removeSelectedFile()"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <!-- Text Input and Buttons -->
+    <div class="input-container">
+      <textarea
+        [(ngModel)]="userInputText"
+        placeholder="Type your message here..."
+        (keydown.enter)="sendTextInput()"
+      ></textarea>
+
+      <label class="file_upload_button">
+        <input
+          #fileInput
+          class="file_upload"
+          type="file"
+          (change)="onFileSelected($event)"
+          aria-label="Upload image"
+          hidden
+        />
+        <button
+          mat-mini-fab
+          color="primary"
+          matTooltip="File upload"
+          [@buttonClick]
+          (click)="fileInput.click()"
+        >
+          <mat-icon>attach_file</mat-icon>
+        </button>
+      </label>
+
+      <button
+        mat-mini-fab
+        color="primary"
+        (click)="sendTextInput()"
+        [@buttonClick]
+      >
+        <mat-icon class="send-icon">send</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Status Indicators -->
+  <div class="status-indicators" [@fadeInOut]>
+    <mat-progress-bar
+      *ngIf="isProcessing"
+      mode="indeterminate"
+      color="accent"
+    ></mat-progress-bar>
+
+    <div *ngIf="isListening" class="status-message listening" [@statusAnimation]>
+      <mat-icon>mic</mat-icon> Listening...
+    </div>
+
+    <!-- <div *ngIf="isPlaying" class="status-message speaking" [@statusAnimation]>
+      <mat-icon>volume_up</mat-icon> AI is speaking...
+    </div> -->
+  </div>
+
+  <!-- Control Panel -->
+  <div class="control-panel">
+    <button
+      mat-mini-fab
+      color="warn"
+      (click)="finalizeChat()"
+      matTooltip="New Conversation"
+      [@buttonClick]
+    >
+      <i class="bi bi-plus-square-fill" style="color: white;"></i>
+    </button>
+    <button
+      mat-mini-fab
+      color="primary"
+      (click)="toggleListening()"
+      matTooltip="{{ isListening ? 'Pause Listening' : 'Resume Listening' }}"
+      [@buttonClick]
+    >
+      <mat-icon>{{ isListening ? 'mic' : 'mic_off' }}</mat-icon>
+    </button>
+    <!-- <button
+      mat-mini-fab
+      (click)="toggleMute()"
+      matTooltip="{{ isMuted ? 'Unmute' : 'Mute' }}"
+      [@buttonClick]
+    >
+      <mat-icon>{{ isMuted ? 'volume_off' : 'volume_up' }}</mat-icon>
+    </button> -->
+  </div>
+</div>

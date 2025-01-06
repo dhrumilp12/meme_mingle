@@ -1,19 +1,9 @@
 
-# -- Standard libraries --
-# -- 3rd Party libraries --
-# Azure
-# Langchain
-# MongoDB
-# -- Custom modules --
-
-"""
-This module defines a class used to generate AI agents centered around Educational applications.
-"""
-
 """Step 1: Import necessary modules"""
 # -- Standard libraries --
 from datetime import datetime
 import logging
+import json
 import asyncio
 from operator import itemgetter
 import os
@@ -38,8 +28,14 @@ from .ai_agent import AIAgent
 from services.azure_mongodb import MongoDBClient
 from services.azure_form_recognizer import extract_text_from_file
 from services.text_to_speech_service import text_to_speech
+from models.user import User
+from services.db.user import get_user_profile_by_user_id
 # Constants
 from utils.consts import SYSTEM_MESSAGE
+from pydub import AudioSegment
+import base64
+import subprocess
+
 
 
 
@@ -97,10 +93,13 @@ class MemeMingleAIAgent(AIAgent):
             MessagesPlaceholder(variable_name="agent_scratchpad"),
         ]
 
-        # Do not set self.prompt here
-        # self.prompt = ChatPromptTemplate.from_messages([...])
-
-        # Initialize the agent executor to None; it will be set in the run method
+        # Define the absolute path for the generated_audio directory
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        project_root = os.path.abspath(os.path.join(current_dir, '../'))  # Adjust as per your project structure
+        self.generated_audio_dir = os.path.join(project_root, 'generated_audio')
+        
+        # Ensure the directory exists
+        os.makedirs(self.generated_audio_dir, exist_ok=True)
         self.agent_executor = None
 
     
@@ -227,40 +226,7 @@ class MemeMingleAIAgent(AIAgent):
         return user_mood
 
 
-    def exec_update_step(self, user_id, chat_id=None, turn_id=None):
-        # Chat Summary:
-        # Update every 5 chat turns
-        # Therapy Material
-        # Maybe not get it from DB at all? Just perform Bing search?
-        # User Entity:
-        # Can be saved from chat summary step, every 5 chat turns
-        # User Journey:
-        # Can be either updated at the end of the chat, or every 5 chat turns
-        # User Material:
-        # Possibly updated every 5 chat turns, at the end of a chat, or not at all
-
-
-
-        # agent_with_history = RunnableWithMessageHistory(
-        #     chain,
-        #     get_session_history=lambda _: memory,
-        #     input_messages_key="input",
-        #     history_messages_key="history",
-        #     verbose=True
-        # )
-        
-
-        # self.agent = create_tool_calling_agent(self.llm, self.tools, self.prompt)
-        # stateless_agent_executor:AgentExecutor = AgentExecutor(
-        #     agent=self.agent, tools=self.tools, verbose=True, handle_parsing_errors=True)
-        
-        # history=self.get_session_history(f"{user_id}-{chat_id}-{}")
-        # Must invoke with an agent that will not write to DB
-        # invocation = stateless_agent_executor.invoke(
-        #     {"input": f"{message}\nuser_id:{user_id}", "agent_scratchpad": []})
-
-        # Get summary text
-        pass
+    
     
     @staticmethod
     def get_chat_id(user_id):
@@ -362,21 +328,155 @@ class MemeMingleAIAgent(AIAgent):
                 meme_url = None
 
             # Convert AI text response to speech
-            audio_url = self.convert_text_to_speech(ai_text_response, user_id, chat_id, turn_id)
+            audio_url, filename = self.convert_text_to_speech(ai_text_response, user_id, chat_id, turn_id)
+            
+             # 4) Determine Facial Expression & Animation
+            fa_data = self.determine_facial_expression_and_animation(ai_text_response)
+            facial_expression = fa_data["facial_expression"]
+            animation = fa_data["animation"]
+            ##convert wav to mp3 and do base64 encoding
+            avatar_audio = self.convert_and_encode_audio(filename)
 
+            ##lipsync data
+            lip_sync_data = self.generate_lipsync_data(filename)
+           
+
+
+            
             # Structure the response to include both text and meme/GIF
             response = {
                 "message": ai_text_response,
                 "meme_url": meme_url,
-                "audio_url": audio_url
-            }
-
+                "audio_url": audio_url,
+                "facial_expression": facial_expression,
+                "animation": animation,
+                "avatar_audio": avatar_audio,
+                "lip_sync_data": lip_sync_data
+            }   
             return response
         except Exception as e:
             logging.error(f"Error during agent execution: {e}", exc_info=True)
             raise   
 
    
+    def convert_and_encode_audio(self, wav_file_name):
+        """
+        Converts a WAV file to MP3 and encodes it in Base64.
+        
+        Args:
+            wav_file_name (str): The name of the WAV file to convert.
+        
+        Returns:
+            str: Base64 encoded MP3 audio.
+        """
+        try:
+            wav_file_path = os.path.join(self.generated_audio_dir, wav_file_name)
+            
+            if not os.path.isfile(wav_file_path):
+                raise FileNotFoundError(f"The file {wav_file_path} does not exist.")
+            
+            # Define the MP3 file path
+            mp3_file_path = os.path.splitext(wav_file_path)[0] + ".mp3"
+            
+            # Convert WAV to MP3
+            audio = AudioSegment.from_wav(wav_file_path)
+            audio.export(mp3_file_path, format="mp3")
+            
+            # Read the MP3 file and encode it as Base64
+            with open(mp3_file_path, "rb") as mp3_file:
+                encoded_audio = base64.b64encode(mp3_file.read()).decode("utf-8")
+            
+            return encoded_audio
+        except Exception as e:
+            logging.error(f"Error during audio conversion and encoding: {e}")
+            return ""
+
+
+
+    def generate_lipsync_data(self, wav_file_name):
+        """
+        Generates lip-sync data using Rhubarb and ensures a consistent return structure.
+        
+        Args:
+            wav_file_name (str): The name of the WAV file to process.
+        
+        Returns:
+            dict: Lip-sync data with "METADATA" and "MOUTH_CUES".
+        """
+        # Define the output JSON file path
+        wav_file_path = os.path.join(self.generated_audio_dir, wav_file_name)
+        json_file_path = os.path.splitext(wav_file_path)[0] + ".json"
+
+        # Define Rhubarb path
+        RHUBARB_PATH = os.getenv('RHUBARB_PATH')
+        if not RHUBARB_PATH:
+            # Fallback to a relative path if environment variable not set
+            RHUBARB_PATH = os.path.join(
+                os.path.dirname(os.path.abspath(__file__)),
+                '..', 'rhubarb', 'Rhubarb-Lip-Sync-1.13.0-Windows', 'rhubarb'
+            )
+            # On Windows, append .exe if necessary
+            if os.name == 'nt' and not RHUBARB_PATH.endswith('.exe'):
+                RHUBARB_PATH += '.exe'
+
+        # Use Rhubarb to generate lip-sync data
+        command = [
+            RHUBARB_PATH,
+            "-f", "json",
+            "-o", json_file_path,
+            wav_file_path,
+            "-r", "phonetic"  # Faster but less accurate; remove for better accuracy
+        ]
+
+        try:
+            # Check if WAV file exists
+            if not os.path.isfile(wav_file_path):
+                raise FileNotFoundError(f"The WAV file {wav_file_path} does not exist.")
+
+            # Run the Rhubarb command
+            subprocess.run(command, check=True)
+            logging.info(f"Rhubarb successfully processed {wav_file_path}")
+
+            # Read and return the lip-sync data from the JSON file
+            if not os.path.isfile(json_file_path):
+                raise FileNotFoundError(f"The JSON file {json_file_path} was not created by Rhubarb.")
+
+            with open(json_file_path, "r") as json_file:
+                lip_sync_data = json.load(json_file)
+
+            # Validate the structure of lip_sync_data
+            if "metadata" not in lip_sync_data or "mouthCues" not in lip_sync_data:
+                logging.warning(f"Unexpected lip-sync data structure in {json_file_path}. Using default structure.")
+                return {
+                    "METADATA": {},
+                    "MOUTH_CUES": {}
+                }
+
+            # Normalize keys to uppercase as per requirement
+            normalized_data = {
+                "METADATA": lip_sync_data.get("metadata", {}),
+                "MOUTH_CUES": lip_sync_data.get("mouthCues", {})
+            }
+
+            return normalized_data
+
+        except subprocess.CalledProcessError as e:
+            logging.error(f"Rhubarb failed with error: {e}")
+        except FileNotFoundError as e:
+            logging.error(e)
+        except json.JSONDecodeError as e:
+            logging.error(f"JSON decoding failed for {json_file_path}: {e}")
+        except Exception as e:
+            logging.error(f"Unexpected error during lip-sync data generation: {e}")
+
+        # Return default structure in case of any errors
+        return {
+            "METADATA": {},
+            "MOUTH_CUES": {}
+        }
+
+
+
     def determine_meme_topic(self, ai_response: str, is_initial: bool = False) -> str:
         """
         Determines the topic for fetching a meme/GIF based on the AI's response content.
@@ -410,7 +510,7 @@ class MemeMingleAIAgent(AIAgent):
             )
 
         try:
-            # Assuming `self.llm` is your language model instance
+            # Assuming self.llm is your language model instance
             response = self.llm.invoke(prompt)
             meme_topic = response.content.strip().lower() if hasattr(response, 'content') else str(response).strip().lower()
         except Exception as e:
@@ -484,9 +584,17 @@ class MemeMingleAIAgent(AIAgent):
             })
 
             introduction = """
-        This is your first session with the patient. Be polite and introduce yourself in a friendly and inviting manner.
-        In this session, do your best to understand what the user hopes to achieve through your service, and derive a therapy style fitting to their needs.
-        """
+This is your first session with the student. Be polite and introduce yourself in a friendly and inviting manner.
+
+In this session, do your best to understand what the user hopes to achieve through your service. Ask questions to uncover the user's academic goals, subjects of interest, and preferred learning methods (visual, auditory, kinesthetic) to derive an educational approach that fits their needs.
+
+**Language Assurance:**
+- Confirm the user's preferred language at the beginning of the session.
+- Inform the user that you will respond **only** in their preferred language. If the preferred language is Gujarati (`"gu"`), ensure all communications are in Gujarati.
+- If you encounter limitations in the preferred language, notify the user and offer to continue in English.
+
+Explain that you are here to provide personalized tutoring, mentorship, and career guidance to support their educational journey. Ensure the student feels welcomed, understood, and excited to embark on their learning experience with your assistance.
+"""
 
             full_system_message = ''.join([system_message.content, introduction])
             system_message.content = full_system_message
@@ -579,9 +687,9 @@ class MemeMingleAIAgent(AIAgent):
                 return tool
         return None
 
-    def convert_text_to_speech(self, text: str, user_id: str, chat_id: int, turn_id: int) -> str:
+    def convert_text_to_speech(self, text: str, user_id: str, chat_id: int, turn_id: int) -> tuple:
         """
-        Converts the given text to speech and returns the URL of the audio file.
+        Converts the given text to speech and returns the URL of the audio file and the filename.
         
         Args:
             text (str): The text to convert to speech.
@@ -590,16 +698,24 @@ class MemeMingleAIAgent(AIAgent):
             turn_id (int): The turn number in the chat.
         
         Returns:
-            str: The URL to access the generated audio file.
+            tuple: (audio_url, filename)
         """
         try:
-            audio_data = text_to_speech(text)
+            # Fetch the user object
+            user = User.find_by_id(user_id)
+            
+            if not user:
+                print(f"User with ID {user_id} not found.")
+                return None
+
+            # Get the preferred language, default to 'en' if not set
+            preferred_language = user.preferredLanguage or 'en'
+            audio_data = text_to_speech(text, preferred_language=preferred_language)
+            if not audio_data:
+                raise ValueError("Text-to-speech conversion returned no audio data.")
             # Define a unique filename
             filename = f"{user_id}_{chat_id}_{turn_id}.wav"
-            file_path = os.path.join('generated_audio', filename)
-            
-            # Ensure the directory exists
-            os.makedirs('generated_audio', exist_ok=True)
+            file_path = os.path.join(self.generated_audio_dir, filename)
             
             # Save the audio file
             with open(file_path, 'wb') as f:
@@ -607,7 +723,106 @@ class MemeMingleAIAgent(AIAgent):
             
             backend_base_url = os.getenv('BACKEND_BASE_URL', 'http://localhost:8000')  # Ensure this environment variable is set
             audio_url = f"{backend_base_url}/ai_mentor/download_audio/{filename}"
-            return audio_url
+            return audio_url, filename
         except Exception as e:
             logging.error(f"Text-to-speech conversion failed: {e}")
-            return ""
+            return "", ""
+
+        
+    def determine_facial_expression_and_animation(self, ai_response: str) -> dict:
+        """
+        Determines a suitable facial expression and animation based on the AI's message.
+
+        Returns:
+            dict: A dictionary with keys 'facial_expression' and 'animation'.
+        """
+
+        # The available options you want the LLM to choose from
+        facial_expressions_list = [
+            "smile", 
+            "sad", 
+            "angry", 
+            "surprised", 
+            "funnyFace", 
+            "default"
+        ]
+
+        animations_list = [
+            "Talking_0", 
+            "Talking_1", 
+            "Talking_2", 
+            "Crying", 
+            "Laughing", 
+            "Rumba", 
+            "Idle", 
+            "Terrified", 
+            "Angry"
+        ]
+
+        prompt = f"""
+You are given a list of possible facial expressions and animations. Based on the content and sentiment of the AI's response, choose the best matching facial expression and animation.
+
+- Facial expressions: {', '.join(facial_expressions_list)}
+- Animations: {', '.join(animations_list)}
+
+Rules:
+    1. Only respond with valid JSON. Example:
+       {{
+           "facial_expression": "smile",
+           "animation": "Laughing"
+       }}
+    2. Do not include any extra text or explanation outside the JSON object.
+    3. Ensure strict JSON formatting without any deviations.
+    4. If the sentiment or tone is unclear, choose:
+       {{
+           "facial_expression": "default",
+           "animation": "Idle"
+       }}
+    
+    AI Response:
+    "{ai_response}"
+    """
+
+        try:
+            # Invoke the LLM with the prompt
+            response = self.llm.invoke(prompt)
+            logging.info(f"Raw LLM response: {response.content}")
+
+            # Strip code fences if present
+            content = response.content.strip()
+            if content.startswith("```") and content.endswith("```"):
+                content = '\n'.join(content.split('\n')[1:-1])
+
+            # Parse the LLM response as JSON
+            for attempt in range(3):  # Retry up to 3 times
+                try:
+                    parsed = json.loads(content)
+                    break
+                except json.JSONDecodeError:
+                    logging.warning(f"LLM returned non-JSON response on attempt {attempt + 1}: {content}")
+                    if attempt == 2:  # Max retries reached
+                        parsed = {"facial_expression": "default", "animation": "Idle"}
+
+            # Extract fields and validate them
+            facial_expression = parsed.get("facial_expression", "default")
+            animation = parsed.get("animation", "Idle")
+
+            if facial_expression not in facial_expressions_list:
+                logging.warning(f"Invalid facial expression: {facial_expression}. Defaulting to 'default'.")
+                facial_expression = "default"
+            if animation not in animations_list:
+                logging.warning(f"Invalid animation: {animation}. Defaulting to 'Idle'.")
+                animation = "Idle"
+
+            return {
+                "facial_expression": facial_expression,
+                "animation": animation
+            }
+
+        except Exception as e:
+            logging.error(f"AI-based facial expression & animation determination failed: {e}")
+            # Fallback to defaults in case of error
+            return {
+                "facial_expression": "default",
+                "animation": "Idle"
+            }

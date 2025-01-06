@@ -1,0 +1,272 @@
+.profile-page {
+  min-height: 100vh;
+  background-color: transparent; // Dark background for the entire page
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+
+  .profile-title {
+    font-size: 2.5rem;
+    color: #ffb84d;
+    margin-bottom: 2rem;
+    font-weight: 600;
+    text-align: center;
+  }
+}
+
+/* Main card container */
+.profile-card {
+  background-color: #1e1e1e;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  border-radius: 1rem;
+  padding: 2rem;
+  width: 100%;
+  max-width: 500px; /* Adjust for your layout */
+  border: 2px solid #ffb84d;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Avatar container */
+.avatar-container {
+  margin-bottom: 2rem;
+  cursor: pointer;
+
+  .avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #333; /* Base border */
+    box-shadow: 0 0 0 4px #ffb84d, /* Outer glow ring */
+                0 0 15px 2px rgba(255, 184, 77, 0.5); /* Subtle outer glow */
+    transition: transform 0.3s, box-shadow 0.3s;
+
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 0 6px #ffb84d,
+                  0 0 25px 4px rgba(255, 184, 77, 0.7);
+    }
+  }
+}
+
+/* Container for form-like fields */
+.fields-container {
+  width: 100%;
+
+  .field-row {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.2rem;
+
+    label {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 0.5rem;
+    }
+
+    input {
+      background-color: #2a2a2a;
+      border: none;
+      border-radius: 0.5rem;
+      padding: 0.8rem;
+      font-size: 1rem;
+      color: #cccccc;
+      outline: none;
+      transition: background-color 0.2s;
+
+      &:focus {
+        background-color: #444444;
+      }
+
+      &[readonly] {
+        cursor: default;
+      }
+    }
+
+    /* Style the Angular Material form field for the dark theme */
+    mat-form-field {
+      width: 100%;
+  
+      .mat-form-field-label {
+        color: #ffb84d !important;
+  
+        &.mat-form-field-label-floating {
+          color: #ffffff !important;
+        }
+      }
+  
+      .mat-form-field-flex {
+        background-color: #3a3a3a;
+        border-radius: 0.5rem;
+      }
+  
+      .mat-form-field-appearance-outline {
+        .mat-form-field-outline-thick,
+        .mat-form-field-outline-start,
+        .mat-form-field-outline-end {
+          stroke: #ffb84d !important;
+        }
+      }
+  
+      .mat-select-arrow {
+        color: #ffb84d;
+      }
+  
+      .mat-select-panel {
+        background-color: #2a2a2a;
+  
+        .mat-option-text {
+          color: #ffffff;
+        }
+  
+        .mat-option.mat-active,
+        .mat-option:hover {
+          background-color: #444444;
+        }
+      }
+    }
+  }
+
+  /* GENDER SLIDER STYLES */
+  .gender-row {
+    .gender-slider {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: #2a2a2a;
+      border-radius: 0.5rem;
+      padding: 0.6rem 1rem;
+
+      .nav-arrow {
+        background: transparent;
+        border: none;
+        color: #ffb84d;
+        font-size: 1.5rem;
+        cursor: pointer;
+        transition: color 0.2s, transform 0.2s;
+
+        &:hover {
+          color: #ffffff;
+          transform: scale(1.15);
+        }
+      }
+
+      .gender-value {
+        color: #ffffff;
+        font-size: 1rem;
+        font-weight: 600;
+        min-width: 50px;
+        text-align: center;
+        margin: 0 1rem; /* spacing between arrows */
+      }
+    }
+  }
+}
+
+/* Button group at the bottom */
+.button-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: 1.5rem;
+
+  .edit-button {
+    border: 2px solid #ffb84d;
+    background-color: #2a2a2a;
+    color: #ffffff;
+    padding: 0.8rem 1.5rem;
+    border-radius: 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+
+    &:hover {
+      background-color: #1a1a1a;
+      color: #ffffff;
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  .delete-button {
+    margin-left: 1rem;
+    border: 2px solid #ff4d4d;
+    background-color: #2a2a2a;
+    color: #ffffff;
+    padding: 0.8rem 1.5rem;
+    border-radius: 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+
+    &:hover {
+      background-color: #ff4d4d; 
+      color: #1a1a1a;
+      border: 2px solid #1a1a1a;
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+}
+
+/* 
+ * 1) Basic mobile styles at 576px (already present, just refining them).
+ * 2) Additional breakpoint at 768px for tablets. 
+ */
+
+/* For screens <= 576px (small phones) */
+@media (max-width: 576px) {
+  .profile-page {
+    padding: 1rem;
+  }
+
+  .profile-title {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+  }
+
+  .profile-card {
+    padding: 1.2rem;
+  }
+
+  .avatar {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+/* For screens <= 768px (tablets) but above 576px */
+@media (max-width: 768px) and (min-width: 577px) {
+  .profile-card {
+    max-width: 90%;
+    margin: 0 auto;
+  }
+
+  .avatar {
+    width: 120px;
+    height: 120px;
+  }
+
+  .profile-title {
+    font-size: 2rem;
+  }
+}
+
+/* For screens between 769px and 992px (small laptops) */
+@media (max-width: 992px) and (min-width: 769px) {
+  .profile-card {
+    max-width: 80%;
+  }
+}

@@ -1,1 +1,10 @@
-<router-outlet></router-outlet>
+<div
+  class="wrapper"
+  [class.sidebar-collapsed]="!sidebarVisible"
+  [class.sidebar-expanded]="sidebarVisible"
+>
+  <app-sidebar></app-sidebar>
+  <span class="main">
+    <router-outlet></router-outlet>
+  </span>
+</div>

@@ -75,7 +75,7 @@ export class SignInComponent implements OnInit {
           localStorage.setItem('access_token', response.access_token);
           localStorage.setItem('user_id', response.userId);
           localStorage.setItem('preferredLanguage', response.preferredLanguage);
-          this.router.navigate(['/home']);        },
+          this.router.navigate(['/main']);        },
         error: (error) => {
           console.error('Error during login:', error);
           if (error.status === 401) {

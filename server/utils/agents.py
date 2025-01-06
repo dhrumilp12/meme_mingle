@@ -300,8 +300,10 @@ def generate_document(content: str, format: str = 'pdf'):
     else:
         return "Unsupported format. Please choose 'pdf' or 'docx'."
     
+    backend_base_url = os.getenv('BACKEND_BASE_URL', 'http://localhost:8000')  # Ensure this environment variable is set
     # Return the URL to download the file
-    download_url = f"/ai_mentor/download_document/{filename}"
+    download_url = f"{backend_base_url}/ai_mentor/download_document/{filename}"
+    print(f"Document generated: {download_url}")
     return download_url
 
 

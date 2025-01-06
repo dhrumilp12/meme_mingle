@@ -1,0 +1,262 @@
+/*******************************************
+ * Variables
+ *******************************************/
+ $sidebar-width: 280px;
+ $sidebar-width-collapsed-desktop: 80px; 
+ $transition-duration: 0.35s;
+ $transition-ease: ease-in-out;
+ 
+ /* For mobile screens */
+ $mobile-breakpoint: 768px;
+ $sidebar-width-mobile: 200px;    /* expanded width on small screens */
+ $sidebar-width-collapsed-mobile: 60px;
+ 
+ /*******************************************
+  * Sidebar Wrapper (Base)
+  *******************************************/
+ .sidebar-wrapper {
+   width: $sidebar-width;
+   height: 98.4vh; /* Adjust height to include margins if needed */
+   background: linear-gradient(to right, #fff3db, #ffb84d);
+   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+   display: flex;
+   flex-direction: column;
+   justify-content: space-between;
+   padding: 1rem;
+   transition: all $transition-duration $transition-ease;
+   border-radius: 15px; 
+   position: fixed;
+   top: 10px;
+   left: 10px;
+   z-index: 1000;
+ 
+   /*
+    * =============== DESKTOP COLLAPSED ===============
+    * When .collapsed is applied on desktop, 
+    * shrink from 280px to ~80px (icon-only).
+    */
+   &.collapsed {
+     width: $sidebar-width-collapsed-desktop; 
+     padding-right: 0;
+     padding-left: 0;
+ 
+     /* The header may rearrange in collapsed mode */
+     .sidebar-header {
+       display: flex;
+       flex-direction: column;
+       align-items: center;
+ 
+       .logo-wrapper {
+         .sidebar-logo-img {
+           width: 110px;
+           margin: 0;
+           padding-left: 0.5rem;
+         }
+       }
+       .collapse-btn {
+         margin-top: 1rem;
+         height: 50px;
+         width: 50px;
+         border: 2px solid #1e1e1e;
+       }
+     }
+ 
+     /* For top/bottom menus, center icons in a round button */
+     .menu-items,
+     .menu-bottom {
+       align-items: center;
+ 
+       .menu-btn {
+         border-radius: 50%;
+         width: 50px;
+         height: 50px;
+         justify-content: center;
+         border: 2px solid #1e1e1e;
+ 
+         /* Hide text labels */
+         span {
+           display: none;
+         }
+       }
+     }
+   }
+ }
+ 
+ /*******************************************
+  * Header & Collapse Button
+  *******************************************/
+ .sidebar-header {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   margin-bottom: 1rem;
+ 
+   .logo-wrapper {
+     .sidebar-logo-img {
+       width: 150px;
+       height: auto;
+       border-radius: 10px;
+     }
+   }
+ 
+   .collapse-btn {
+     width: 40px;
+     height: 40px;
+     font-size: 1.2rem;
+     background: #fff;
+     border: none;
+     border-radius: 50%;
+     color: #333;
+     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     cursor: pointer;
+     transition: background $transition-duration $transition-ease;
+     border: 2px solid #1e1e1e;
+     
+     &:hover {
+       background: #f0f0f0;
+     }
+   }
+ }
+ 
+ /*******************************************
+  * Top Menu Items
+  *******************************************/
+ .menu-items {
+   display: flex;
+   flex-direction: column;
+   gap: 1rem;
+   
+   .menu-btn {
+     display: flex;
+     align-items: center;
+     gap: 1rem;
+     padding: 0.8rem;
+     background-color: #fff;
+     border: none;
+     border-radius: 8px;
+     font-size: 1rem;
+     font-weight: 600;
+     color: #333;
+     box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+     position: relative;
+     transition: background-color 0.3s, transform 0.3s;
+     border: 2px solid #1e1e1e;
+ 
+     i {
+       font-size: 1.2rem;
+     }
+ 
+     &:hover {
+       background-color: #f7f7f7;
+     }
+ 
+     .score-badge {
+       position: absolute;
+       top: 8px;
+       right: 8px;
+       background-color: #2a2a2a;
+       color: #fff;
+       border-radius: 12px;
+       padding: 2px 6px;
+       font-size: 0.75rem;
+       font-weight: bold;
+       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+       transition: background-color 0.3s ease, transform 0.3s ease;
+ 
+       &:hover {
+         background-color: #2a2a2a;
+         transform: scale(1.1);
+       }
+     }
+   }
+ }
+ 
+ /*******************************************
+  * Bottom Menu Items
+  *******************************************/
+ .menu-bottom {
+   display: flex;
+   flex-direction: column;
+   gap: 1rem;
+ 
+   .menu-btn {
+     display: flex;
+     align-items: center;
+     gap: 1rem;
+     padding: 0.8rem;
+     background-color: #fff;
+     border: none;
+     border-radius: 8px;
+     font-size: 1rem;
+     font-weight: 600;
+     color: #333;
+     box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+     transition: background-color 0.3s, transform 0.3s;
+     border: 2px solid #1e1e1e;
+
+     &:hover {
+       background-color: #f7f7f7;
+     }
+   }
+ 
+   .profile-btn {
+     img.user-avatar {
+       width: 30px;
+       height: 30px;
+       border-radius: 50%;
+       object-fit: cover;
+       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+       
+     }
+   }
+ }
+ 
+ /*******************************************
+  * MOBILE STYLES
+  *******************************************/
+ @media (max-width: #{$mobile-breakpoint}) {
+   /*
+    * We'll limit the “expanded” state to 200px, 
+    * and collapsed to 60px
+    * (actual pinned layout is in main scss).
+    */
+   .sidebar-wrapper {
+     width: $sidebar-width-mobile;  /* ~200px in expanded mode */
+     
+ 
+     /* If you want the header to arrange differently, do so here. */
+     .sidebar-header {
+       justify-content: space-between; /* keep logo on left, toggle on right */
+ 
+       .logo-wrapper {
+         .sidebar-logo-img {
+           width: 120px; /* smaller logo on mobile */
+         }
+       }
+     }
+ 
+     &.collapsed {
+       width: $sidebar-width-collapsed-mobile; /* 60px on mobile */
+       
+       /* Possibly hide menu items if collapsed */
+       .menu-items,
+       .menu-bottom {
+         align-items: center;
+         
+         .menu-btn {
+           /* same round icon logic as desktop collapsed */
+           border-radius: 50%;
+           width: 50px;
+           height: 50px;
+           span {
+             display: none;
+           }
+         }
+       }
+     }
+   }
+ }
+ 

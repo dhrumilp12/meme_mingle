@@ -2,105 +2,111 @@
 // @import 'bootstrap/scss/bootstrap';
 
 html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    overflow: auto;
-  }
-  
-  .contact-container {
-    max-width: 100%;
-    margin: 0 auto;
-    padding: 20px;
-    overflow: auto;
-    scrollbar-width: thin;
-    max-height: 100%;
-  
-    .section {
-      background-color: rgba(5, 95, 114, 1);
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+}
+
+.contact-container {
+  height: 100vh; // Ensures it takes the full viewport height
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  overflow-y: auto; // Scroll only vertically
+  background-color: #101d2b; // Dark background for body
+  color: #ecf0f1; // Light text for contrast in dark mode
+
+
+.display-4{
+  font-weight: 550;
+  margin-top: 40px;
+
+}
+  .section {
+      background-color: #1f3a44; // Dark teal background for sections
       border-radius: 8px;
       margin-bottom: 30px;
       padding: 20px 30px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); // Slight shadow for depth
+
       .section-title {
-        position: relative;
-        font-size: 1.75rem;
-        margin-bottom: 20px;
-        color: white;
-        font-weight: 600;
-  
-        &::after {
-          content: '';
-          position: absolute;
-          left: 0;
-          bottom: -10px;
-          width: 60px;
-          height: 4px;
-          background-color: #e74c3c;
-        }
+          position: relative;
+          font-size: 1.75rem;
+          margin-bottom: 20px;
+          color: #ecf0f1; // Light text for section titles
+          font-weight: 400;
+
+          &::after {
+              content: '';
+              position: absolute;
+              left: 0;
+              bottom: -10px;
+              width: 60px;
+              height: 4px;
+              background-color: #16a085; // Teal-green highlight for titles
+          }
       }
-  
+
       .contact-form {
-        .form-group {
-          margin-bottom: 1.5rem;
-  
-          label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: white;
+          .form-group {
+              margin-bottom: 1.5rem;
+
+              label {
+                  display: block;
+                  margin-bottom: 0.5rem;
+                  font-weight: 600;
+                  color: #ecf0f1; // White label text
+              }
+
+              .form-control {
+                  width: 100%;
+                  padding: 0.75rem;
+                  border: 1px solid #ccc;
+                  border-radius: 4px;
+                  font-size: 1rem;
+
+                  &:focus {
+                      border-color: #16a085; // Focus border color matching section highlight
+                      outline: none;
+                      box-shadow: none;
+                  }
+
+                  &.is-invalid {
+                      border-color: #dc3545; // Red color for invalid fields
+                  }
+              }
+
+              .invalid-feedback {
+                  color: #dc3545; // Red feedback for invalid input
+                  font-size: 0.875rem;
+                  margin-top: 0.25rem;
+              }
           }
-  
-          .form-control {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 1rem;
-  
-            &:focus {
-              border-color: #e74c3c;
-              outline: none;
-              box-shadow: none;
-            }
-  
-            &.is-invalid {
-              border-color: #dc3545;
-            }
+
+          .btn {
+              padding: 0.75rem 1.5rem;
+              background-color: #16a085; // Teal-green button background
+              color: #fff;
+              border: none;
+              border-radius: 4px;
+              font-size: 1rem;
+              cursor: pointer;
+
+              &:disabled {
+                  background-color: #6c757d;
+                  cursor: not-allowed;
+              }
+
+              &:hover:not(:disabled) {
+                  background-color: #1abc9c; // Lighter teal on hover
+              }
           }
-  
-          .invalid-feedback {
-            color: #dc3545;
-            font-size: 0.875rem;
-            margin-top: 0.25rem;
-          }
-        }
-  
-        .btn {
-          padding: 0.75rem 1.5rem;
-          background-color: #e74c3c;
-          color: #fff;
-          border: none;
-          border-radius: 4px;
-          font-size: 1rem;
-          cursor: pointer;
-  
-          &:disabled {
-            background-color: #6c757d;
-            cursor: not-allowed;
-          }
-  
-          &:hover:not(:disabled) {
-            background-color: #c0392b;
-          }
-        }
       }
-    }
-  
-    // Specific styles for the Contact section
-    .contact-section {
-      border-left: 5px solid #e74c3c; // Matching one of the section colors
-    }
   }
-  
+
+  // Specific styles for the Contact section
+  .contact-section {
+      border-left: 5px solid #16a085; // Matching border color for Contact section
+  }
+}
