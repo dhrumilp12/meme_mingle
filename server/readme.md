@@ -18,7 +18,7 @@ Before you begin, ensure you have the following installed on your machine:
 
 1. **Clone the repository**:
    ```
-   git clone https://github.com/dhrumilp12/.git
+   git clone https://github.com/dhrumilp12/meme_mingle.git
    cd server
    ```
 
